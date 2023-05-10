@@ -11,29 +11,32 @@ const HeaderComponent = () => {
     const [stripeClass, setStripeClass] = useState({})
     const [routeName, setRouteName] = useState('')
     const router = useRouter()
-    const queryId = router.query?.id
-    const path = router.asPath.replace(queryId, '').replaceAll('/', '')
+    const queryId = router.query.id
+    let path: string;
+    if (typeof queryId === 'string') {
+        path = router.asPath.replace(queryId, '').replaceAll('/', '')
+    }
 
 
     const setStripeStyles = function() {
         const style = {};
         const stripe = document.querySelector(".stripe");
         const floaty = document.querySelector("header");
-        const collectionDeets = document.querySelector(".collection-deets");
+        const CollectionDetails = document.querySelector<HTMLElement>(".collection-deets");
 
-        if (path === 'collections' && !collectionDeets) {
+        if (path === 'collections' && !CollectionDetails) {
         } else if (path === 'collections') {
-            const deetsHeight = collectionDeets?.offsetHeight;
+            const detailsHeight = CollectionDetails?.offsetHeight;
             const floatyHeight = floaty?.offsetHeight;
-            stripe.setAttribute("style",`height:${deetsHeight + floatyHeight + 80}px`);
+            stripe!.setAttribute("style",`height:${detailsHeight! + floatyHeight! + 80}px`);
             if (queryId === 'dreamwork') {
             }
         } else if (path === 'about') {
-            stripe.setAttribute("style",'height:300px');
+            stripe!.setAttribute("style",'height:300px');
         } else if (path === 'projects') {
-            stripe.setAttribute("style",'height:200px');
+            stripe!.setAttribute("style",'height:200px');
         } else {
-            stripe.removeAttribute("style");
+            stripe!.removeAttribute("style");
         }
         setStripeClass(path);
         return [path, style]

@@ -2,7 +2,7 @@ const EventApiLibrary = {
     RODRIGO_SERVICE: window.location.hostname === 'localhost' ? 'https://apis.rod.dev/' : 'https://api.rod.dev/',
     SESSION_SERVICE: 'session-service',
     
-    async postEvent(form) {
+    async postEvent(form: object) {
         const method = 'POST';
         const url = `${this.RODRIGO_SERVICE}${this.SESSION_SERVICE}/event`;
         try {

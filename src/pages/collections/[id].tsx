@@ -23,7 +23,8 @@ export default function Collection() {
     }
 
     useEffect(() => {
-        setMoreCollections(lodash.reject(lodash.shuffle(ArtCollectionsCollection), { name: currentCollection?.title }).slice(0, 3))
+        const result: any = lodash.reject(lodash.shuffle(ArtCollectionsCollection), { name: currentCollection?.title }).slice(0, 3)
+        setMoreCollections(result)
     }, [currentCollection?.title])
 
     return (
@@ -37,9 +38,9 @@ export default function Collection() {
                 <meta property="og:site_name" content="Rodrigo Barraza"/>
                 <meta property="og:description" content={meta.description}/>
                 <meta property="og:title" content={meta.title}/>
-                {meta.date && (
+                {/* {meta.date && (
                     <meta property='article:published_time' content={meta.date}/>
-                )}
+                )} */}
                 <link rel="icon" href="/images/favicon.ico" />
             </Head>
             <div className="collection">
@@ -62,7 +63,7 @@ export default function Collection() {
                 </div>
 
                 {currentCollection?.works.map((work, workIndex) => (
-                    <div className={`work ${work.orientation || currentCollection.orientation}`} key={workIndex}>
+                    <div className={`work ${work?.orientation || currentCollection?.orientation} || ''`} key={workIndex}>
                         <div className="container">
                             { work.imagePath && (
                                 // To do, refactor to use Image, but using the right sizes

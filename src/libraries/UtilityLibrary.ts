@@ -6,7 +6,7 @@ import moment from 'moment'
 const useS3: boolean = true;
 
 const UtilityLibrary = {
-    renderAssetPath(assetPath: string, collectionPath: string): string {
+    renderAssetPath(assetPath: string, collectionPath: string | undefined): string {
         let path = `/`;
         if (assetPath && !collectionPath) {
             path =`/${assetPath}`;
@@ -24,7 +24,7 @@ const UtilityLibrary = {
     imageFullScreen(event: Event & {target: Element}) {
         event.target.requestFullscreen();
     },
-    humanDuration(durationInSeconds: number): string {
+    humanDuration(durationInSeconds: number | undefined): string {
         var minutes = moment.duration(durationInSeconds, 'seconds').minutes();
         var seconds = moment.duration(durationInSeconds, 'seconds').seconds();
         var humanDurationString = '';
@@ -38,13 +38,15 @@ const UtilityLibrary = {
         return humanDurationString;
     },
     playVideoOnMouseOver(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-        const video = event.target.querySelector('video')
+        const target = event.target as HTMLElement;
+        const video = target.querySelector('video')
         if (video) {
             video.play();
         }
     },
     stopVideoOnMouseOver(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-        const video = event.target.querySelector('video')
+        const target = event.target as HTMLElement;
+        const video = target.querySelector('video')
         if (video) {
             video.load();
         }
