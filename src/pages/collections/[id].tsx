@@ -44,7 +44,7 @@ export default function Collection() {
                 <link rel="icon" href="/images/favicon.ico" />
             </Head>
             <div className="collection">
-                <div className="collection-deets">
+                <div className="collection-details">
                     <div className="container">
                         <div>
                             <h1>{currentCollection?.title}</h1>
@@ -62,7 +62,7 @@ export default function Collection() {
                     </div>
                 </div>
 
-                {currentCollection?.works.map((work, workIndex) => (
+                {currentCollection && currentCollection.works.map((work, workIndex) => (
                     <div className={`work ${work?.orientation || currentCollection?.orientation} || ''`} key={workIndex}>
                         <div className="container">
                             { work.imagePath && (

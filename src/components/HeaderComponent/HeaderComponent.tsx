@@ -5,54 +5,55 @@ import ActiveLink from '../ActiveLink'
 import styles from './HeaderComponent.module.scss'
 import SocialsCollection from '../../collections/SocialsCollection'
 
-const HeaderComponent = () => {
+const HeaderComponent: React.FC = () => {
     const [pageOffset, setPageOffset] = useState(0)
     const [mobileMenu, setMobileMenu] = useState(false)
     const [stripeClass, setStripeClass] = useState({})
     const [routeName, setRouteName] = useState('')
     const router = useRouter()
     const queryId = router.query.id
-    let path: string;
-    if (typeof queryId === 'string') {
+    let path = ''
+
+    if (queryId !== undefined && typeof queryId === "string") {
         path = router.asPath.replace(queryId, '').replaceAll('/', '')
     }
 
-
-    const setStripeStyles = function() {
-        const style = {};
-        const stripe = document.querySelector(".stripe");
-        const floaty = document.querySelector("header");
-        const CollectionDetails = document.querySelector<HTMLElement>(".collection-deets");
-
-        if (path === 'collections' && !CollectionDetails) {
-        } else if (path === 'collections') {
-            const detailsHeight = CollectionDetails?.offsetHeight;
-            const floatyHeight = floaty?.offsetHeight;
-            stripe!.setAttribute("style",`height:${detailsHeight! + floatyHeight! + 80}px`);
-            if (queryId === 'dreamwork') {
-            }
-        } else if (path === 'about') {
-            stripe!.setAttribute("style",'height:300px');
-        } else if (path === 'projects') {
-            stripe!.setAttribute("style",'height:200px');
-        } else {
-            stripe!.removeAttribute("style");
-        }
-        setStripeClass(path);
-        return [path, style]
-    }
-
     useEffect(() => {
+        function onScroll() {
+            setPageOffset(window.pageYOffset)
+        }
+        window.addEventListener('scroll', onScroll);
+    })
+    useEffect(() => {
+        const setStripeStyles = function() {
+            const style: Object = {};
+            const stripe: HTMLElement | null = document.querySelector(".stripe");
+            const floaty: HTMLElement | null = document.querySelector("header");
+            const collectionDetails: HTMLElement | null = document.querySelector(".collection-details");
+
+            if (path === 'collections' && !collectionDetails) {
+            } else if (stripe && collectionDetails && floaty && path === 'collections') {
+                const collectionDetailsHeight = collectionDetails.offsetHeight;
+                const floatyHeight = floaty.offsetHeight;
+                stripe.setAttribute("style",`height:${collectionDetailsHeight + floatyHeight + 80}px`);
+            } else if (stripe && path === 'about') {
+                stripe.setAttribute("style",'height:300px');
+            } else if (stripe && path === 'projects') {
+                stripe.setAttribute("style",'height:200px');
+            } else if (stripe) {
+                stripe.removeAttribute("style");
+            }
+            setStripeClass(path);
+            return [path, style]
+        }
+
         setRouteName(path)
         const timeoutTimer = setTimeout(function () {
             setStripeStyles();
             clearTimeout(timeoutTimer);
         }, 100);
-        function scrolling2() {
-            setPageOffset(window.pageYOffset)
-        }
-        window.addEventListener('scroll', scrolling2);
-    })
+    }, [path])
+
     return (
         <header className={`${styles.HeaderComponent} ${routeName}`}>
             <div className={`stripe ${stripeClass}`}></div>
