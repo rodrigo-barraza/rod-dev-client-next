@@ -1,11 +1,14 @@
-// import moment from 'moment';
-// import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection';
-// import ViewsCollection from '@/collections/ViewsCollection';
-// import AboutCollection from '@/collections/AboutCollection';
 import moment from 'moment'
+import EventLibrary from './EventLibrary';
+
 const useS3: boolean = true;
 
 const UtilityLibrary = {
+    capitalize(string: string) {
+        if (string) {
+            return string.charAt(0).toUpperCase() + string.slice(1)
+        }
+    },
     renderAssetPath(assetPath: string, collectionPath: string | undefined): string {
         let path = `/`;
         if (assetPath && !collectionPath) {
@@ -21,8 +24,9 @@ const UtilityLibrary = {
         }
         return fullPath;
     },
-    imageFullScreen(event: Event & {target: Element}) {
+    imageFullScreen(event: Event & {target: Element}, collectionPath: object, workImagePath: object) {
         event.target.requestFullscreen();
+        EventLibrary.postEventImageFullscreen(`/${collectionPath}/${workImagePath}`);
     },
     humanDuration(durationInSeconds: number | undefined): string {
         var minutes = moment.duration(durationInSeconds, 'seconds').minutes();

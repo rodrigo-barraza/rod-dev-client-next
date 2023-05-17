@@ -1,0 +1,29 @@
+.ButtonComponent {
+    background: rgb(44, 117, 253);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    button {
+        // font-family: 'Ubuntu', sans-serif;
+        font-weight: 700;
+        // letter-spacing: 2px;
+        width: 100%;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        // text-transform: uppercase;
+        color: white;
+        padding: 20px;
+        font-size: 24px;
+    }
+    &:hover {
+        background: rgb(44, 117, 253, 0.8);
+    }
+    &[disabled] {
+        background: rgba(250,250,250);
+        button {
+            color: rgba(220,220,220);
+            cursor: not-allowed;
+        }
+    }
+}

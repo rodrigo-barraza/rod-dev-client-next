@@ -8,14 +8,16 @@ import Head from 'next/head'
 import styles from './[id].module.scss'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
 import ArtCollectionsCollection from '../../collections/ArtCollectionsCollection'
+import { Meta } from '../../types/types'
 
 export default function Collection() {
     const router = useRouter()
     const [moreCollections, setMoreCollections] = useState([])
     const currentCollectionPath = router.query.id
     const currentCollection = ArtCollectionsCollection.find(collection => collection.path === currentCollectionPath)
+    const currentCollectionWorks = currentCollection?.works as Array<any>
 
-    const meta = {
+    const meta: Meta = {
         title: `${currentCollection?.documentTitle}`,
         description: `${currentCollection?.documentDescription}`,
         keywords: `${currentCollection?.documentKeywords}`,
@@ -62,24 +64,17 @@ export default function Collection() {
                     </div>
                 </div>
 
-                {currentCollection && currentCollection.works.map((work, workIndex) => (
+                {currentCollection && currentCollectionWorks && currentCollectionWorks.map((work, workIndex) => (
                     <div className={`work ${work?.orientation || currentCollection?.orientation} || ''`} key={workIndex}>
                         <div className="container">
                             { work.imagePath && (
-                                // To do, refactor to use Image, but using the right sizes
-                                // <Image
-                                //     onClick={(event) => UtilityLibrary.imageFullScreen(event, currentCollection, work)}
-                                //     src={UtilityLibrary.renderAssetPath(work?.imagePath, currentCollection?.path)}
-                                //     alt={work.title}
-                                //     sizes="(max-width: 768px) 100vw"
-                                //     fill={true}>
-                                // </Image>
-                                <img
-                                    onClick={(event) => UtilityLibrary.imageFullScreen(event, currentCollection, work)}
-                                    src={UtilityLibrary.renderAssetPath(work?.imagePath, currentCollection?.path)}
-                                    alt={work.title}
-                                    fill={true}>
-                                </img>
+                                <picture>
+                                    <img
+                                        onClick={(event) => UtilityLibrary.imageFullScreen(event, currentCollection.path, work.imagePath)}
+                                        src={UtilityLibrary.renderAssetPath(work?.imagePath, currentCollection?.path)}
+                                        alt={work.title}>
+                                    </img>
+                                </picture>
                             )}
 
                             { work.videoPath && (
@@ -92,7 +87,7 @@ export default function Collection() {
                             )}
                             
 
-                            { currentCollection.works.length >= 2 && (
+                            { currentCollectionWorks.length >= 2 && (
                                 <div className="card">
                                     <div>
                                         <h2>{work.title}</h2>

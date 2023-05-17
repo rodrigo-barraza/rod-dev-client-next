@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import ActiveLink from '../ActiveLink'
 import styles from './HeaderComponent.module.scss'
 import SocialsCollection from '../../collections/SocialsCollection'
+import PagesCollection from '../../collections/PagesCollection'
+import UtilityLibrary from '../../libraries/UtilityLibrary'
 
 const HeaderComponent: React.FC = () => {
     const [pageOffset, setPageOffset] = useState(0)
@@ -68,9 +70,9 @@ const HeaderComponent: React.FC = () => {
                     </div>
                     <nav className="full">
                         <ul>
-                            <li className="ai-art"><ActiveLink activeClassName="active" href="/">Collections</ActiveLink></li>
-                            <li className="ai-art"><ActiveLink activeClassName="active" href="/projects">Projects</ActiveLink></li>
-                            <li className="ai-art"><ActiveLink activeClassName="active" href="/rodrigo-barraza">About</ActiveLink></li>
+                            { PagesCollection.map((page, pageIndex) => (
+                                <li className="ai-art" key={pageIndex}><ActiveLink activeClassName="active" href={page.path}>{UtilityLibrary.capitalize(page.name)}</ActiveLink></li>
+                            ))}
                         </ul>
                     </nav>
                     <div className="hamburger">
@@ -89,9 +91,9 @@ const HeaderComponent: React.FC = () => {
                 <div className="overlay">
                     <nav className="shrink">
                         <ul>
-                            <li className="ai-art"><ActiveLink onClick={() => setMobileMenu(false)} activeClassName="active" href="/">Collections</ActiveLink></li>
-                            <li className="ai-art"><ActiveLink onClick={() => setMobileMenu(false)} activeClassName="active" href="/projects">Projects</ActiveLink></li>
-                            <li className="ai-art"><ActiveLink onClick={() => setMobileMenu(false)} activeClassName="active" href="/rodrigo-barraza">About</ActiveLink></li>
+                            { PagesCollection.map((page, pageIndex) => (
+                                <li className="ai-art" key={pageIndex}><ActiveLink activeClassName="active" href={page.path} onClick={() => setMobileMenu(false)} >{UtilityLibrary.capitalize(page.name)}</ActiveLink></li>
+                            ))}
                         </ul>
                     </nav>
                     <ul className="socials">

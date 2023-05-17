@@ -10,7 +10,6 @@ function createSession() {
     const timestamp = Math.round(+new Date() / 1000);
     
     const local = {
-        // id:crypto.randomUUID(),
         id: crypto.randomUUID(),
         timestamp: timestamp
     }
@@ -84,13 +83,13 @@ const EventLibrary = {
         const value = undefined;
         postEvent(category, action, label, value);
     },
-    postEventNavigationScroll: (scrollPercentage: string) => {
-        const category = 'navigation';
-        const action = 'scroll';
-        const label = scrollPercentage;
-        const value = undefined;
-        postEvent(category, action, label, value);
-    },
+    // postEventNavigationScroll: (scrollPercentage: string) => {
+    //     const category = 'navigation';
+    //     const action = 'scroll';
+    //     const label = scrollPercentage;
+    //     const value = undefined;
+    //     postEvent(category, action, label, value);
+    // },
     postEventLinkClick: (url: string) => {
         const category = 'link';
         const action = 'click';
@@ -98,13 +97,13 @@ const EventLibrary = {
         const value = undefined;
         postEvent(category, action, label, value);
     },
-    postEventVideoUnmute: (videoName: string) => {
-        const category = 'video';
-        const action = 'unmute';
-        const label = videoName;
-        const value = undefined;
-        postEvent(category, action, label, value);
-    },
+    // postEventVideoUnmute: (videoName: string) => {
+    //     const category = 'video';
+    //     const action = 'unmute';
+    //     const label = videoName;
+    //     const value = undefined;
+    //     postEvent(category, action, label, value);
+    // },
     postEventImageFullscreen: (imageName: string) => {
         const category = 'image';
         const action = 'fullscreen';

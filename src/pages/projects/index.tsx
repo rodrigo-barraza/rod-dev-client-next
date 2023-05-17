@@ -1,10 +1,11 @@
 import styles from './index.module.scss'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { Meta } from '../../types/types'
 
 export default function Projects() {
     const router = useRouter()
-    const meta = {
+    const meta: Meta = {
         title: 'Rodrigo Barraza - Software Engineering Projects',
         description: 'Projects and Github repositories by software engineer: Rodrigo Barraza',
         keywords: 'rodrigo barraza, projects, repository, image captioning, blip2, github, google colab, disco diffusion, programming, software engineer, portfolio',
