@@ -47,6 +47,7 @@ export default function Txt2ImageComponent(props: any) {
                 {/* {isImageLoading && <div className="loading">LOADING...</div>} */}
                 <div className="Card">
                     <h1>Generate an image from text</h1>
+                    <p>Try out Rodrigo Barraza's text-to-image realism-model, trained on more than 120,000 images, photographs and captions.</p>
                     {/* <p>Trained on 55,000 images</p> */}
                     <InputComponent 
                     label="Prompt"
@@ -61,7 +62,7 @@ export default function Txt2ImageComponent(props: any) {
                     onChange={setSampler}
                     ></SelectComponent>
                     <SliderComponent 
-                    label="Contrast"
+                    label="Strength"
                     value={cfg} 
                     onChange={setCfg}
                     ></SliderComponent>
@@ -77,8 +78,11 @@ export default function Txt2ImageComponent(props: any) {
                     disabled={isImageLoading}
                     ></ButtonComponent>
                 </div>
+                <div className="Card">
+                    a
+                </div>
                 <picture className={isImageLoading ? 'loading' : ''}>
-                    <img className={isImageLoading ? 'loading' : ''} src={base64Img} alt="">
+                    <img className={isImageLoading ? 'loading' : ''} src={base64Img} alt={newPrompt}>
                     </img>
                 </picture>
             </form>
