@@ -30,6 +30,8 @@ export default function Txt2ImageComponent(props: any) {
     const [generatedImageSampler, setGeneratedImageSampler] = useState('')
     const [generatedImageStyle, setGeneratedImageStyle] = useState('')
     const [generatedImageId, setGeneratedImageId] = useState('')
+    const [isSharing, setIsSharing] = useState(false)
+    const [imageBlur, setImageBlur] = useState(false)
     const formReference = useRef(null)
 
     const renderImage = useCallback(() => {
@@ -47,6 +49,7 @@ export default function Txt2ImageComponent(props: any) {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
             setImage(parsedResult.data.image)
+            setImageBlur(true)
             setGeneratedImageId(parsedResult.data.count)
             setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
             setGeneratedImageDescription(newPrompt)
@@ -55,6 +58,12 @@ export default function Txt2ImageComponent(props: any) {
             setGeneratedImageStyle(styleLabel)
 
             setIsImageLoading(false)
+
+            
+            const timeoutTimer = setTimeout(function () {
+                setImageBlur(false)
+                clearTimeout(timeoutTimer)
+            }, 1000);
 
         })
         .catch(error => console.log('error', error));
@@ -111,8 +120,14 @@ export default function Txt2ImageComponent(props: any) {
     }
 
     function shareOnClick() {
+        setIsSharing(true)
         const shareLink = `${window.location.origin}${currentPage}?id=${generatedImageId}`
         navigator.clipboard.writeText(shareLink);
+        
+        const timeoutTimer = setTimeout(function () {
+            setIsSharing(false)
+            clearTimeout(timeoutTimer)
+        }, 1000);
 
     }
 
@@ -184,9 +199,15 @@ export default function Txt2ImageComponent(props: any) {
                 ></ButtonComponent>
             </div>
             <picture className={isImageLoading ? 'loading' : ''}>
-                <img className={isImageLoading ? 'loading' : ''} src={image} alt={newPrompt}>
+                <img className={`${isImageLoading ? 'loading' : ''} ${imageBlur ? 'blur' : ''}`} src={image} alt={newPrompt}>
                 </img>
             </picture>
+            { isSharing && (
+                <div className="test">Copied Link!</div>
+            )}
+            { isImageLoading && (
+                <div className="test">Generate</div>
+            )}
         </div>
     )
 }
