@@ -9,6 +9,12 @@ const UtilityLibrary = {
             return string.charAt(0).toUpperCase() + string.slice(1)
         }
     },
+    toHumanDateAndTime(date: string) {
+        if (date) {
+            // return moment(date).format('MMMM Do, YYYY @ h:mmA')
+            return moment(date).format('MMMM Do, YYYY')
+        }
+    },
     renderAssetPath(assetPath: string, collectionPath: string | undefined): string {
         let path = `/`;
         if (assetPath && !collectionPath) {

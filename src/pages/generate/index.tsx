@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import PromptCollection from '../../collections/PromptCollection'
 import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
+import style from './index.module.scss'
 
 export default function Playground() {
   const router = useRouter()
@@ -14,12 +15,12 @@ export default function Playground() {
       type: 'website',
   }
   return (
-    <div>
+    <main className={style.GeneratePage}>
         <Head>
             <title>{meta.title}</title>
             <meta name="description" content={meta.description}/>
             <meta name="keywords" content={meta.keywords}/>
-              <meta property="og:url" content={`https://rod.dev${router.asPath}`}/>
+            <meta property="og:url" content={`https://rod.dev${router.asPath}`}/>
             <meta property="og:type" content={meta.type}/>
             <meta property="og:site_name" content="Rodrigo Barraza"/>
             <meta property="og:description" content={meta.description}/>
@@ -30,6 +31,6 @@ export default function Playground() {
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
         <Txt2ImageComponent prompt={randomPrompt}/>
-    </div>
+    </main>
   )
 }

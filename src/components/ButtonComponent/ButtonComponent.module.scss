@@ -3,16 +3,14 @@
     cursor: pointer;
     border-radius: 4px;
     transition: all 0.3s;
+    color: white;
     button {
-        // font-family: 'Ubuntu', sans-serif;
         font-weight: 700;
-        // letter-spacing: 2px;
         width: 100%;
         cursor: pointer;
         background: transparent;
         border: 0;
-        // text-transform: uppercase;
-        color: white;
+        color: inherit;
         padding: 20px;
         font-size: 24px;
     }
@@ -24,6 +22,14 @@
         button {
             color: rgba(220,220,220);
             cursor: not-allowed;
+        }
+    }
+    &.secondary {
+        background: white;
+        border: 1px solid black;
+        color: black;
+        &:hover {
+            background: rgba(235, 235, 235, 0.8);
         }
     }
 }

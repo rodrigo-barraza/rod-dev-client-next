@@ -18,7 +18,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'assets.rod.dev',
         port: ''
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'generations.rod.dev',
+        port: ''
+      },
     ]
   },
   experimental: {

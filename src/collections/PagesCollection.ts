@@ -1,7 +1,7 @@
 const PagesCollection = [
     {
         path: '/generate',
-        name: 'Generate'
+        name: '✨Generate'
     },
     {
         path: '/',
