@@ -104,7 +104,7 @@ export default function Txt2ImageComponent(props: any) {
         <div className={styles.Txt2ImageComponent}>
             <div className="Card Interface">
                 <h1>Generate an image from text</h1>
-                <p>Try out Rodrigo Barraza's text-to-image realism-model, trained on more than 120,000 images, photographs and captions.</p>
+                <p>Try out Rodrigo Barraza&apos;s text-to-image realism-model, trained on more than 120,000 images, photographs and captions.</p>
                 
                 <form onSubmit={(event)=> submitForm(event)} ref={formReference}>
                     <TextAreaComponent
