@@ -41,7 +41,6 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <Layout>
             <Component {...pageProps} />
-            <Analytics/>
         </Layout>
     )
 }
