@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import React from 'react'
+import { InferGetServerSidePropsType, GetServerSideProps  } from 'next'
 import EventApiLibrary from '../../libraries/EventApiLibrary'
 import styles from './Txt2ImageComponent.module.scss'
 import InputComponent from '../InputComponent/InputComponent'
@@ -13,11 +14,8 @@ import UtilityLibrary from '../../libraries/UtilityLibrary'
 import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
 
-export default function Txt2ImageComponent(props: any) {
-    const {prompt, style}: {prompt: string, style: string} = props
-    const router = useRouter()
+export default function Txt2ImageComponent() {
     const currentPage = usePathname()
-    // const randomStyle = StyleCollection[Math.floor(Math.random() * StyleCollection.length)].value
     const [image, setImage] = useState('')
     const [newPrompt, setNewPrompt] = useState('')
     const [sampler, setSampler] = useState(SamplerCollection[0].value)
@@ -35,8 +33,6 @@ export default function Txt2ImageComponent(props: any) {
     const formReference = useRef(null)
 
     const renderImage = useCallback(() => {
-        const fullPrompt = `${newStyle}${newStyle ? ', ' : ''}${newPrompt}`
-        // const negativePrompt = StyleCollection.find((styleOption) => styleOption.value === newStyle).negativePrompt
         setIsImageLoading(true)
         EventApiLibrary.postRender(newPrompt, sampler, cfg, newStyle, '')
         .then(response => response.text())
