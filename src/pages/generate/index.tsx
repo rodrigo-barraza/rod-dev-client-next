@@ -9,9 +9,9 @@ export default function Playground() {
   const router = useRouter()
   const randomPrompt = PromptCollection[Math.floor(Math.random() * PromptCollection.length)].prompt
   const meta = {
-      title: 'Generate an image from text',
-      description: "Try out Rodrigo Barraza's text-to-image realism-model, trained on more than 120,000 images, photographs and captions.",
-      keywords: 'generate, text, text to image, text to image generator, text to image ai',
+      title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
+      description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
+      keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
       type: 'website',
   }
   return (
