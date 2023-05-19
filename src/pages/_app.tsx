@@ -1,4 +1,5 @@
 import { AppProps } from 'next/app'
+import { Analytics } from '@vercel/analytics/react';
 import { useEffect } from 'react'
 import Layout from '../components/Layout';
 import EventLibrary from '../libraries/EventLibrary';
@@ -40,6 +41,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <Layout>
             <Component {...pageProps} />
+            <Analytics/>
         </Layout>
     )
 }
