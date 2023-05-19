@@ -10,9 +10,13 @@ import TextAreaComponent from '../TextAreaComponent/TextAreaComponent'
 import StyleCollection from '../../collections/StyleCollection'
 import SamplerCollection from '../../collections/SamplerCollection'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
+import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
 export default function Txt2ImageComponent(props: any) {
     const {prompt, style}: {prompt: string, style: string} = props
+    const router = useRouter()
+    const currentPage = usePathname()
     // const randomStyle = StyleCollection[Math.floor(Math.random() * StyleCollection.length)].value
     const [image, setImage] = useState('')
     const [newPrompt, setNewPrompt] = useState('')
@@ -25,6 +29,7 @@ export default function Txt2ImageComponent(props: any) {
     const [generatedImageDescription, setGeneratedImageDescription] = useState('')
     const [generatedImageSampler, setGeneratedImageSampler] = useState('')
     const [generatedImageStyle, setGeneratedImageStyle] = useState('')
+    const [generatedImageId, setGeneratedImageId] = useState('')
     const formReference = useRef(null)
 
     const renderImage = useCallback(() => {
@@ -42,6 +47,7 @@ export default function Txt2ImageComponent(props: any) {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
             setImage(parsedResult.data.image)
+            setGeneratedImageId(parsedResult.data.count)
             setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
             setGeneratedImageDescription(newPrompt)
             setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
@@ -55,7 +61,10 @@ export default function Txt2ImageComponent(props: any) {
     },[newStyle, newPrompt, sampler, cfg])
 
     useEffect(() => {
-        EventApiLibrary.getRandom()
+        let url = new URL(window.location.href)
+        let params = new URLSearchParams(url.search);
+        let sourceid = params.get('id')
+        EventApiLibrary.getRender(sourceid)
         .then(response => response.text())
         .then(result => {
             const parsedResult = JSON.parse(result)
@@ -66,6 +75,7 @@ export default function Txt2ImageComponent(props: any) {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
             setImage(parsedResult.data.image)
+            setGeneratedImageId(parsedResult.data.count)
             setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
             setGeneratedImageDescription(parsedResult.data.prompt)
             setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
@@ -98,6 +108,12 @@ export default function Txt2ImageComponent(props: any) {
         a.href = image
         a.download = `rod.dev ${generatedImageTitle}.png`;
         a.click();
+    }
+
+    function shareOnClick() {
+        const shareLink = `${window.location.origin}${currentPage}?id=${generatedImageId}`
+        navigator.clipboard.writeText(shareLink);
+
     }
 
     return (
@@ -154,6 +170,12 @@ export default function Txt2ImageComponent(props: any) {
                         <p className="style">{generatedImageStyle}</p>
                     )}
                 </div>
+                <ButtonComponent 
+                className="secondary"
+                label="Share"
+                type="button" 
+                onClick={shareOnClick}
+                ></ButtonComponent>
                 <ButtonComponent 
                 className="secondary"
                 label="Download"

@@ -1,6 +1,6 @@
 const EventApiLibrary = {
-    // RODRIGO_SERVICE: 'http://localhost:7777/',
-    RODRIGO_SERVICE: 'https://api.rod.dev/',
+    RODRIGO_SERVICE: 'http://localhost:7777/',
+    // RODRIGO_SERVICE: 'https://api.rod.dev/',
     // RODRIGO_SERVICE: process.env.NEXT_PUBLIC_RODRIGO_SERVICE,
     SESSION_SERVICE: 'session-service',
     RENDER_SERVICE: 'render-service',
@@ -77,6 +77,36 @@ const EventApiLibrary = {
                 method: method,
                 headers: headers,
                 body: JSON.stringify(form),
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response;
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async getRender(id?: string) {
+        const method = 'GET';
+        let searchParams;
+        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
+        try {
+            const headers = new Headers({
+                'Content-Type': 'application/json',
+                'Session': sessionStorage.id,
+                'Local': localStorage.id,
+            })
+
+            if (id) {
+                searchParams = new URLSearchParams({
+                    id: id
+                })
+                url = `${url}?${searchParams.toString()}`
+            }
+
+            const response = await fetch(url, {
+                method: method,
+                headers: headers,
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
