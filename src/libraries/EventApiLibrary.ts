@@ -1,6 +1,6 @@
 const EventApiLibrary = {
-    RODRIGO_SERVICE: 'http://localhost:7777/',
-    // RODRIGO_SERVICE: 'https://api.rod.dev/',
+    // RODRIGO_SERVICE: 'http://localhost:7777/',
+    RODRIGO_SERVICE: 'https://api.rod.dev/',
     // RODRIGO_SERVICE: process.env.NEXT_PUBLIC_RODRIGO_SERVICE,
     SESSION_SERVICE: 'session-service',
     RENDER_SERVICE: 'render-service',
