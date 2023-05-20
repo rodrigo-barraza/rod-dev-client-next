@@ -69,7 +69,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
                 `}
             </Script>
             <Component {...pageProps} />
-            <Analytics />
+            {/* <Analytics /> */}
         </Layout>
     )
 }
