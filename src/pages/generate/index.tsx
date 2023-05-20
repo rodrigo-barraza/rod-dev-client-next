@@ -27,17 +27,14 @@ export const getServerSideProps = async (context) => {
       const result = await getRandomNew.data.text()
       render = JSON.parse(result)
       return {
-        props: { render },
         redirect: {
           permanent: false,
-          // destination: resolvedUrl.split("?")[0],
-          destination: '/generate',
+          destination: resolvedUrl.split("?")[0],
         },
       };
     }
-  } else {
-    return { props: { render } };
   }
+  return { props: { render } };
 }
 
 export default function Playground(props) {
