@@ -27,6 +27,7 @@ export const getServerSideProps = async (context) => {
       const result = await getRandomNew.data.text()
       render = JSON.parse(result)
       return {
+        props: { render },
         redirect: {
           permanent: false,
           destination: resolvedUrl.split("?")[0],
