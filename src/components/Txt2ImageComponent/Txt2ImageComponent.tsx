@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
 
 export default function Txt2ImageComponent() {
+    const router = useRouter();
     const currentPage = usePathname()
     const [image, setImage] = useState('')
     const [newPrompt, setNewPrompt] = useState('')
@@ -44,6 +45,8 @@ export default function Txt2ImageComponent() {
             if (currentStyle && currentStyle.label != 'None') {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
+            router.query.id = parsedResult.data.count
+            router.push(router)
             setImage(parsedResult.data.image)
             setImageBlur(true)
             setGeneratedImageId(parsedResult.data.count)
