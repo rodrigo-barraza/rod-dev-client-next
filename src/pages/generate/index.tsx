@@ -30,7 +30,8 @@ export const getServerSideProps = async (context) => {
         props: { render },
         redirect: {
           permanent: false,
-          destination: resolvedUrl.split("?")[0],
+          // destination: resolvedUrl.split("?")[0],
+          destination: '/generate',
         },
       };
     }
