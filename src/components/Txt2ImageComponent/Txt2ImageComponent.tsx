@@ -17,7 +17,7 @@ import { usePathname } from 'next/navigation';
 export default function Txt2ImageComponent() {
     const router = useRouter();
     const currentPage = usePathname()
-    const [image, setImage] = useState('')
+    const [image, setImage] = useState('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
     const [newPrompt, setNewPrompt] = useState('')
     const [sampler, setSampler] = useState(SamplerCollection[0].value)
     const [newStyle, setNewStyle] = useState('')
@@ -30,7 +30,6 @@ export default function Txt2ImageComponent() {
     const [generatedImageStyle, setGeneratedImageStyle] = useState('')
     const [generatedImageId, setGeneratedImageId] = useState('')
     const [isSharing, setIsSharing] = useState(false)
-    const [imageBlur, setImageBlur] = useState(false)
     const formReference = useRef(null)
 
     const renderImage = useCallback(() => {
@@ -47,8 +46,6 @@ export default function Txt2ImageComponent() {
             }
             router.query.id = parsedResult.data.count
             router.push(router)
-            setImage(parsedResult.data.image)
-            setImageBlur(true)
             setGeneratedImageId(parsedResult.data.count)
             setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
             setGeneratedImageDescription(newPrompt)
@@ -56,13 +53,11 @@ export default function Txt2ImageComponent() {
             setGeneratedImageSampler(samplerLabel)
             setGeneratedImageStyle(styleLabel)
 
-            setIsImageLoading(false)
-
-            
-            const timeoutTimer = setTimeout(function () {
-                setImageBlur(false)
-                clearTimeout(timeoutTimer)
-            }, 1000);
+            img.onload = function () {
+                setIsImageLoading(false)
+                setImage(parsedResult.data.image)
+            }
+            img.src = parsedResult.data.image
 
         })
         .catch(error => console.log('error', error));
@@ -198,7 +193,7 @@ export default function Txt2ImageComponent() {
                 ></ButtonComponent>
             </div>
             <picture className={isImageLoading ? 'loading' : ''}>
-                <img className={`${isImageLoading ? 'loading' : ''} ${imageBlur ? 'blur' : ''}`} src={image} alt={newPrompt}>
+                <img className={`${isImageLoading ? 'loading' : ''}`} src={image} alt={newPrompt}>
                 </img>
             </picture>
             { isSharing && (
