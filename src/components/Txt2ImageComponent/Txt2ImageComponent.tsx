@@ -53,6 +53,7 @@ export default function Txt2ImageComponent() {
             setGeneratedImageSampler(samplerLabel)
             setGeneratedImageStyle(styleLabel)
 
+            const img = new Image()
             img.onload = function () {
                 setIsImageLoading(false)
                 setImage(parsedResult.data.image)

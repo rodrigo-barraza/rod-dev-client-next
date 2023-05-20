@@ -133,7 +133,6 @@
                 transition: 30s opacity ease-out;
             }
             &.loading :local{
-                box-shadow: 10px 10px 10px rgba(0,0,0,0.75);
                 filter: brightness(10) saturate(10) contrast(10);
                 transition: 30s filter ease-out;
                 animation: shake 1s ease;
