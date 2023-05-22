@@ -4,6 +4,14 @@ import EventLibrary from './EventLibrary';
 const useS3: boolean = true;
 
 const UtilityLibrary = {
+    isObjectEmpty(object: object) {
+        for (var i in object){
+            if (object.hasOwnProperty(i)) {
+                return false;
+            }
+        }
+        return true;
+    },
     capitalize(string: string) {
         if (string) {
             return string.charAt(0).toUpperCase() + string.slice(1)

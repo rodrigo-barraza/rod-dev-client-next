@@ -2,9 +2,11 @@
     background: rgb(44, 117, 253, 0.8);
     cursor: pointer;
     border-radius: 4px;
-    transition: all 0.2s;
+    transition: all 0.1s;
     color: white;
+    // border: 3px solid rgb(55, 55, 55);
     button {
+        transition: all 0.1s;
         font-weight: 700;
         width: 100%;
         cursor: pointer;
@@ -27,13 +29,6 @@
         box-shadow: 2px 2px 0px rgb(0,0,0,1);
         background: rgb(44, 117, 253, 0.9);
     }
-    &[disabled] {
-        background: rgba(250,250,250);
-        button {
-            color: rgba(220,220,220);
-            cursor: not-allowed;
-        }
-    }
     &.secondary {
         background: white;
         border: 3px solid rgb(55,55,55);
@@ -47,4 +42,23 @@
             color: white;
         }
     }
+    &[disabled] {
+        border: none;
+        background: rgba(235,235,235);
+        pointer-events: none;
+        box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
+        button {
+            color: rgba(210,210,210);
+            cursor: not-allowed;
+        }
+    }
+    // &[disabled] {
+    //     border: 3px dashed rgba(230,230,230);
+    //     background: rgba(240,240,240);
+    //     pointer-events: none;
+    //     button {
+    //         color: rgba(230,230,230);
+    //         cursor: not-allowed;
+    //     }
+    // }
 }

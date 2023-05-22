@@ -6,40 +6,34 @@ import { useRouter } from 'next/router'
 import PromptCollection from '../../collections/PromptCollection'
 import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
 import style from './index.module.scss'
-import EventApiLibrary from '../../libraries/EventApiLibrary'
+import RenderApiLibrary from '../../libraries/RenderApiLibrary'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
 
 export const getServerSideProps = async (context) => {
   const { req, query, res, resolvedUrl } = context
 
-  let render = {};
-  let renders = {};
   // console.log(req.headers.referer)
   // console.log(`${context.req.headers.host}`)
   // console.log(`${context.req.headers.host}${resolvedUrl}`)
 
   let returnBody = {
-    props: {},
+    props: {
+      render: {},
+      renders: {},
+    }
   }
-
   
-  const getRenders = await EventApiLibrary.getRenders('12')
-  console.log(getRenders)
+  const getRenders = await RenderApiLibrary.getRenders('12')
   const result = await getRenders.data.text()
-  renders = JSON.parse(result)
+  const renders = JSON.parse(result)
   returnBody.props.renders = renders;
-
-
   if (query?.id) {
-    const getRenderNew = await EventApiLibrary.getRenderNew(query.id)
-    if (getRenderNew.data) {
-      const result = await getRenderNew.data.text()
-      render = JSON.parse(result)
-      returnBody.props.render = render;
+    const getRender = await RenderApiLibrary.getRender(query.id)
+    if (getRender.data) {
+      returnBody.props.render = getRender.data;
     } else {
-      const getRandomNew = await EventApiLibrary.getRenderNew()
-      const result = await getRandomNew.data.text()
-      render = JSON.parse(result)
+      const getRandom = await RenderApiLibrary.getRender()
+      returnBody.props.render = getRandom.data
       returnBody = {
         redirect: {
           permanent: false,
@@ -49,15 +43,16 @@ export const getServerSideProps = async (context) => {
       };
     }
   } else {
-    returnBody.props.render = render;
+    const getRender = await RenderApiLibrary.getRender()
+    returnBody.props.render = getRender.data;
   }
-  
   return returnBody;
 }
 
 export default function Playground(props) {
   const { render, renders } = props
   const router = useRouter()
+  const [renderCount, setRenderCount] = useState(0)
 
   const openGraphImage = render.data?.image ? render.data.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
 
@@ -74,6 +69,15 @@ export default function Playground(props) {
       query: { id: id },
     })
   }
+
+  async function getCount() {
+    const count = await RenderApiLibrary.getCount()
+    setRenderCount(count.data.count)
+  }
+
+  useEffect(() => {
+    getCount()
+  }, [])
 
   return (
     <main className={style.GeneratePage}>
@@ -92,11 +96,11 @@ export default function Playground(props) {
             )}
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
-        <Txt2ImageComponent render={render.data}/>
+        <Txt2ImageComponent render={render}/>
         <div className="gallery">
-          <div className="sectionTitle">Explore Generations</div>
+          <div className="sectionTitle">Explore {renderCount} Generations</div>
           { renders.data.images.map((render, index) => (
-            <div key={index} className="gallery-item" onClick={() => goToGeneration(render.count)}>
+            <div key={index} className="gallery-item" onClick={() => goToGeneration(render.id)}>
               <div className="image">
                 <div className="overlay">
                   <div className="prompt">{render.prompt}</div>
