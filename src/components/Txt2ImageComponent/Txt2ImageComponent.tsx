@@ -75,7 +75,7 @@ export default function Txt2ImageComponent({render}) {
                     styleLabel = `🎨 ${currentStyle.label}`
                 }
                 setImage(render.image)
-                setGeneratedImageId(render.count)
+                setGeneratedImageId(render.id)
                 setGeneratedImageTitle(`Generated Image #${render.count}`)
                 setGeneratedImageDescription(render.prompt)
                 setDate(UtilityLibrary.toHumanDateAndTime(render.createdAt))
