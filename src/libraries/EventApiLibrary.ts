@@ -162,33 +162,11 @@ const EventApiLibrary = {
         }
         return { data, error, response }
     },
-    async getRandom() {
-        const method = 'GET';
-        const url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/random`;
-        try {
-            if (typeof window !== 'undefined') {
-            }
-            const headers = new Headers({
-                'Content-Type': 'application/json',
-                'Session': sessionStorage.id,
-                'Local': localStorage.id,
-            })
-            const response = await fetch(url, {
-                method: method,
-                headers: headers,
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response;
-        } catch (error) {
-            console.log(error)
-        }
-    },
-    async getRandomNew() {
+    async getRenders(limit?: string) {
         let data, error, response;
         const method = 'GET';
-        const url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/random`;
+        let searchParams;
+        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/renders`;
         try {
             const headers = new Headers({
                 'Content-Type': 'application/json',
@@ -197,6 +175,13 @@ const EventApiLibrary = {
             if (typeof window !== 'undefined') {
                 headers['Session'] = sessionStorage.id
                 headers['Local'] = localStorage.id
+            }
+
+            if (limit) {
+                searchParams = new URLSearchParams({
+                    limit: limit
+                })
+                url = `${url}?${searchParams.toString()}`
             }
 
             response = await fetch(url, {
