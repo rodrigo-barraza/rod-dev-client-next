@@ -199,6 +199,36 @@ const EventApiLibrary = {
         }
         return { data, error, response }
     },
+    async getRenderCount() {
+        let data, error, response;
+        const method = 'GET';
+        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/count`;
+        try {
+            const headers = new Headers({
+                'Content-Type': 'application/json',
+            })
+
+            if (typeof window !== 'undefined') {
+                headers['Session'] = sessionStorage.id
+                headers['Local'] = localStorage.id
+            }
+
+            response = await fetch(url, {
+                method: method,
+                headers: headers,
+            });
+
+            if (response.ok) {
+                data = response
+            } else {
+                error = response
+            }
+                
+        } catch (err) {
+            error = err
+        }
+        return { data, error, response }
+    },
 };
 
 export default EventApiLibrary;

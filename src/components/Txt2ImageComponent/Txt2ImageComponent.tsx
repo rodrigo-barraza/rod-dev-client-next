@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import React from 'react'
 import { InferGetServerSidePropsType, GetServerSideProps  } from 'next'
 import EventApiLibrary from '../../libraries/EventApiLibrary'
+import RenderApiLibrary from '../../libraries/RenderApiLibrary'
 import styles from './Txt2ImageComponent.module.scss'
 import InputComponent from '../InputComponent/InputComponent'
 import SelectComponent from '../SelectComponent/SelectComponent'
@@ -44,9 +45,9 @@ export default function Txt2ImageComponent({render}) {
             if (currentStyle && currentStyle.label != 'None') {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
-            router.query.id = parsedResult.data.count
+            router.query.id = parsedResult.data.id
             router.push(router)
-            setGeneratedImageId(parsedResult.data.count)
+            setGeneratedImageId(parsedResult.data.id)
             setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
             setGeneratedImageDescription(newPrompt)
             setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
@@ -65,58 +66,29 @@ export default function Txt2ImageComponent({render}) {
     },[newStyle, newPrompt, sampler, cfg])
 
     useEffect(() => {
-        let url = new URL(window.location.href)
-        let params = new URLSearchParams(url.search);
-        let sourceid = params.get('id')
-        
-        if (render) {
-            const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === render.sampler).label}`
-            let styleLabel
-            const currentStyle = StyleCollection.find((styleOption) => styleOption.value === render.style)
-            if (currentStyle && currentStyle.label != 'None') {
-                styleLabel = `🎨 ${currentStyle.label}`
-            }
-            setImage(render.image)
-            setGeneratedImageId(render.count)
-            setGeneratedImageTitle(`Generated Image #${render.count}`)
-            setGeneratedImageDescription(render.prompt)
-            setDate(UtilityLibrary.toHumanDateAndTime(render.createdAt))
-            setGeneratedImageSampler(samplerLabel)
-            setGeneratedImageStyle(styleLabel)
-            
-            setNewPrompt(render.prompt)
-            setNewStyle(render.style)
-            setCfg(render.cfg)
-            setSampler(render.sampler)
-            setIsImageLoading(false)
-        } else {
-            EventApiLibrary.getRender(sourceid)
-            .then(response => response.text())
-            .then(result => {
-                const parsedResult = JSON.parse(result)
-                const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === parsedResult.data.sampler).label}`
+        async function getRender() {
+            if (render) {
+                const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === render.sampler).label}`
                 let styleLabel
-                const currentStyle = StyleCollection.find((styleOption) => styleOption.value === parsedResult.data.style)
+                const currentStyle = StyleCollection.find((styleOption) => styleOption.value === render.style)
                 if (currentStyle && currentStyle.label != 'None') {
                     styleLabel = `🎨 ${currentStyle.label}`
                 }
-                setImage(parsedResult.data.image)
-                setGeneratedImageId(parsedResult.data.count)
-                setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
-                setGeneratedImageDescription(parsedResult.data.prompt)
-                setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
+                setImage(render.image)
+                setGeneratedImageId(render.count)
+                setGeneratedImageTitle(`Generated Image #${render.count}`)
+                setGeneratedImageDescription(render.prompt)
+                setDate(UtilityLibrary.toHumanDateAndTime(render.createdAt))
                 setGeneratedImageSampler(samplerLabel)
                 setGeneratedImageStyle(styleLabel)
-                
-                setNewPrompt(parsedResult.data.prompt)
-                setNewStyle(parsedResult.data.style)
-                setCfg(parsedResult.data.cfg)
-                setSampler(parsedResult.data.sampler)
+                setNewPrompt(render.prompt)
+                setNewStyle(render.style)
+                setCfg(render.cfg)
+                setSampler(render.sampler)
                 setIsImageLoading(false)
-    
-            })
-            .catch(error => console.log('error', error));
+            }
         }
+        getRender()
     }, [render])
 
     function onTextAreaComponentChange(event: any) {
@@ -203,6 +175,13 @@ export default function Txt2ImageComponent({render}) {
                         <p className="style">{generatedImageStyle}</p>
                     )}
                 </div>
+                <ButtonComponent 
+                className="secondary"
+                label="Buy"
+                disabled
+                type="button" 
+                onClick={shareOnClick}
+                ></ButtonComponent>
                 <ButtonComponent 
                 className="secondary"
                 label="Share"
