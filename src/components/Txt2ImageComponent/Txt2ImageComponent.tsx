@@ -30,6 +30,7 @@ export default function Txt2ImageComponent({render}) {
     const [generatedImageSampler, setGeneratedImageSampler] = useState('')
     const [generatedImageStyle, setGeneratedImageStyle] = useState('')
     const [generatedImageId, setGeneratedImageId] = useState('')
+    const [styleLabelColor, setStyleLabelColor] = useState('black')
     const [isSharing, setIsSharing] = useState(false)
     const formReference = useRef(null)
 
@@ -39,12 +40,14 @@ export default function Txt2ImageComponent({render}) {
         .then(response => response.text())
         .then(result => {
             const parsedResult = JSON.parse(result)
-            const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === parsedResult.data.sampler).label}`
+            const samplerResult = SamplerCollection.find((samplerOption) => samplerOption.value === parsedResult.data.sampler);
+            const samplerLabel = `🖌️ ${samplerResult.label}`
             let styleLabel
             const currentStyle = StyleCollection.find((styleOption) => styleOption.value === parsedResult.data.style)
             if (currentStyle && currentStyle.label != 'None') {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
+            setStyleLabelColor(currentStyle.color)
             router.query.id = parsedResult.data.id
             router.push(router)
             setGeneratedImageId(parsedResult.data.id)
@@ -74,6 +77,7 @@ export default function Txt2ImageComponent({render}) {
                 if (currentStyle && currentStyle.label != 'None') {
                     styleLabel = `🎨 ${currentStyle.label}`
                 }
+                setStyleLabelColor(currentStyle.color)
                 setImage(render.image)
                 setGeneratedImageId(render.id)
                 setGeneratedImageTitle(`Generated Image #${render.count}`)
@@ -166,15 +170,15 @@ export default function Txt2ImageComponent({render}) {
                 
             </div>
             <div className={`Card Label${image && !isImageLoading ? '' : ' loading'}`}>
-                <h1>{generatedImageTitle}</h1>
+                <h1>{render.id}</h1>
                 <p className="date">{date}</p>
-                <p className="description">{generatedImageDescription}</p>
                 <div className="properties">
                     <p className="sampler">{generatedImageSampler}</p>
                     { generatedImageStyle && (
-                        <p className="style">{generatedImageStyle}</p>
+                        <p className={`style ${styleLabelColor}`} style={{ backgroundColor: styleLabelColor}}>{generatedImageStyle}</p>
                     )}
                 </div>
+                <p className="description">{generatedImageDescription}</p>
                 <ButtonComponent 
                 className="secondary"
                 label="Buy"

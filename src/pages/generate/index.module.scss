@@ -18,6 +18,25 @@
             width: 100%;
             grid-column-start: 1;
             grid-column-end: -1;
+            display: flex;
+            justify-content: space-between;
+            .refresh {
+                cursor: pointer;
+                transition: 1s all;
+                opacity: 0.5;
+                filter: grayscale(100%);
+                &:hover {
+                    filter: grayscale(0%);
+                    // filter: hue-rotate(360deg);
+                    transform: scale(1.2);
+                    opacity: 1;
+                }
+                &:active {
+                    // filter: hue-rotate(360deg);
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
         }
         .gallery{
             display: grid;

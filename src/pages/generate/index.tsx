@@ -24,8 +24,7 @@ export const getServerSideProps = async (context) => {
   }
   
   const getRenders = await RenderApiLibrary.getRenders('12')
-  const result = await getRenders.data.text()
-  const renders = JSON.parse(result)
+  const renders = getRenders.data
   returnBody.props.renders = renders;
   if (query?.id) {
     const getRender = await RenderApiLibrary.getRender(query.id)
@@ -52,6 +51,7 @@ export const getServerSideProps = async (context) => {
 export default function Playground(props) {
   const { render, renders } = props
   const router = useRouter()
+  const [currentRenders, setCurrentRenders] = useState(renders)
   const [renderCount, setRenderCount] = useState(0)
 
   const openGraphImage = render.data?.image ? render.data.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
@@ -73,6 +73,11 @@ export default function Playground(props) {
   async function getCount() {
     const count = await RenderApiLibrary.getCount()
     setRenderCount(count.data.count)
+  }
+
+  async function getRenders() {
+    const getRenders = await RenderApiLibrary.getRenders('12')
+    setCurrentRenders(getRenders.data)
   }
 
   useEffect(() => {
@@ -98,8 +103,11 @@ export default function Playground(props) {
         </Head>
         <Txt2ImageComponent render={render}/>
         <div className="gallery">
-          <div className="sectionTitle">Explore {renderCount} Generations</div>
-          { renders.data.images.map((render, index) => (
+          <div className="sectionTitle">
+            <div>Explore {renderCount} Generations</div>
+            <div className="refresh" onClick={getRenders}>♻️</div>
+          </div>
+          { currentRenders.images.map((render, index) => (
             <div key={index} className="gallery-item" onClick={() => goToGeneration(render.id)}>
               <div className="image">
                 <div className="overlay">
