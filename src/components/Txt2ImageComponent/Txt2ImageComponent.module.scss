@@ -179,6 +179,25 @@
             z-index: 999;
             opacity: 0;
         }
+        .gallery {
+            grid-column: 1/4;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+            div {
+                background: white;
+            }
+        }
+        
+        @media (max-width: 1320px) {
+            .gallery {
+                grid-template-columns: 1fr 1fr;
+                grid-column: 1/2;
+                justify-self: center;
+                width: 768px;
+            }
+        }
     }
     
     @keyframes fadeOut {

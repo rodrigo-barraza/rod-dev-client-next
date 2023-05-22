@@ -1,4 +1,133 @@
 .GeneratePage {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+    :global {
+        .sectionTitle {
+            text-transform: uppercase;
+            text-align: left;
+            font-size: 28px;
+            text-transform: capitalize;
+            color: black;
+            font-weight: 500;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 8px;
+            max-width: 1432px;
+            width: 100%;
+            grid-column-start: 1;
+            grid-column-end: -1;
+        }
+        .gallery{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 4px;
+            width: 100%;
+            max-width: 1432px;
+            .gallery-item {
+                display: flex;
+                flex-direction: column;
+                .image {
+                    position: relative;
+                    flex: 0 0 300px;
+                    position: relative;
+                    .overlay {
+                        cursor: pointer;
+                        background: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 33%);
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        z-index: 1;
+                        padding: 8px;
+                        display: flex;
+                        align-items: flex-end;
+                        transition: all 0.2s;
+                        box-shadow: inset 0px -160px 50px -100px rgba(0,0,0,0.5);
+                        opacity: 0;
+                        .prompt {
+                            font-size: 14px;
+                            color: white;
+                            text-align: left;
+                            font-weight: 500;
+                            text-shadow: 0px 0px 4px black;
+                        }
+                    }
+                    img {
+                        object-fit: cover;
+                        position: absolute;
+                        height: 100%;
+                        width: 100%;
+                        inset: 0px;
+                        color: transparent;
+                    }
+                }
+                &:hover {
+                    .image {
+                        .overlay {
+                            opacity: 1;
+                        }
+                    }
+                }
+                // .miniCard {
+                //     background: white;
+                //     padding: 16px;
+                //     display: grid;
+                //     gap: 8px;
+                //     grid-template-columns: 1fr 1fr 1fr 1fr;
+                //     grid-template-rows: auto auto 80px auto;
+                //     .name {
+                //         text-align: left;
+                //         grid-column: 1/5;
+                //         font-weight: 500;
+                //         font-size: 24px;
+                //         color: black;
+                //     }
+                //     .date {
+                //         grid-column: 1/5;
+                //         text-align: left;
+                //         font-weight: 100;
+                //         font-size: 16px;
+                //     }
+                //     .prompt {
+                //         grid-column: 1/5;
+                //         text-align: justify;
+                //         font-weight: 100;
+                //     }
+                //     .properties {
+                //         grid-column: 1/5;
+                //         grid-row: 4;
+                //         display: flex;
+                //         gap: 8px;
+                //         div {
+                //             flex: 0 1 auto;
+                //             font-size: 12px;
+                //             background: black;
+                //             color: white;
+                //             padding: 4px 8px;
+                //             border-radius: 24px;
+
+                //         }
+                //     }
+                // }
+            }
+        }
+        @media (max-width: 1320px) {
+            .gallery {
+                grid-template-columns: 1fr 1fr;
+                grid-column: 1/2;
+                justify-self: center;
+                max-width: 768px;
+            }
+        }
+        @media (max-width: 550px) {
+            .gallery {
+                grid-template-columns: 1fr;
+                justify-self: center;
+                max-width: 768px;
+            }
+        }
+    }
 }

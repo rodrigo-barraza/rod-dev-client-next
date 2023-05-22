@@ -14,7 +14,7 @@ import UtilityLibrary from '../../libraries/UtilityLibrary'
 import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
 
-export default function Txt2ImageComponent() {
+export default function Txt2ImageComponent({render}) {
     const router = useRouter();
     const currentPage = usePathname()
     const [image, setImage] = useState('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
@@ -68,33 +68,56 @@ export default function Txt2ImageComponent() {
         let url = new URL(window.location.href)
         let params = new URLSearchParams(url.search);
         let sourceid = params.get('id')
-        EventApiLibrary.getRender(sourceid)
-        .then(response => response.text())
-        .then(result => {
-            const parsedResult = JSON.parse(result)
-            const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === parsedResult.data.sampler).label}`
+        
+        if (render) {
+            const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === render.sampler).label}`
             let styleLabel
-            const currentStyle = StyleCollection.find((styleOption) => styleOption.value === parsedResult.data.style)
+            const currentStyle = StyleCollection.find((styleOption) => styleOption.value === render.style)
             if (currentStyle && currentStyle.label != 'None') {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
-            setImage(parsedResult.data.image)
-            setGeneratedImageId(parsedResult.data.count)
-            setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
-            setGeneratedImageDescription(parsedResult.data.prompt)
-            setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
+            setImage(render.image)
+            setGeneratedImageId(render.count)
+            setGeneratedImageTitle(`Generated Image #${render.count}`)
+            setGeneratedImageDescription(render.prompt)
+            setDate(UtilityLibrary.toHumanDateAndTime(render.createdAt))
             setGeneratedImageSampler(samplerLabel)
             setGeneratedImageStyle(styleLabel)
             
-            setNewPrompt(parsedResult.data.prompt)
-            setNewStyle(parsedResult.data.style)
-            setCfg(parsedResult.data.cfg)
-            setSampler(parsedResult.data.sampler)
+            setNewPrompt(render.prompt)
+            setNewStyle(render.style)
+            setCfg(render.cfg)
+            setSampler(render.sampler)
             setIsImageLoading(false)
-
-        })
-        .catch(error => console.log('error', error));
-    }, [])
+        } else {
+            EventApiLibrary.getRender(sourceid)
+            .then(response => response.text())
+            .then(result => {
+                const parsedResult = JSON.parse(result)
+                const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === parsedResult.data.sampler).label}`
+                let styleLabel
+                const currentStyle = StyleCollection.find((styleOption) => styleOption.value === parsedResult.data.style)
+                if (currentStyle && currentStyle.label != 'None') {
+                    styleLabel = `🎨 ${currentStyle.label}`
+                }
+                setImage(parsedResult.data.image)
+                setGeneratedImageId(parsedResult.data.count)
+                setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
+                setGeneratedImageDescription(parsedResult.data.prompt)
+                setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
+                setGeneratedImageSampler(samplerLabel)
+                setGeneratedImageStyle(styleLabel)
+                
+                setNewPrompt(parsedResult.data.prompt)
+                setNewStyle(parsedResult.data.style)
+                setCfg(parsedResult.data.cfg)
+                setSampler(parsedResult.data.sampler)
+                setIsImageLoading(false)
+    
+            })
+            .catch(error => console.log('error', error));
+        }
+    }, [render])
 
     function onTextAreaComponentChange(event: any) {
         if(event.keyCode == 13 && event.shiftKey == false) {
