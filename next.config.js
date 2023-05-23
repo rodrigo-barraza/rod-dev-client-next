@@ -21,7 +21,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'generations.rod.dev',
+        hostname: 'renders.rod.dev',
         port: ''
       },
     ]

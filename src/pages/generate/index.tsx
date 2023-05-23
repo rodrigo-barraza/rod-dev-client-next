@@ -21,6 +21,7 @@ export const getServerSideProps = async (context) => {
     props: {
       render: {},
       renders: {},
+      meta: {},
     }
   }
   
@@ -46,23 +47,27 @@ export const getServerSideProps = async (context) => {
     const getRender = await RenderApiLibrary.getRender()
     returnBody.props.render = getRender.data;
   }
+  returnBody.props.meta = {
+    title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
+    description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
+    keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
+    type: 'website',
+    image: returnBody.props.render?.image ? returnBody.props.render.image : 'https://renders.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg',
+    url: `https://rod.dev${resolvedUrl}`,
+  }
+
+  console.log(returnBody.props.meta)
+
   return returnBody;
 }
 
 export default function Playground(props) {
-  const { render, renders } = props
+  const { render, renders, meta } = props
   const router = useRouter()
   const [currentRenders, setCurrentRenders] = useState(renders)
   const [renderCount, setRenderCount] = useState(0)
 
-  const openGraphImage = render?.image ? render.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
-
-  const meta = {
-      title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
-      description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
-      keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
-      type: 'website',
-  }
+  const openGraphImage = render?.image ? render.image : 'https://renders.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
 
   function goToGeneration(id) {
     router.push({
@@ -106,6 +111,11 @@ export default function Playground(props) {
             {render?.image && (
                 <meta property='article:published_time' content={render.createdAt}/>
             )}
+            <meta name="twitter:card" content="summary_large_image"/>
+            <meta name="twitter:title" content={meta.title}/>
+            <meta name="twitter:site" content="@rawdreygo"/>
+            <meta name="twitter:url" content={`https://rod.dev${router.asPath}`}/>
+            <meta name="twitter:image" content={openGraphImage}/>
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
         <Txt2ImageComponent render={render}/>
