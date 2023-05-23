@@ -5,17 +5,6 @@
     transition: all 0.1s;
     color: white;
     // border: 3px solid rgb(55, 55, 55);
-    button {
-        transition: all 0.1s;
-        font-weight: 700;
-        width: 100%;
-        cursor: pointer;
-        background: transparent;
-        border: 0;
-        color: inherit;
-        padding: 20px;
-        font-size: 24px;
-    }
     &:hover {
         transform: translateY(-2px);
         background: rgb(44, 117, 253, 0.8);
@@ -41,6 +30,18 @@
             background: rgb(44, 117, 253);
             color: white;
         }
+        &.blue {
+            &:active {
+                background: rgb(44, 117, 253);
+                color: white;
+            }
+        }
+        &.red {
+            &:active {
+                background: rgb(218, 11, 11);
+                color: white;
+            }
+        }
     }
     &[disabled] {
         border: none;
@@ -52,13 +53,17 @@
             cursor: not-allowed;
         }
     }
-    // &[disabled] {
-    //     border: 3px dashed rgba(230,230,230);
-    //     background: rgba(240,240,240);
-    //     pointer-events: none;
-    //     button {
-    //         color: rgba(230,230,230);
-    //         cursor: not-allowed;
-    //     }
-    // }
+    :global {
+        button {
+            transition: all 0.1s;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            color: inherit;
+            padding: 20px;
+            font-size: 24px;
+        }
+    }
 }

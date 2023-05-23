@@ -7,6 +7,7 @@ import PromptCollection from '../../collections/PromptCollection'
 import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
 import style from './index.module.scss'
 import RenderApiLibrary from '../../libraries/RenderApiLibrary'
+import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
 
 export const getServerSideProps = async (context) => {
@@ -70,6 +71,12 @@ export default function Playground(props) {
     })
   }
 
+  function goToGenerations() {
+    router.push({
+      pathname: '/renders'
+    })
+  }
+
   async function getCount() {
     const count = await RenderApiLibrary.getCount()
     setRenderCount(count.data.count)
@@ -104,8 +111,14 @@ export default function Playground(props) {
         <Txt2ImageComponent render={render}/>
         <div className="gallery">
           <div className="sectionTitle">
-            <div>Explore {renderCount} Generations</div>
-            <div className="refresh" onClick={getRenders}>♻️</div>
+            <div>Explore {renderCount} Renders</div>
+            <ButtonComponent 
+              className="secondary"
+              label="My Renders"
+              type="button" 
+              onClick={goToGenerations}
+              ></ButtonComponent>
+            {/* <div className="refresh" onClick={getRenders}>♻️</div> */}
           </div>
           { currentRenders.images.map((render, index) => (
             <div key={index} className="gallery-item" onClick={() => goToGeneration(render.id)}>

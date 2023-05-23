@@ -1,7 +1,9 @@
 const PagesCollection = [
     {
         path: '/generate',
-        name: '✨Generate'
+        name: 'Generate',
+        emoji: '✨'
+        // name: '✨Generate'
     },
     {
         path: '/',
@@ -14,7 +16,12 @@ const PagesCollection = [
     {
         path: '/rodrigo-barraza',
         name: 'about'
-    }
+    },
+    // {
+    //     path: '/renders',
+    //     name: 'My Art',
+    //     emoji: '💾'
+    // },
 ];
 
 export default PagesCollection;

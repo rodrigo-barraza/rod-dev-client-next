@@ -94,7 +94,7 @@ export default function Generations(props) {
         </Head> */}
         <div className="sectionTitle">
             <div className="container column">
-                <h1>My Generations</h1>
+                <h1>Your Renders</h1>
                 <p>text-to-image AI generations</p>
                 <p>Your collection of AI-generated images</p>
             </div>
@@ -136,9 +136,11 @@ export default function Generations(props) {
                             onClick={() => goToGeneration(render.id)}
                             ></ButtonComponent>
                             <ButtonComponent 
-                            className="secondary"
+                            className="secondary red"
                             label="Delete"
                             type="button" 
+                            disabled
+                            // onClick={() => deleteGeneration(render.id)}
                             ></ButtonComponent>
                         </div>
                     </div>

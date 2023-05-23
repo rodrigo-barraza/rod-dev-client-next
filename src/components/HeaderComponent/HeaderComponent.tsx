@@ -32,9 +32,10 @@ const HeaderComponent: React.FC = () => {
             const stripe: HTMLElement | null = document.querySelector(".stripe");
             const floaty: HTMLElement | null = document.querySelector("header");
             const collectionDetails: HTMLElement | null = document.querySelector(".collection-details");
-
-            if (path === 'collections' && !collectionDetails) {
+            if ((path === 'collections' && !collectionDetails)) {
+                // router.asPath.replaceAll('/', '') === 'generations')
             } else if (stripe && collectionDetails && floaty && path === 'collections') {
+                console.log('yes')
                 const collectionDetailsHeight = collectionDetails.offsetHeight;
                 const floatyHeight = floaty.offsetHeight;
                 stripe.setAttribute("style",`height:${collectionDetailsHeight + floatyHeight + 80}px`);
@@ -71,7 +72,12 @@ const HeaderComponent: React.FC = () => {
                     <nav className="full">
                         <ul>
                             { PagesCollection.map((page, pageIndex) => (
-                                <li className="ai-art" key={pageIndex}><ActiveLink activeClassName="active" href={page.path}>{UtilityLibrary.capitalize(page.name)}</ActiveLink></li>
+                                <li className="ai-art" key={pageIndex}>
+                                    <ActiveLink activeClassName="active" href={page.path}>
+                                        {page.emoji && <span className="emoji">{page.emoji}</span>}
+                                        {UtilityLibrary.capitalize(page.name)}
+                                    </ActiveLink>
+                                </li>
                             ))}
                         </ul>
                     </nav>
