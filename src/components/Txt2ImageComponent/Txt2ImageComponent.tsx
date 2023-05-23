@@ -14,6 +14,8 @@ import SamplerCollection from '../../collections/SamplerCollection'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
 import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
+import { useContext } from 'react'
+import { useAlertContext } from '../../contexts/AlertContext'
 
 export default function Txt2ImageComponent({render}) {
     const router = useRouter();
@@ -33,6 +35,8 @@ export default function Txt2ImageComponent({render}) {
     const [styleLabelColor, setStyleLabelColor] = useState('black')
     const [isSharing, setIsSharing] = useState(false)
     const formReference = useRef(null)
+
+    const { setMessage } = useAlertContext();
 
     const renderImage = useCallback(() => {
         setIsImageLoading(true)
@@ -106,20 +110,18 @@ export default function Txt2ImageComponent({render}) {
         renderImage()
     }
 
-    function downloadOnClick() {
-        var a = document.createElement("a");
-        a.href = image
-        a.download = `rod.dev ${generatedImageTitle}.png`;
-        a.click();
+    function downloadGeneration() {
+        UtilityLibrary.downloadImage(image, generatedImageTitle);
     }
 
-    function shareOnClick() {
-        setIsSharing(true)
+    function shareGeneration() {
+        setMessage('Copied Link!')
+        // setIsSharing(true)
         const shareLink = `${window.location.origin}${currentPage}?id=${generatedImageId}`
         navigator.clipboard.writeText(shareLink);
         
         const timeoutTimer = setTimeout(function () {
-            setIsSharing(false)
+            setMessage('')
             clearTimeout(timeoutTimer)
         }, 1000);
 
@@ -184,19 +186,18 @@ export default function Txt2ImageComponent({render}) {
                 label="Buy"
                 disabled
                 type="button" 
-                onClick={shareOnClick}
                 ></ButtonComponent>
                 <ButtonComponent 
                 className="secondary"
                 label="Share"
                 type="button" 
-                onClick={shareOnClick}
+                onClick={shareGeneration}
                 ></ButtonComponent>
                 <ButtonComponent 
                 className="secondary"
                 label="Download"
                 type="button" 
-                onClick={downloadOnClick}
+                onClick={downloadGeneration}
                 ></ButtonComponent>
             </div>
             <picture className={isImageLoading ? 'loading' : ''}>

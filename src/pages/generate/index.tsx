@@ -54,7 +54,7 @@ export default function Playground(props) {
   const [currentRenders, setCurrentRenders] = useState(renders)
   const [renderCount, setRenderCount] = useState(0)
 
-  const openGraphImage = render.data?.image ? render.data.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
+  const openGraphImage = render?.image ? render.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
 
   const meta = {
       title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
@@ -96,8 +96,8 @@ export default function Playground(props) {
             <meta property="og:description" content={meta.description}/>
             <meta property="og:title" content={meta.title}/>
             <meta property="og:image" content={openGraphImage} />
-            {render.data?.image && (
-                <meta property='article:published_time' content={render.data.createdAt}/>
+            {render?.image && (
+                <meta property='article:published_time' content={render.createdAt}/>
             )}
             <link rel="icon" href="/images/favicon.ico" />
         </Head>

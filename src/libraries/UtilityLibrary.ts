@@ -4,6 +4,13 @@ import EventLibrary from './EventLibrary';
 const useS3: boolean = true;
 
 const UtilityLibrary = {
+    downloadImage(imagePath: string, imageId: string) {
+        var a = document.createElement("a");
+        a.href = imagePath
+        a.download = `rod.dev ${imageId}.png`;
+        a.target = "_blank";
+        a.click();
+    },
     isObjectEmpty(object: object) {
         for (var i in object){
             if (object.hasOwnProperty(i)) {

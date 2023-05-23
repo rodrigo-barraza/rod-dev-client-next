@@ -75,13 +75,14 @@ const EventApiLibrary = {
         }
         return { data, error, response }
     },
-    async getRenders(limit?: string) {
+    async getRenders(limit?: string, mode?: string) {
         const method = 'GET';
         let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/renders`;
         const headers = new Headers({})
         const body = {}
         const searchParams = new URLSearchParams({})
         if (limit) { searchParams.append('limit', limit) }
+        if (mode) { searchParams.append('mode', mode) }
         return await FetchWrapper.fetch(method, url, headers, body, searchParams)
     },
     async getRender(id?: string) {

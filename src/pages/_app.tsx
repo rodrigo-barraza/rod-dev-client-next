@@ -6,9 +6,14 @@ import EventLibrary from '../libraries/EventLibrary';
 import '../styles.scss'
 import '../styles/animations.scss'
 import Script from 'next/script'
+import { AlertProvider, useAlertContext } from '../contexts/AlertContext'
 
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
+    const { message } = useAlertContext();
+
+    console.log(123, message)
+    
     function postSession() {
         EventLibrary.postSession(1, screen.width, screen.height);
     }
@@ -68,7 +73,10 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
                     })(window,document,'script','dataLayer','GTM-T62WJS5');
                 `}
             </Script>
-            <Component {...pageProps} />
+            <AlertProvider>
+                {message}
+                <Component {...pageProps} />
+            </AlertProvider>
             {/* <Analytics /> */}
         </Layout>
     )
