@@ -67,8 +67,6 @@ export default function Playground(props) {
   const [currentRenders, setCurrentRenders] = useState(renders)
   const [renderCount, setRenderCount] = useState(0)
 
-  const openGraphImage = render?.image ? render.image : 'https://renders.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
-
   function goToGeneration(id) {
     router.push({
       pathname: '/generate',
@@ -107,7 +105,7 @@ export default function Playground(props) {
             <meta property="og:site_name" content="Rodrigo Barraza"/>
             <meta property="og:description" content={meta.description}/>
             <meta property="og:title" content={meta.title}/>
-            <meta property="og:image" content={openGraphImage} />
+            <meta property="og:image" content={meta.image} />
             {render?.image && (
                 <meta property='article:published_time' content={render.createdAt}/>
             )}
@@ -115,7 +113,7 @@ export default function Playground(props) {
             <meta name="twitter:title" content={meta.title}/>
             <meta name="twitter:site" content="@rawdreygo"/>
             <meta name="twitter:url" content={`https://rod.dev${router.asPath}`}/>
-            <meta name="twitter:image" content={openGraphImage}/>
+            <meta name="twitter:image" content={meta.image}/>
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
         <Txt2ImageComponent render={render}/>
