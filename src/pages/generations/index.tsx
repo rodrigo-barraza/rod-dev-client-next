@@ -15,25 +15,19 @@ export const getServerSideProps = async (context) => {
   const { req, query, res, resolvedUrl } = context
 
     let returnBody = {
-        props: {
-            renders: {},
-        }
+        props: {}
     }
-    const getRenders = await RenderApiLibrary.getRenders('12', 'user')
-    const renders = getRenders.data
-    returnBody.props.renders = renders;
     return returnBody;
 }
 
 export default function Generations(props) {
-  const { renders } = props
+  // const { renders } = props
   const router = useRouter()
   const currentPage = usePathname()
-  const [currentRenders, setCurrentRenders] = useState(renders)
+  const [currentRenders, setCurrentRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
   const [isSharing, setIsSharing] = useState(false)
-
-  console.log(renders)
+  const [renders, setRenders] = useState([])
 
 //   const openGraphImage = render?.image ? render.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
 
@@ -72,12 +66,13 @@ export default function Generations(props) {
   }
 
   async function getRenders() {
-    const getRenders = await RenderApiLibrary.getRenders('12')
+    const getRenders = await RenderApiLibrary.getRenders('12', 'user')
     setCurrentRenders(getRenders.data)
   }
 
   useEffect(() => {
     getCount()
+    getRenders();
   }, [])
 
   return (
@@ -106,7 +101,7 @@ export default function Generations(props) {
         </div>
         <div className="gallery">
             <div className="container column">
-            { currentRenders.images.map((render, index) => (
+            { currentRenders.images?.map((render, index) => (
                 <div key={index} className="gallery-item">
                     <div className="image">
                         <img src={render.image}></img>
