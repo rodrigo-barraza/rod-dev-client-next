@@ -43,9 +43,30 @@
             }
         }
     }
+    &.filled {
+        background: rgb(44, 117, 253);
+        border: 3px solid rgb(55,55,55);
+        color: white;
+        &.blue {
+            background: rgb(37, 97, 209);
+            color: white;
+        }
+        &.red {
+            background: rgb(218, 11, 11);
+            color: white;
+        }
+        &:hover {
+            background: rgb(44, 117, 253);
+            color: white;
+        }
+        &:active {
+            background: rgb(39, 102, 219);
+            color: white;
+        }
+    }
     &[disabled] {
         border: none;
-        background: rgba(235,235,235);
+        background: rgba(235,235,235)!important;
         pointer-events: none;
         box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
         button {

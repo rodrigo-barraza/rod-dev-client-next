@@ -17,7 +17,9 @@ const HeaderComponent: React.FC = () => {
     let path = ''
 
     if (queryId !== undefined && typeof queryId === "string") {
-        path = router.asPath.replace(queryId, '').replaceAll('/', '')
+        path = router.asPath.replaceAll('/', '').replace(queryId, '')
+    } else {
+        path = router.asPath.replaceAll('/', '')
     }
 
     useEffect(() => {
@@ -28,14 +30,13 @@ const HeaderComponent: React.FC = () => {
     })
     useEffect(() => {
         const setStripeStyles = function() {
+            console.log('fire')
             const style: Object = {};
             const stripe: HTMLElement | null = document.querySelector(".stripe");
             const floaty: HTMLElement | null = document.querySelector("header");
-            const collectionDetails: HTMLElement | null = document.querySelector(".collection-details");
+            const collectionDetails: HTMLElement | null = document.querySelector(".collection-details") || document.querySelector(".details");
             if ((path === 'collections' && !collectionDetails)) {
-                // router.asPath.replaceAll('/', '') === 'generations')
-            } else if (stripe && collectionDetails && floaty && path === 'collections') {
-                console.log('yes')
+            } else if (stripe && collectionDetails && floaty && (path === 'collections' || path === 'renders')) {
                 const collectionDetailsHeight = collectionDetails.offsetHeight;
                 const floatyHeight = floaty.offsetHeight;
                 stripe.setAttribute("style",`height:${collectionDetailsHeight + floatyHeight + 80}px`);

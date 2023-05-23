@@ -44,7 +44,7 @@
                     @media (max-width: 1432px) {
                         width: 33vw;
                     }
-                    @media (max-width: 640px) {
+                    @media (max-width: 960px) {
                         width: 100%;
                     }
                     div {
@@ -65,7 +65,7 @@
                             @media (max-width: 1432px) {
                                 font-size: calc(1.35vw + 13px);
                             }
-                            @media (max-width: 640px) {
+                            @media (max-width: 960px) {
                                 font-size: 24px;
                             }
                         }
@@ -134,7 +134,7 @@
                         @media (max-width: 1432px) {
                             font-size: calc(3vw + 5px);
                         }
-                        @media (max-width: 640px) {
+                        @media (max-width: 960px) {
                             font-size: 28px;
                         }
                     }
@@ -176,7 +176,7 @@
                         color: rgba(0,0,0,0.9);
                     }
                 }
-                @media (max-width: 640px) {
+                @media (max-width: 960px) {
                     grid-template-columns: 1fr;
                     grid-template-rows: auto;
                     grid-gap: 12px;
@@ -294,10 +294,10 @@
                                 @media (max-width: 1432px) {
                                     font-size: calc(1.4vw + 12px);
                                 }
-                                @media (max-width: 640px) {
+                                @media (max-width: 960px) {
                                     font-size: calc(2.4vw + 12px);
                                 }
-                                // @media (max-width: 640px) {
+                                // @media (max-width: 960px) {
                                 // }
                             }
                         }
@@ -379,7 +379,7 @@
                         display: none;
                     }
                 }
-                @media (max-width: 640px) {
+                @media (max-width: 960px) {
                     grid-template-columns: 1fr;
                     .collection:last-of-type {
                         display: block;
@@ -398,7 +398,7 @@
                 }
             }
         }
-        @media (max-width: 640px) {
+        @media (max-width: 960px) {
             .work {
                 .container {
                     grid-template-columns: 1fr;

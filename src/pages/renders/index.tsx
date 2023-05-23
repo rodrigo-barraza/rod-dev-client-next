@@ -10,6 +10,8 @@ import RenderApiLibrary from '../../libraries/RenderApiLibrary'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import { usePathname } from 'next/navigation';
+import InputComponent from '../../components/InputComponent/InputComponent'
+import { debounce } from 'lodash'
 
 export const getServerSideProps = async (context) => {
   const { req, query, res, resolvedUrl } = context
@@ -25,11 +27,68 @@ export default function Generations(props) {
   const router = useRouter()
   const currentPage = usePathname()
   const [currentRenders, setCurrentRenders] = useState([])
-  const [renderCount, setRenderCount] = useState(0)
   const [isSharing, setIsSharing] = useState(false)
-  const [renders, setRenders] = useState([])
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-//   const openGraphImage = render?.image ? render.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
+  const searchFilter = (array) => {
+    if (array && array.length) {
+      return array.filter((item) =>
+        item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase())
+      );
+    }
+  };
+
+  useEffect(() => {
+    const debouncedSearchValue = debounce((value) => {
+      setDebouncedSearch(value);
+      console.log('fire')
+    }, 600);
+  
+    debouncedSearchValue(search);
+  
+    // Cleanup function to cancel debounce in case of unmounting while waiting for execution
+    return () => {
+      debouncedSearchValue.cancel();
+    };
+  }, [search]);
+
+  // const searchFilter = debounce((array) => {
+  //   if (array && array.length) {
+  //     return array.filter((item) =>
+  //       item.prompt.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //   }
+  // }, 300);
+
+  // const searchFilter = (array) => {
+  //   if (array && array.length) {
+  //     return array.filter((item) =>
+  //       item.prompt.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //   }
+  // };
+
+  // const searchFilter = (array) => {
+  //   if (array && array.length) {
+  //     return array.filter((item) => {
+  //       console.log(search, item.prompt.toLowerCase().includes(search.toLowerCase()))
+  //       return item.prompt.toLowerCase().includes(search.toLowerCase());
+  //     });
+  //   }
+  // };
+
+  
+  // const searchFilter = debounce((array) => {
+  //   if (array && array.length) {
+  //     return array.filter((item) => {
+  //       console.log(item)
+  //       return item.prompt.toLowerCase().includes(search.toLowerCase())
+  //     }
+  //     )}
+  //   }, 300)
+
+  const filteredCurrentRenders = searchFilter(currentRenders.images);
 
   const meta = {
       title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
@@ -60,23 +119,17 @@ export default function Generations(props) {
       }, 1000);
   }
 
-  async function getCount() {
-    const count = await RenderApiLibrary.getCount()
-    setRenderCount(count.data.count)
-  }
-
   async function getRenders() {
     const getRenders = await RenderApiLibrary.getRenders('12', 'user')
     setCurrentRenders(getRenders.data)
   }
 
   useEffect(() => {
-    getCount()
     getRenders();
   }, [])
 
   return (
-    <main className={style.GenerationsPage}>
+    <main className={style.RendersPage}>
         {/* <Head>
             <title>{meta.title}</title>
             <meta name="description" content={meta.description}/>
@@ -92,61 +145,73 @@ export default function Generations(props) {
             )}
             <link rel="icon" href="/images/favicon.ico" />
         </Head> */}
-        <div className="sectionTitle">
-            <div className="container column">
-                <h1>Your Renders</h1>
-                <p>text-to-image AI generations</p>
-                <p>Your collection of AI-generated images</p>
-            </div>
-        </div>
         <div className="gallery">
-            <div className="container column">
-            { currentRenders.images?.map((render, index) => (
-                <div key={index} className="gallery-item">
-                    <div className="image">
-                        <img src={render.image}></img>
-                    </div>
-                    <div className="miniCard">
-                        <div className="name">{render.id}</div>
-                        <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
-                        <div className="properties">
-                            <div className="sampler">🖌️ {render.sampler}</div>
-                            <div className="style">🎨 {render.style}</div>
-                        </div>
-                        <div className="prompt">{render.prompt}</div>
-                        <div className="buttons">
-                            <ButtonComponent 
-                            className="secondary"
-                            label="Share"
-                            type="button" 
-                            onClick={() => shareGeneration(render)}
-                            ></ButtonComponent>
-                            <ButtonComponent 
-                            className="secondary"
-                            label="Download"
-                            type="button"
-                            onClick={() => downloadGeneration(render)}
-                            ></ButtonComponent>
-                        </div>
-                        <div className="buttons">
-                            <ButtonComponent 
-                            className="secondary"
-                            label="Prompt"
-                            type="button" 
-                            onClick={() => goToGeneration(render.id)}
-                            ></ButtonComponent>
-                            <ButtonComponent 
-                            className="secondary red"
-                            label="Delete"
-                            type="button" 
-                            disabled
-                            // onClick={() => deleteGeneration(render.id)}
-                            ></ButtonComponent>
-                        </div>
-                    </div>
-                </div>
-            ))}
+          <div className="details">
+              <div className="container column">
+                  <h1>Your Renders</h1>
+                  <p>text-to-image AI generations</p>
+                  <p>Your collection of AI-generated images</p>
+              </div>
+          </div>
+          <div className="search">
+            <div className="nav container column">
+              <div className="CardComponent">
+                <InputComponent 
+                  label="Search"
+                  type="text"
+                  value={search} 
+                  onChange={setSearch}
+                ></InputComponent>
+              </div>
             </div>
+          </div>
+          { filteredCurrentRenders?.map((render, index) => (
+          <div key={index} className="item">
+            <div className="container">
+              <picture className="image">
+                  <img src={render.image}></img>
+              </picture>
+              <div className="card">
+                  <div className="name">{render.id}</div>
+                  <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
+                  <div className="properties">
+                      <div className="sampler">🖌️ {render.sampler}</div>
+                      <div className="style">🎨 {render.style}</div>
+                  </div>
+                  <div className="prompt">{render.prompt}</div>
+                  <div className="buttons">
+                      <ButtonComponent 
+                      className="secondary"
+                      label="Share"
+                      type="button" 
+                      onClick={() => shareGeneration(render)}
+                      ></ButtonComponent>
+                      <ButtonComponent 
+                      className="secondary"
+                      label="Download"
+                      type="button"
+                      onClick={() => downloadGeneration(render)}
+                      ></ButtonComponent>
+                  </div>
+                  <div className="buttons">
+                      <ButtonComponent 
+                      className="secondary"
+                      label="Load"
+                      type="button" 
+                      onClick={() => goToGeneration(render.id)}
+                      ></ButtonComponent>
+                      <ButtonComponent 
+                      className="secondary red"
+                      label="Delete"
+                      type="button" 
+                      disabled
+                      // onClick={() => deleteGeneration(render.id)}
+                      ></ButtonComponent>
+                  </div>
+              </div>
+            </div>
+          </div>
+            ))}
         </div>
     </main>
   )

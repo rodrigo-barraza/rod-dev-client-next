@@ -166,6 +166,7 @@ export default function Txt2ImageComponent({render}) {
                     <ButtonComponent 
                     label="Generate"
                     type="submit" 
+                    className="filled blue"
                     disabled={isImageLoading}
                     ></ButtonComponent>
                 </form>

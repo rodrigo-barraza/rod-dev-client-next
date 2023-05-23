@@ -20,6 +20,13 @@
             grid-column-end: -1;
             display: flex;
             justify-content: space-between;
+            padding: 32px;
+            box-sizing: border-box;
+            > div {
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+            }
             .refresh {
                 cursor: pointer;
                 transition: 1s all;
