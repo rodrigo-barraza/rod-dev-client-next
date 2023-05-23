@@ -26,14 +26,16 @@ export const getServerSideProps = async (context) => {
 }
 
 export default function Generations(props) {
-  const { render, renders } = props
+  const { renders } = props
   const router = useRouter()
   const currentPage = usePathname()
   const [currentRenders, setCurrentRenders] = useState(renders)
   const [renderCount, setRenderCount] = useState(0)
   const [isSharing, setIsSharing] = useState(false)
 
-  const openGraphImage = render?.image ? render.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
+  console.log(renders)
+
+//   const openGraphImage = render?.image ? render.image : 'https://generations.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg';
 
   const meta = {
       title: 'Rodrigo Barraza - Text to Image: AI Image Generation',

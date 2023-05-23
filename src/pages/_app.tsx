@@ -11,8 +11,6 @@ import { AlertProvider, useAlertContext } from '../contexts/AlertContext'
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
     const { message } = useAlertContext();
-
-    console.log(123, message)
     
     function postSession() {
         EventLibrary.postSession(1, screen.width, screen.height);
