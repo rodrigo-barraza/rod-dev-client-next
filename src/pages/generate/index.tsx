@@ -20,14 +20,14 @@ export const getServerSideProps = async (context) => {
   let returnBody = {
     props: {
       render: {},
-      renders: {},
+      randomRenders: {},
       meta: {},
     }
   }
   
   const getRenders = await RenderApiLibrary.getRenders('12')
-  const renders = getRenders.data
-  returnBody.props.renders = renders;
+  const randomRenders = getRenders.data.images
+  returnBody.props.randomRenders = randomRenders;
   if (query?.id) {
     const getRender = await RenderApiLibrary.getRender(query.id)
     if (getRender.data) {
@@ -56,15 +56,14 @@ export const getServerSideProps = async (context) => {
     url: `https://rod.dev${resolvedUrl}`,
   }
 
-  console.log(returnBody.props.meta)
-
   return returnBody;
 }
 
 export default function Playground(props) {
-  const { render, renders, meta } = props
+  const { render, randomRenders, meta } = props
   const router = useRouter()
-  const [currentRenders, setCurrentRenders] = useState(renders)
+  const [exploreRenders, setExploreRenders] = useState(randomRenders)
+  const [renders, setRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
 
   function goToGeneration(id) {
@@ -86,12 +85,18 @@ export default function Playground(props) {
   }
 
   async function getRenders() {
-    const getRenders = await RenderApiLibrary.getRenders('12')
-    setCurrentRenders(getRenders.data)
+    const getRenders = await RenderApiLibrary.getRenders('1', 'user');
+    setRenders(getRenders.data.images);
+  }
+
+  async function getRandomRenders() {
+    const getRandomRenders = await RenderApiLibrary.getRenders('12');
+    setExploreRenders(getRandomRenders.data.images);
   }
 
   useEffect(() => {
     getCount()
+    getRenders()
   }, [])
 
   return (
@@ -120,15 +125,18 @@ export default function Playground(props) {
         <div className="gallery">
           <div className="sectionTitle">
             <div>Explore {renderCount} Renders</div>
-            <ButtonComponent 
-              className="secondary"
-              label="My Renders"
-              type="button" 
-              onClick={goToGenerations}
-              ></ButtonComponent>
-            {/* <div className="refresh" onClick={getRenders}>♻️</div> */}
+            { renders.length ? (
+              <ButtonComponent 
+                className="secondary"
+                label={`My ${renders.length} Renders`}
+                type="button" 
+                onClick={goToGenerations}
+                ></ButtonComponent>
+            ) : (
+              <div className="refresh" onClick={getRandomRenders}>♻️</div>
+            )}
           </div>
-          { currentRenders.images.map((render, index) => (
+          { exploreRenders.map((render, index) => (
             <div key={index} className="gallery-item" onClick={() => goToGeneration(render.id)}>
               <div className="image">
                 <div className="overlay">
