@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 import PromptCollection from '../../collections/PromptCollection'
 import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
 import style from './index.module.scss'
@@ -14,13 +15,24 @@ import InputComponent from '../../components/InputComponent/InputComponent'
 import SelectComponent from '../../components/SelectComponent/SelectComponent'
 import { debounce, filter } from 'lodash'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
 
-    let returnBody = {
-        props: {}
-    }
-    return returnBody;
+  let returnBody = {
+      props: {
+          meta: {},
+      }
+  }
+
+  returnBody.props.meta = {
+      title: 'Text to Image - Your Renders',
+      description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
+      keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
+      type: 'website',
+      image: 'https://renders.rod.dev/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
+  }
+
+  return returnBody;
 }
 
 export default function Renders(props) {
@@ -129,13 +141,6 @@ export default function Renders(props) {
     setIsDeleting(deleteObject);
   }
 
-  const meta = {
-      title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
-      description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
-      keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
-      type: 'website',
-  }
-
   function goToGeneration(id) {
     router.push({
       pathname: '/generate',
@@ -183,21 +188,23 @@ export default function Renders(props) {
 
   return (
     <main className={style.RendersPage}>
-        {/* <Head>
-            <title>{meta.title}</title>
-            <meta name="description" content={meta.description}/>
-            <meta name="keywords" content={meta.keywords}/>
-            <meta property="og:url" content={`https://rod.dev${router.asPath}`}/>
-            <meta property="og:type" content={meta.type}/>
-            <meta property="og:site_name" content="Rodrigo Barraza"/>
-            <meta property="og:description" content={meta.description}/>
-            <meta property="og:title" content={meta.title}/>
-            <meta property="og:image" content={openGraphImage} />
-            {render?.image && (
-                <meta property='article:published_time' content={render.createdAt}/>
-            )}
-            <link rel="icon" href="/images/favicon.ico" />
-        </Head> */}
+      <Head>
+          <title>{meta.title}</title>
+          <meta name="description" content={meta.description}/>
+          <meta name="keywords" content={meta.keywords}/>
+          <meta property="og:url" content={`https://rod.dev${router.asPath}`}/>
+          <meta property="og:type" content={meta.type}/>
+          <meta property="og:site_name" content="Rodrigo Barraza"/>
+          <meta property="og:description" content={meta.description}/>
+          <meta property="og:title" content={meta.title}/>
+          <meta property="og:image" content={meta.image} />
+          <meta name="twitter:card" content="summary_large_image"/>
+          <meta name="twitter:title" content={meta.title}/>
+          <meta name="twitter:site" content="@rawdreygo"/>
+          <meta name="twitter:url" content={`https://rod.dev${router.asPath}`}/>
+          <meta name="twitter:image" content={meta.image}/>
+          <link rel="icon" href="/images/favicon.ico" />
+      </Head>
         <div className="gallery">
           <div className="details">
               <div className="container column">
