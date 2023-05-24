@@ -128,7 +128,7 @@ export default function Playground(props) {
             { renders.length ? (
               <ButtonComponent 
                 className="secondary"
-                label={`My ${renders.length} Renders`}
+                label={`My ${renders.length} ${renders.length > 1 ? 'Renders' : 'Render'}`}
                 type="button" 
                 onClick={goToGenerations}
                 ></ButtonComponent>
