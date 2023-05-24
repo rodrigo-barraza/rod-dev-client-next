@@ -22,7 +22,7 @@ export const getServerSideProps = async (context) => {
     return returnBody;
 }
 
-export default function Generations(props) {
+export default function Renders(props) {
   // const { renders } = props
   const router = useRouter()
   const currentPage = usePathname()
@@ -30,6 +30,7 @@ export default function Generations(props) {
   const [isSharing, setIsSharing] = useState(false)
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [isDeleting, setIsDeleting] = useState({})
 
   const searchFilter = (array) => {
     if (array && array.length) {
@@ -38,6 +39,25 @@ export default function Generations(props) {
       );
     }
   };
+
+  async function deleteRender(id) {
+    const deleteRender = await RenderApiLibrary.deleteRender(id);
+    if (deleteRender.data.success) {
+      getRenders();
+    }
+  }
+
+  async function startDeleteRender(id) {
+    const deleteObject = { ...isDeleting };
+    deleteObject[id] = true;
+    setIsDeleting(deleteObject);
+  }
+
+  async function cancelDeleteRender(id) {
+    const deleteObject = { ...isDeleting };
+    deleteObject[id] = false;
+    setIsDeleting(deleteObject);
+  }
 
   useEffect(() => {
     const debouncedSearchValue = debounce((value) => {
@@ -52,41 +72,6 @@ export default function Generations(props) {
       debouncedSearchValue.cancel();
     };
   }, [search]);
-
-  // const searchFilter = debounce((array) => {
-  //   if (array && array.length) {
-  //     return array.filter((item) =>
-  //       item.prompt.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //   }
-  // }, 300);
-
-  // const searchFilter = (array) => {
-  //   if (array && array.length) {
-  //     return array.filter((item) =>
-  //       item.prompt.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //   }
-  // };
-
-  // const searchFilter = (array) => {
-  //   if (array && array.length) {
-  //     return array.filter((item) => {
-  //       console.log(search, item.prompt.toLowerCase().includes(search.toLowerCase()))
-  //       return item.prompt.toLowerCase().includes(search.toLowerCase());
-  //     });
-  //   }
-  // };
-
-  
-  // const searchFilter = debounce((array) => {
-  //   if (array && array.length) {
-  //     return array.filter((item) => {
-  //       console.log(item)
-  //       return item.prompt.toLowerCase().includes(search.toLowerCase())
-  //     }
-  //     )}
-  //   }, 300)
 
   const filteredCurrentRenders = searchFilter(currentRenders.images);
 
@@ -172,6 +157,27 @@ export default function Generations(props) {
                   <img src={render.image}></img>
               </picture>
               <div className="card">
+
+                  { isDeleting[render.id] && (
+                    <div className="delete">
+                      <div className="label">Are you sure you want to delete this?</div>
+                      <div className="buttons">
+                          <ButtonComponent 
+                          className="secondary"
+                          label="Cancel"
+                          type="button" 
+                          onClick={() => cancelDeleteRender(render.id)}
+                          ></ButtonComponent>
+                          <ButtonComponent 
+                          className="secondary red"
+                          label="Delete"
+                          type="button"
+                          onClick={() => deleteRender(render.id)}
+                          ></ButtonComponent>
+                        </div>
+                    </div>
+                  )}
+
                   <div className="name">{render.id}</div>
                   <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
                   <div className="properties">
@@ -203,9 +209,8 @@ export default function Generations(props) {
                       <ButtonComponent 
                       className="secondary red"
                       label="Delete"
-                      type="button" 
-                      disabled
-                      // onClick={() => deleteGeneration(render.id)}
+                      type="button"
+                      onClick={() => startDeleteRender(render.id)}
                       ></ButtonComponent>
                   </div>
               </div>

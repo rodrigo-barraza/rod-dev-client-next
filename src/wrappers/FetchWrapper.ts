@@ -19,7 +19,7 @@ const FetchWrapper = {
             if (response.ok) {
                 const result = await response.text()
                 const parsedResult = JSON.parse(result)
-                data = parsedResult.data
+                data = parsedResult.data || parsedResult
 
             } else {
                 error = response
