@@ -210,6 +210,7 @@ export default function Renders(props) {
                       className="secondary red"
                       label="Delete"
                       type="button"
+                      disabled={isDeleting[render.id]}
                       onClick={() => startDeleteRender(render.id)}
                       ></ButtonComponent>
                   </div>
