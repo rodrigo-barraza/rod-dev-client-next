@@ -94,6 +94,15 @@ const EventApiLibrary = {
         if (id) { searchParams.append('id', id) }
         return await FetchWrapper.fetch(method, url, headers, body, searchParams)
     },
+    async deleteRender(id?: string) {
+        const method = 'DELETE';
+        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
+        const headers = new Headers({})
+        const body = {}
+        const searchParams = new URLSearchParams({})
+        if (id) { Object.assign(body, { id: id }) }
+        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+    },
     async getCount() {
         const method = 'GET'
         const url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/count`
