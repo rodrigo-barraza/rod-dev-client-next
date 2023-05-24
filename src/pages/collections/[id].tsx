@@ -1,4 +1,3 @@
-import moment from 'moment'
 import lodash from 'lodash'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -8,21 +7,46 @@ import Head from 'next/head'
 import styles from './[id].module.scss'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
 import ArtCollectionsCollection from '../../collections/ArtCollectionsCollection'
-import { Meta } from '../../types/types'
 
-export default function Collection() {
-    const router = useRouter()
-    const [moreCollections, setMoreCollections] = useState([])
-    const currentCollectionPath = router.query.id
+export const getServerSideProps = async (context: any) => {
+    const { req, query, res, resolvedUrl } = context
+    
+    const currentCollectionPath = query.id
     const currentCollection = ArtCollectionsCollection.find(collection => collection.path === currentCollectionPath)
     const currentCollectionWorks = currentCollection?.works as Array<any>
 
-    const meta: Meta = {
+    let returnBody = {
+        props: {
+            meta: {},
+            currentCollectionWorks: currentCollectionWorks,
+            currentCollection: currentCollection,
+        }
+    }
+
+    let image = null;
+    if (currentCollection.thumbnail) {
+        image = UtilityLibrary.renderAssetPath(currentCollection.thumbnail, currentCollection.path)
+    } else if (currentCollection.works[0].imagePath) {
+        image = UtilityLibrary.renderAssetPath(currentCollection.works[0].imagePath, currentCollection.path)
+    } else if (currentCollection.poster) {
+        image = UtilityLibrary.renderAssetPath(currentCollection.poster, currentCollection.path)
+    }
+
+    returnBody.props.meta = {
         title: `${currentCollection?.documentTitle}`,
         description: `${currentCollection?.documentDescription}`,
         keywords: `${currentCollection?.documentKeywords}`,
         type: 'website',
+        image: image
     }
+
+    return returnBody;
+}
+
+export default function Collection(props) {
+    const { meta, currentCollectionWorks, currentCollection } = props
+    const router = useRouter()
+    const [moreCollections, setMoreCollections] = useState([])
 
     useEffect(() => {
         const result: any = lodash.reject(lodash.shuffle(ArtCollectionsCollection), { name: currentCollection?.title }).slice(0, 3)
@@ -40,9 +64,12 @@ export default function Collection() {
                 <meta property="og:site_name" content="Rodrigo Barraza"/>
                 <meta property="og:description" content={meta.description}/>
                 <meta property="og:title" content={meta.title}/>
-                {/* {meta.date && (
-                    <meta property='article:published_time' content={meta.date}/>
-                )} */}
+                { meta.image && (
+                    <meta property="og:image" content={meta.image} />
+                )}
+                { meta.createdAt && (
+                    <meta property='article:published_time' content={meta.createdAt}/>
+                )}
                 <link rel="icon" href="/images/favicon.ico" />
             </Head>
             <div className="collection">

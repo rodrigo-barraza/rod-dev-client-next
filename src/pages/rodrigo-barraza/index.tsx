@@ -1,24 +1,35 @@
-import { Metadata } from 'next'
 import Image from 'next/image'
 import SocialsCollection from '../../collections/SocialsCollection'
 import AboutCollection from '../../collections/AboutCollection'
 import styles from './index.module.scss'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
- 
-export const metadata: Metadata = {
-  title: 'HELLO',
-  description: 'WORLD',
-};
 
-export default function AboutView() {
-    const router = useRouter()
-    const meta = {
+export const getServerSideProps = async (context: any) => {
+    const { req, query, res, resolvedUrl } = context
+
+    let returnBody = {
+        props: {
+            meta: {},
+        }
+    }
+
+    returnBody.props.meta = {
         title: 'The Software Engineer, Photographer, Artist: Rodrigo Barraza',
         description: 'About Rodrigo Barraza, a Vancouver software engineer, photographer and artist.',
         keywords: 'rodrigo, barraza, rodrigo barraza, vancouver, photographer, software engineer, artist, ai artist, animator, emily carr university',
         type: 'website',
+        image: 'https://assets.rod.dev/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
     }
+
+    return returnBody;
+}
+    
+
+export default function AboutView(props) {
+    const { meta } = props
+    const router = useRouter()
+
     return (
         <main className={ styles.AboutView }>
             <Head>
@@ -30,6 +41,7 @@ export default function AboutView() {
                 <meta property="og:site_name" content="Rodrigo Barraza"/>
                 <meta property="og:description" content={meta.description}/>
                 <meta property="og:title" content={meta.title}/>
+                <meta property="og:image" content={meta.image} />
                 {meta.date && (
                     <meta property='article:published_time' content={meta.date}/>
                 )}

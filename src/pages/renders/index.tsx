@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import Head from 'next/head'
-import { InferGetServerSidePropsType, GetServerSideProps  } from 'next'
+import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import PromptCollection from '../../collections/PromptCollection'
 import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
@@ -15,7 +14,7 @@ import InputComponent from '../../components/InputComponent/InputComponent'
 import SelectComponent from '../../components/SelectComponent/SelectComponent'
 import { debounce, filter } from 'lodash'
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req, query, res, resolvedUrl } = context
 
     let returnBody = {
@@ -25,7 +24,7 @@ export const getServerSideProps = async (context) => {
 }
 
 export default function Renders(props) {
-  // const { renders } = props
+  const { meta } = props
   const router = useRouter()
   const currentPage = usePathname()
   const [currentRenders, setCurrentRenders] = useState([])

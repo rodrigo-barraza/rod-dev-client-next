@@ -8,7 +8,29 @@ import ArtCollectionsCollection from '../collections/ArtCollectionsCollection'
 import UtilityLibrary from '../libraries/UtilityLibrary'
 import { useRouter } from 'next/router'
 
-export default function Index() {
+export const getServerSideProps = async (context: any) => {
+    const { req, query, res, resolvedUrl } = context
+
+    let returnBody = {
+        props: {
+            meta: {},
+        }
+    }
+
+    returnBody.props.meta = {
+        title: 'Rodrigo Barraza: Photographer, Software Engineer, Artist',
+        description: 'Visual portfolio of Rodrigo Barraza, a Vancouver-based photographer, software engineer and artist.',
+        keywords: 'rodrigo barraza',
+        type: 'website',
+        image: 'https://assets.rod.dev/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
+    }
+
+    return returnBody;
+}
+    
+
+export default function Index(props) {
+    const { meta } = props
     const router = useRouter()
     const [shuffledArtCollection, setShuffledArtCollection] = useState([])
 
@@ -16,12 +38,6 @@ export default function Index() {
         setShuffledArtCollection(lodash.shuffle(ArtCollectionsCollection))
     }, [])
 
-    const meta = {
-        title: 'Rodrigo Barraza: Photographer, Software Engineer, Artist',
-        description: 'Visual portfolio of Rodrigo Barraza, a Vancouver-based photographer, software engineer and artist.',
-        keywords: 'rodrigo barraza',
-        type: 'website',
-    }
     return (
     <main className={styles.home}>
         <Head>
@@ -33,6 +49,7 @@ export default function Index() {
             <meta property="og:site_name" content="Rodrigo Barraza"/>
             <meta property="og:description" content={meta.description}/>
             <meta property="og:title" content={meta.title}/>
+            <meta property="og:image" content={meta.image} />
             {meta.date && (
                 <meta property='article:published_time' content={meta.date}/>
             )}

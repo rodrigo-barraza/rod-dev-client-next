@@ -1,16 +1,31 @@
 import styles from './index.module.scss'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Meta } from '../../types/types'
 
-export default function Projects() {
-    const router = useRouter()
-    const meta: Meta = {
+export const getServerSideProps = async (context: any) => {
+    const { req, query, res, resolvedUrl } = context
+
+    let returnBody = {
+        props: {
+            meta: {},
+        }
+    }
+
+    returnBody.props.meta = {
         title: 'Rodrigo Barraza - Software Engineering Projects',
         description: 'Projects and Github repositories by software engineer: Rodrigo Barraza',
         keywords: 'rodrigo barraza, projects, repository, image captioning, blip2, github, google colab, disco diffusion, programming, software engineer, portfolio',
         type: 'website',
+        image: 'https://assets.rod.dev/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
     }
+
+    return returnBody;
+}
+
+export default function Projects(props) {
+    const { meta } = props
+    const router = useRouter()
+
     return (
         <main className={styles.AboutView}>
             <Head>
@@ -22,6 +37,7 @@ export default function Projects() {
                 <meta property="og:site_name" content="Rodrigo Barraza"/>
                 <meta property="og:description" content={meta.description}/>
                 <meta property="og:title" content={meta.title}/>
+            <meta property="og:image" content={meta.image} />
                 {meta.date && (
                     <meta property='article:published_time' content={meta.date}/>
                 )}
