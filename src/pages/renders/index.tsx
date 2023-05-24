@@ -7,11 +7,13 @@ import PromptCollection from '../../collections/PromptCollection'
 import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
 import style from './index.module.scss'
 import RenderApiLibrary from '../../libraries/RenderApiLibrary'
+import FavoriteApiLibrary from '../../libraries/FavoriteApiLibrary'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import { usePathname } from 'next/navigation';
 import InputComponent from '../../components/InputComponent/InputComponent'
-import { debounce } from 'lodash'
+import SelectComponent from '../../components/SelectComponent/SelectComponent'
+import { debounce, filter } from 'lodash'
 
 export const getServerSideProps = async (context) => {
   const { req, query, res, resolvedUrl } = context
@@ -29,16 +31,85 @@ export default function Renders(props) {
   const [currentRenders, setCurrentRenders] = useState([])
   const [isSharing, setIsSharing] = useState(false)
   const [search, setSearch] = useState('')
+  const [filter, setFilter] = useState('')
+  const [sort, setSort] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isDeleting, setIsDeleting] = useState({})
 
-  const searchFilter = (array) => {
+  const filterOptions = [
+    { value: 'all', label: 'All' },
+    { value: 'favorites', label: 'Favorites' },
+  ]
+
+  const sortOptions = [
+    { value: 'newest', label: 'Newest' },
+    { value: 'oldest', label: 'Oldest' },
+  ]
+
+  // START FILTERING
+
+
+
+  // END FILTERING
+
+  useEffect(() => {
+  }, [sort])
+
+  // START SEARCHING
+
+  const rendersFilter = (array) => {
     if (array && array.length) {
-      return array.filter((item) =>
-        item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase())
-      );
+      const filteredArray =  array.filter((item) => {
+        if (filter === 'favorites') {
+          return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase()) && 
+          item.favorite === true
+        } else {
+          return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase())
+        }
+      });
+      if (sort === 'oldest') {
+        return filteredArray.reverse();
+      }
+      return filteredArray;
     }
   };
+
+  const searchFilter = (array) => {
+    if (array && array.length) {
+      return array.filter((item) => {
+        return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase())
+      });
+    }
+  };
+
+  const favoritesFilter = (array) => {
+    if (array && array.length) {
+      return array.filter((item) => {
+        if (filter === 'favorites') {
+          return item.favorite === true
+        } else {
+          return item;
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    const debouncedSearchValue = debounce((value) => {
+      setDebouncedSearch(value);
+    }, 600);
+  
+    debouncedSearchValue(search);
+  
+    // Cleanup function to cancel debounce in case of unmounting while waiting for execution
+    return () => {
+      debouncedSearchValue.cancel();
+    };
+  }, [search]);
+
+  const filteredCurrentRenders = rendersFilter(currentRenders.images);
+
+  // END SEARCHING
 
   async function deleteRender(id) {
     const deleteRender = await RenderApiLibrary.deleteRender(id);
@@ -58,22 +129,6 @@ export default function Renders(props) {
     deleteObject[id] = false;
     setIsDeleting(deleteObject);
   }
-
-  useEffect(() => {
-    const debouncedSearchValue = debounce((value) => {
-      setDebouncedSearch(value);
-      console.log('fire')
-    }, 600);
-  
-    debouncedSearchValue(search);
-  
-    // Cleanup function to cancel debounce in case of unmounting while waiting for execution
-    return () => {
-      debouncedSearchValue.cancel();
-    };
-  }, [search]);
-
-  const filteredCurrentRenders = searchFilter(currentRenders.images);
 
   const meta = {
       title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
@@ -107,6 +162,20 @@ export default function Renders(props) {
   async function getRenders() {
     const getRenders = await RenderApiLibrary.getRenders('12', 'user')
     setCurrentRenders(getRenders.data)
+  }
+
+  async function postFavorite(render) {
+    if (!render.favorite) {
+      const postFavorite = await FavoriteApiLibrary.postFavorite(render.id)
+      if (postFavorite.data) {
+        getRenders()
+      }
+    } else {
+      const deleteFavorite = await FavoriteApiLibrary.deleteFavorite(render.id)
+      if (deleteFavorite.data) {
+        getRenders()
+      }
+    }
   }
 
   useEffect(() => {
@@ -147,6 +216,20 @@ export default function Renders(props) {
                   value={search} 
                   onChange={setSearch}
                 ></InputComponent>
+                <SelectComponent 
+                  label="Filter"
+                  type="text"
+                  value={filter} 
+                  onChange={setFilter}
+                  options={filterOptions}
+                ></SelectComponent>
+                <SelectComponent 
+                  label="Sort"
+                  type="text"
+                  value={sort} 
+                  onChange={setSort}
+                  options={sortOptions}
+                ></SelectComponent>
               </div>
             </div>
           </div>
@@ -178,7 +261,10 @@ export default function Renders(props) {
                     </div>
                   )}
 
-                  <div className="name">{render.id}</div>
+                  <div className="name">
+                    <span className={`star ${render.favorite ? 'favorite' : ''}`} onClick={() => postFavorite(render)}>⭐</span>
+                    {render.id}
+                  </div>
                   <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
                   <div className="properties">
                       <div className="sampler">🖌️ {render.sampler}</div>

@@ -30,7 +30,6 @@ const HeaderComponent: React.FC = () => {
     })
     useEffect(() => {
         const setStripeStyles = function() {
-            console.log('fire')
             const style: Object = {};
             const stripe: HTMLElement | null = document.querySelector(".stripe");
             const floaty: HTMLElement | null = document.querySelector("header");
