@@ -36,6 +36,7 @@ export default function Txt2ImageComponent({render}) {
     const [styleLabelColor, setStyleLabelColor] = useState('black')
     const [isSharing, setIsSharing] = useState(false)
     const [like, setLike] = useState(render.like)
+    const [likes, setLikes] = useState(render.likes)
     const formReference = useRef(null)
 
     const { setMessage } = useAlertContext();
@@ -62,6 +63,7 @@ export default function Txt2ImageComponent({render}) {
             setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
             setGeneratedImageSampler(samplerLabel)
             setGeneratedImageStyle(styleLabel)
+            setLikes(parsedResult.data.likes)
 
             const img = new Image()
             img.onload = function () {
@@ -95,6 +97,7 @@ export default function Txt2ImageComponent({render}) {
                 setNewStyle(render.style)
                 setCfg(render.cfg)
                 setSampler(render.sampler)
+                setLikes(render.likes)
                 setIsImageLoading(false)
             }
         }
@@ -121,6 +124,7 @@ export default function Txt2ImageComponent({render}) {
         const render = getRender.data
         if (render) {
             setLike(render.like)
+            setLikes(render.likes)
         }
     }
 
@@ -211,7 +215,7 @@ export default function Txt2ImageComponent({render}) {
                     )}
                 </div>
                 <p className="description">{generatedImageDescription}</p>
-                <p>1 Like</p>
+                <p className="likes">{likes} {likes == 1 ? 'like' : 'likes'}</p>
                 <ButtonComponent 
                 className="secondary"
                 label="Buy"
