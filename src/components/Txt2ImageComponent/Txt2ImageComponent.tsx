@@ -212,7 +212,7 @@ export default function Txt2ImageComponent({render}) {
                 
             </div>
             <div className={`Card Label${image && !isImageLoading ? '' : ' loading'}`}>
-                <h1><span className={`like ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}>{like ? '❤️' : '🤍'}</span>{render.id}</h1>
+                <h1>{render.id}</h1>
                 <p className="date">{date}</p>
                 <div className="properties">
                     <p className="sampler">{generatedImageSampler}</p>
@@ -221,7 +221,6 @@ export default function Txt2ImageComponent({render}) {
                     )}
                 </div>
                 <p className="description">{generatedImageDescription}</p>
-                <p className="likes">{likes} {likes == 1 ? 'like' : 'likes'}</p>
                 <ButtonComponent 
                 className="secondary"
                 label="Buy"
@@ -242,6 +241,11 @@ export default function Txt2ImageComponent({render}) {
                 ></ButtonComponent>
             </div>
             <picture className={isImageLoading ? 'loading' : ''}>
+                { !likes ? (
+                    <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}><span className="icon">{like ? '❤️' : '🤍'}</span></div>
+                ) : (
+                    <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}><span className="icon">{like ? '❤️' : '🤍'}</span> {likes} {likes == 1 ? 'like' : 'likes'}</div>
+                )}
                 <img className={`${isImageLoading ? 'loading' : ''}`} src={image} alt={newPrompt}>
                 </img>
             </picture>

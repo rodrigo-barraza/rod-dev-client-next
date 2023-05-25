@@ -127,6 +127,10 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
+            width: 100%;
+            max-width: 768px;
+            align-self: center;
+            justify-self: center;
             &.hidden {
                 display: none;
             }

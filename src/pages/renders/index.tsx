@@ -158,7 +158,7 @@ export default function Renders(props) {
 
   function shareGeneration(generation) {
       setIsSharing(true)
-      const shareLink = `${window.location.origin}${currentPage}?id=${generation.id}`
+      const shareLink = `${window.location.origin}/generate?id=${generation.id}`
       navigator.clipboard.writeText(shareLink);
       
       const timeoutTimer = setTimeout(function () {

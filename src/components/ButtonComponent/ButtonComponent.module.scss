@@ -44,7 +44,7 @@
         }
     }
     &.filled {
-        background: rgb(44, 117, 253);
+        background: rgb(37, 97, 209);
         border: 3px solid rgb(55,55,55);
         color: white;
         &.blue {
@@ -54,6 +54,44 @@
         &.red {
             background: rgb(218, 11, 11);
             color: white;
+            &:hover {
+                background: rgb(218, 11, 11);
+                color: white;
+            }
+        }
+        &.green {
+            background: rgb(35, 144, 58);
+            color: white;
+            &:hover {
+                background: rgb(44, 170, 71);
+                color: white;
+            }
+        }
+        &.yellow {
+            background: rgb(218, 201, 11);
+            color: white;
+            &:hover {
+                background: rgb(218, 201, 11);
+                color: white;
+            }
+        }
+        &.black {
+            background: transparent;
+            color: white;
+            border: 3px solid rgb(5,5,5);
+            button {
+                font-family: 'Ubuntu';
+                font-weight: 200;
+                font-size: 18px;
+                text-underline-offset: 5px;
+            }
+            &:hover {
+                background: transparent;
+                transform: translateY(0);
+                button {
+                    text-decoration: underline;
+                }
+            }
         }
         &:hover {
             background: rgb(44, 117, 253);
@@ -62,6 +100,12 @@
         &:active {
             background: rgb(39, 102, 219);
             color: white;
+        }
+    }
+    &.mini {
+        button {
+            padding: 8px 12px;
+            font-size: 16px;
         }
     }
     &[disabled] {
@@ -85,6 +129,7 @@
             color: inherit;
             padding: 20px;
             font-size: 24px;
+            // font-family: Ubuntu, sans-serif;
         }
     }
 }

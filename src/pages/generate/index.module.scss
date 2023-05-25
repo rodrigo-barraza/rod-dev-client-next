@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 64px;
+    gap: 12px;
     :global {
         .sectionTitle {
             text-transform: uppercase;
@@ -44,6 +44,13 @@
                     opacity: 1;
                 }
             }
+        }
+        .header {
+            height: 40px;
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            max-width: 1432px;
         }
         .gallery{
             display: grid;
