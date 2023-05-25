@@ -54,9 +54,10 @@ export default function Txt2ImageComponent({render}) {
             if (currentStyle && currentStyle.label != 'None') {
                 styleLabel = `🎨 ${currentStyle.label}`
             }
-            setStyleLabelColor(currentStyle.color)
             router.query.id = parsedResult.data.id
             router.push(router)
+
+            setStyleLabelColor(currentStyle.color)
             setGeneratedImageId(parsedResult.data.id)
             setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
             setGeneratedImageDescription(newPrompt)
@@ -64,11 +65,12 @@ export default function Txt2ImageComponent({render}) {
             setGeneratedImageSampler(samplerLabel)
             setGeneratedImageStyle(styleLabel)
             setLikes(parsedResult.data.likes)
+            setLike(parsedResult.data.like)
 
             const img = new Image()
             img.onload = function () {
-                setIsImageLoading(false)
                 setImage(parsedResult.data.image)
+                setIsImageLoading(false)
             }
             img.src = parsedResult.data.image
 
@@ -85,19 +87,23 @@ export default function Txt2ImageComponent({render}) {
                 if (currentStyle && currentStyle.label != 'None') {
                     styleLabel = `🎨 ${currentStyle.label}`
                 }
+                setSampler(render.sampler)
+                setNewStyle(render.style)
+                setCfg(render.cfg)
+                setNewPrompt(render.prompt)
+
                 setStyleLabelColor(currentStyle.color)
-                setImage(render.image)
                 setGeneratedImageId(render.id)
                 setGeneratedImageTitle(`Generated Image #${render.count}`)
                 setGeneratedImageDescription(render.prompt)
                 setDate(UtilityLibrary.toHumanDateAndTime(render.createdAt))
                 setGeneratedImageSampler(samplerLabel)
                 setGeneratedImageStyle(styleLabel)
-                setNewPrompt(render.prompt)
-                setNewStyle(render.style)
-                setCfg(render.cfg)
-                setSampler(render.sampler)
                 setLikes(render.likes)
+                setLike(render.like)
+
+
+                setImage(render.image)
                 setIsImageLoading(false)
             }
         }

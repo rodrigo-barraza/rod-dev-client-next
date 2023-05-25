@@ -50,6 +50,7 @@ export default function Renders(props) {
   const filterOptions = [
     { value: 'all', label: 'All' },
     { value: 'favorites', label: 'Favorites' },
+    { value: 'unfavorites', label: 'Unfavorites' },
   ]
 
   const sortOptions = [
@@ -74,6 +75,9 @@ export default function Renders(props) {
         if (filter === 'favorites') {
           return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase()) && 
           item.favorite === true
+        } if (filter === 'unfavorites') {
+          return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase()) && 
+          item.favorite === false
         } else {
           return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase())
         }
