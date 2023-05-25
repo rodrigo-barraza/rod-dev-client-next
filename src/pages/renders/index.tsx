@@ -249,7 +249,7 @@ export default function Renders(props) {
 
                   { isDeleting[render.id] && (
                     <div className="delete">
-                      <div className="label">Are you sure you want to delete this?</div>
+                      <div className="label">Are you sure you want to delete this?</div>	
                       <div className="buttons">
                           <ButtonComponent 
                           className="secondary"
@@ -268,7 +268,7 @@ export default function Renders(props) {
                   )}
 
                   <div className="name">
-                    <span className={`star ${render.favorite ? 'favorite' : ''}`} onClick={() => postFavorite(render)}>⭐</span>
+                    <span className={`favorite ${render.favorite ? 'favorited' : ''}`} onClick={() => postFavorite(render)}>{render.favorite ? '📀' : '💿'}</span>
                     {render.id}
                   </div>
                   <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>

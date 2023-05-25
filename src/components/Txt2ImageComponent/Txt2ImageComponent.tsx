@@ -12,6 +12,7 @@ import TextAreaComponent from '../TextAreaComponent/TextAreaComponent'
 import StyleCollection from '../../collections/StyleCollection'
 import SamplerCollection from '../../collections/SamplerCollection'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
+import LikeApiLibrary from '../../libraries/LikeApiLibrary'
 import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
 import { useContext } from 'react'
@@ -34,6 +35,7 @@ export default function Txt2ImageComponent({render}) {
     const [generatedImageId, setGeneratedImageId] = useState('')
     const [styleLabelColor, setStyleLabelColor] = useState('black')
     const [isSharing, setIsSharing] = useState(false)
+    const [like, setLike] = useState(render.like)
     const formReference = useRef(null)
 
     const { setMessage } = useAlertContext();
@@ -114,6 +116,33 @@ export default function Txt2ImageComponent({render}) {
         UtilityLibrary.downloadImage(image, generatedImageTitle);
     }
 
+    async function getRender(id) {
+        const getRender = await RenderApiLibrary.getRender(id)
+        const render = getRender.data
+        if (render) {
+            setLike(render.like)
+        }
+    }
+
+    async function likeRender(id, like) {
+        setLike(!like)
+        if (!like) {
+            const postLike = await LikeApiLibrary.postLike(id)
+            if (postLike.data) {
+                setTimeout(function () {
+                    getRender(id)
+                }, 100);
+            }
+        } else {
+            const postDelete = await LikeApiLibrary.deleteLike(id)
+            if (postDelete.data) {
+                setTimeout(function () {
+                    getRender(id)
+                }, 100);
+            }
+        }
+    }
+
     function shareGeneration() {
         setMessage('Copied Link!')
         // setIsSharing(true)
@@ -173,7 +202,7 @@ export default function Txt2ImageComponent({render}) {
                 
             </div>
             <div className={`Card Label${image && !isImageLoading ? '' : ' loading'}`}>
-                <h1>{render.id}</h1>
+                <h1><span className={`like ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}>{like ? '❤️' : '🤍'}</span>{render.id}</h1>
                 <p className="date">{date}</p>
                 <div className="properties">
                     <p className="sampler">{generatedImageSampler}</p>
@@ -182,6 +211,7 @@ export default function Txt2ImageComponent({render}) {
                     )}
                 </div>
                 <p className="description">{generatedImageDescription}</p>
+                <p>1 Like</p>
                 <ButtonComponent 
                 className="secondary"
                 label="Buy"
