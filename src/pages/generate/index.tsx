@@ -97,7 +97,7 @@ export default function Playground(props) {
   useEffect(() => {
     getCount()
     getRenders()
-  }, [])
+  }, [render])
 
   return (
     <main className={style.GeneratePage}>
@@ -121,20 +121,29 @@ export default function Playground(props) {
             <meta name="twitter:image" content={meta.image}/>
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
+        <div className="header">
+            {/* { renders.length && (
+            <ButtonComponent 
+                className="secondary mini filled black"
+                label="Likes"
+                type="button" 
+                onClick={goToGenerations}
+              ></ButtonComponent>
+            )} */}
+            { renders.length && (
+              <ButtonComponent 
+                className="secondary mini filled black"
+                label={`My ${renders.length} ${renders.length > 1 ? 'Renders' : 'Render'}`}
+                type="button" 
+                onClick={goToGenerations}
+              ></ButtonComponent>
+            )}
+        </div>
         <Txt2ImageComponent render={render}/>
         <div className="gallery">
           <div className="sectionTitle">
             <div>Explore {renderCount} Renders</div>
-            { renders.length ? (
-              <ButtonComponent 
-                className="secondary"
-                label={`My ${renders.length} ${renders.length > 1 ? 'Renders' : 'Render'}`}
-                type="button" 
-                onClick={goToGenerations}
-                ></ButtonComponent>
-            ) : (
-              <div className="refresh" onClick={getRandomRenders}>♻️</div>
-            )}
+            <div className="refresh" onClick={getRandomRenders}>♻️</div>
           </div>
           { exploreRenders.map((render, index) => (
             <div key={index} className="gallery-item" onClick={() => goToGeneration(render.id)}>
