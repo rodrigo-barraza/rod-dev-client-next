@@ -35,7 +35,7 @@ const HeaderComponent: React.FC = () => {
             const floaty: HTMLElement | null = document.querySelector("header");
             const collectionDetails: HTMLElement | null = document.querySelector(".collection-details") || document.querySelector(".details");
             if ((path === 'collections' && !collectionDetails)) {
-            } else if (stripe && collectionDetails && floaty && (path === 'collections' || path === 'renders')) {
+            } else if (stripe && collectionDetails && floaty && (path === 'collections' || path === 'renders' || path === 'likes')) {
                 const collectionDetailsHeight = collectionDetails.offsetHeight;
                 const floatyHeight = floaty.offsetHeight;
                 stripe.setAttribute("style",`height:${collectionDetailsHeight + floatyHeight + 80}px`);
