@@ -66,16 +66,22 @@ export default function Playground(props) {
   const [renders, setRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
 
-  function goToGeneration(id) {
+  function goToGenerate(id) {
     router.push({
       pathname: '/generate',
       query: { id: id },
     })
   }
 
-  function goToGenerations() {
+  function goToRenders() {
     router.push({
       pathname: '/renders'
+    })
+  }
+
+  function goToLikes() {
+    router.push({
+      pathname: '/likes'
     })
   }
 
@@ -122,20 +128,20 @@ export default function Playground(props) {
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
         <div className="header">
-            {/* { renders.length && (
+            {/* { renders.length && ( */}
             <ButtonComponent 
                 className="secondary mini filled black"
-                label="Likes"
+                label="Liked Renders"
                 type="button" 
-                onClick={goToGenerations}
+                onClick={goToLikes}
               ></ButtonComponent>
-            )} */}
+            {/* )} */}
             { renders.length && (
               <ButtonComponent 
                 className="secondary mini filled black"
                 label={`My ${renders.length} ${renders.length > 1 ? 'Renders' : 'Render'}`}
                 type="button" 
-                onClick={goToGenerations}
+                onClick={goToRenders}
               ></ButtonComponent>
             )}
         </div>
@@ -146,7 +152,7 @@ export default function Playground(props) {
             <div className="refresh" onClick={getRandomRenders}>♻️</div>
           </div>
           { exploreRenders.map((render, index) => (
-            <div key={index} className="gallery-item" onClick={() => goToGeneration(render.id)}>
+            <div key={index} className="gallery-item" onClick={() => goToGenerate(render.id)}>
               <div className="image">
                 <div className="overlay">
                   <div className="prompt">{render.prompt}</div>

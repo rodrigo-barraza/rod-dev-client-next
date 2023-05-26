@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
 
   returnBody.props.meta = {
-      title: 'Text to Image - Your Renders',
+      title: 'Text to Image - Your Likes',
       description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
       keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
       type: 'website',
@@ -130,7 +130,7 @@ export default function Renders(props) {
   async function deleteRender(id) {
     const deleteRender = await RenderApiLibrary.deleteRender(id);
     if (deleteRender.data.success) {
-      getRenders();
+      getLikedRenders();
     }
   }
 
@@ -168,21 +168,21 @@ export default function Renders(props) {
       }, 1000);
   }
 
-  async function getRenders() {
-    const getRenders = await RenderApiLibrary.getRenders('12', 'user')
-    setCurrentRenders(getRenders.data)
+  async function getLikedRenders() {
+    const getLikedRenders = await RenderApiLibrary.getLikedRenders()
+    setCurrentRenders(getLikedRenders.data)
   }
 
   async function postFavorite(render) {
     if (!render.favorite) {
       const postFavorite = await FavoriteApiLibrary.postFavorite(render.id)
       if (postFavorite.data) {
-        getRenders()
+        getLikedRenders()
       }
     } else {
       const deleteFavorite = await FavoriteApiLibrary.deleteFavorite(render.id)
       if (deleteFavorite.data) {
-        getRenders()
+        getLikedRenders()
       }
     }
   }
@@ -192,21 +192,21 @@ export default function Renders(props) {
         const postLike = await LikeApiLibrary.postLike(id)
         if (postLike.data) {
             setTimeout(function () {
-                getRenders()
+                getLikedRenders()
             }, 300);
         }
     } else {
         const postDelete = await LikeApiLibrary.deleteLike(id)
         if (postDelete.data) {
             setTimeout(function () {
-                getRenders()
+                getLikedRenders()
             }, 300);
         }
     }
   }
 
   useEffect(() => {
-    getRenders();
+    getLikedRenders();
   }, [])
 
   return (
@@ -231,9 +231,9 @@ export default function Renders(props) {
         <div className="gallery">
           <div className="details">
               <div className="container column">
-                  <h1>Your Renders</h1>
+                  <h1>Your Likes</h1>
                   <p>text-to-image AI generations</p>
-                  <p>Your collection of AI-generated images</p>
+                  <p>A collection of liked AI-generated images</p>
               </div>
           </div>
           <div className="search">
@@ -267,10 +267,10 @@ export default function Renders(props) {
             <div className="container">
               <picture className="image">
                   { !render.likes ? (
-                      <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
-                  ) : (
-                      <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
-                  )}
+                        <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
+                    ) : (
+                        <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
+                    )}
                   <img src={render.image}></img>
               </picture>
               <div className="card">
@@ -326,13 +326,13 @@ export default function Renders(props) {
                       type="button" 
                       onClick={() => goToGeneration(render.id)}
                       ></ButtonComponent>
-                      <ButtonComponent 
+                      {/* <ButtonComponent 
                       className="secondary red"
                       label="Delete"
                       type="button"
                       disabled={isDeleting[render.id]}
                       onClick={() => startDeleteRender(render.id)}
-                      ></ButtonComponent>
+                      ></ButtonComponent> */}
                   </div>
               </div>
             </div>

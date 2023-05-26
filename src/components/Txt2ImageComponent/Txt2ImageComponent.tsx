@@ -240,14 +240,13 @@ export default function Txt2ImageComponent({render}) {
                 onClick={downloadGeneration}
                 ></ButtonComponent>
             </div>
-            <picture className={isImageLoading ? 'loading' : ''}>
+            <picture className={`image ${isImageLoading ? 'loading' : ''}`}>
                 { !likes ? (
                     <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}><span className="icon">{like ? '❤️' : '🤍'}</span></div>
                 ) : (
                     <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}><span className="icon">{like ? '❤️' : '🤍'}</span> {likes} {likes == 1 ? 'like' : 'likes'}</div>
                 )}
-                <img className={`${isImageLoading ? 'loading' : ''}`} src={image} alt={newPrompt}>
-                </img>
+                <img className={`${isImageLoading ? 'loading' : ''}`} src={image} alt={newPrompt}/>
             </picture>
             { isSharing && (
                 <div className="test">Copied Link!</div>
