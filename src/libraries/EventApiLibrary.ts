@@ -122,7 +122,7 @@ const EventApiLibrary = {
             }
             return response;
         } catch (error) {
-            console.log(123, error)
+            console.log(error)
         }
     },
     async getRenderNew(id?: string) {
