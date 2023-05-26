@@ -17,8 +17,9 @@ import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
 import { useContext } from 'react'
 import { useAlertContext } from '../../contexts/AlertContext'
+import GuestApiLibrary from '../../libraries/GuestApiLibrary'
 
-export default function Txt2ImageComponent({render}) {
+export default function Txt2ImageComponent({render, setGuest}) {
     const router = useRouter();
     const currentPage = usePathname()
     const [image, setImage] = useState('data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==')
@@ -139,17 +140,17 @@ export default function Txt2ImageComponent({render}) {
         if (!like) {
             const postLike = await LikeApiLibrary.postLike(id)
             if (postLike.data) {
-                setTimeout(function () {
-                    getRender(id)
-                }, 100);
+                getRender(id)
             }
         } else {
             const postDelete = await LikeApiLibrary.deleteLike(id)
             if (postDelete.data) {
-                setTimeout(function () {
-                    getRender(id)
-                }, 100);
+                getRender(id)
             }
+        }
+        const getGuest = await GuestApiLibrary.getGuest()
+        if (getGuest.data) {
+          setGuest(getGuest.data)
         }
     }
 

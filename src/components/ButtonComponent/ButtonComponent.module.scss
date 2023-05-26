@@ -79,12 +79,8 @@
             background: transparent;
             color: white;
             border: 3px solid rgb(5,5,5);
-            // background-image: linear-gradient(to left, rgb(232, 232, 232), rgb(0, 0, 0), rgb(232, 232, 232), rgb(12, 12, 12), rgb(255, 255, 255), rgb(237, 235, 230), rgb(0, 0, 0));
-            // -webkit-background-clip: text;
-            // -webkit-text-fill-color: transparent;
-            // font-size: 25px;
-            // transition: all .25s ease-in-out;
             button {
+                color: inherit;
                 font-family: 'Ubuntu';
                 font-weight: 200;
                 font-size: 18px;
@@ -96,6 +92,11 @@
                 button {
                     text-decoration: underline;
                 }
+            }
+            &[disabled] {
+                background: transparent;
+                box-shadow: none;
+                color: rgba(255,255,255,0.35);
             }
         }
         &:hover {
@@ -115,7 +116,7 @@
     }
     &[disabled] {
         border: none;
-        background: rgba(235,235,235)!important;
+        background: rgba(235,235,235);
         pointer-events: none;
         box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
         button {

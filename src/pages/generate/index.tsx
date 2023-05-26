@@ -7,8 +7,10 @@ import PromptCollection from '../../collections/PromptCollection'
 import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
 import style from './index.module.scss'
 import RenderApiLibrary from '../../libraries/RenderApiLibrary'
+import GuestApiLibrary from '../../libraries/GuestApiLibrary'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import UtilityLibrary from '../../libraries/UtilityLibrary'
+import GenerateHeaderComponent from '../../components/GenerateHeaderComponent/GenerateHeaderComponent'
 
 export const getServerSideProps = async (context) => {
   const { req, query, res, resolvedUrl } = context
@@ -22,6 +24,7 @@ export const getServerSideProps = async (context) => {
       render: {},
       randomRenders: {},
       meta: {},
+      guest: {},
     }
   }
   
@@ -56,15 +59,21 @@ export const getServerSideProps = async (context) => {
     url: `https://rod.dev${resolvedUrl}`,
   }
 
+  const getGuest = await GuestApiLibrary.getGuest()
+  if (getGuest.data) {
+    returnBody.props.guest = getGuest.data;
+  }
+
   return returnBody;
 }
 
 export default function Playground(props) {
-  const { render, randomRenders, meta } = props
+  const { render, randomRenders, meta, guest } = props
   const router = useRouter()
   const [exploreRenders, setExploreRenders] = useState(randomRenders)
   const [renders, setRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
+  const [theGuest, setGuest] = useState(guest)
 
   function goToGenerate(id) {
     router.push({
@@ -100,7 +109,15 @@ export default function Playground(props) {
     setExploreRenders(getRandomRenders.data.images);
   }
 
+  async function getGuest() {
+    const getGuest = await GuestApiLibrary.getGuest()
+    if (getGuest.data) {
+      setGuest(getGuest.data)
+    }
+  }
+
   useEffect(() => {
+    getGuest()
     getCount()
     getRenders()
   }, [render])
@@ -127,25 +144,9 @@ export default function Playground(props) {
             <meta name="twitter:image" content={meta.image}/>
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
-        <div className="header">
-            {/* { renders.length && ( */}
-            <ButtonComponent 
-                className="secondary mini filled black"
-                label="Liked Renders"
-                type="button" 
-                onClick={goToLikes}
-              ></ButtonComponent>
-            {/* )} */}
-            { renders.length && (
-              <ButtonComponent 
-                className="secondary mini filled black"
-                label={`My ${renders.length} ${renders.length > 1 ? 'Renders' : 'Render'}`}
-                type="button" 
-                onClick={goToRenders}
-              ></ButtonComponent>
-            )}
-        </div>
-        <Txt2ImageComponent render={render}/>
+        
+        <GenerateHeaderComponent guest={theGuest} renders={renders} />
+        <Txt2ImageComponent render={render} setGuest={setGuest}/>
         <div className="gallery">
           <div className="sectionTitle">
             <div>Explore {renderCount} Renders</div>

@@ -45,13 +45,6 @@
                 }
             }
         }
-        .header {
-            height: 40px;
-            display: flex;
-            justify-content: flex-end;
-            width: 100%;
-            max-width: 1432px;
-        }
         .gallery{
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;

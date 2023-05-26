@@ -13,8 +13,10 @@ import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import { usePathname } from 'next/navigation';
 import InputComponent from '../../components/InputComponent/InputComponent'
 import SelectComponent from '../../components/SelectComponent/SelectComponent'
+import GenerateHeaderComponent from '../../components/GenerateHeaderComponent/GenerateHeaderComponent'
 import LikeApiLibrary from '../../libraries/LikeApiLibrary'
 import { debounce, filter } from 'lodash'
+import GuestApiLibrary from '../../libraries/GuestApiLibrary'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
@@ -22,6 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let returnBody = {
       props: {
           meta: {},
+          guest: {},
       }
   }
 
@@ -33,11 +36,16 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       image: 'https://renders.rod.dev/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
   }
 
+  const getGuest = await GuestApiLibrary.getGuest()
+  if (getGuest.data) {
+    returnBody.props.guest = getGuest.data;
+  }
+
   return returnBody;
 }
 
 export default function Renders(props) {
-  const { meta } = props
+  const { meta, guest } = props
   const router = useRouter()
   const currentPage = usePathname()
   const [currentRenders, setCurrentRenders] = useState([])
@@ -47,6 +55,7 @@ export default function Renders(props) {
   const [sort, setSort] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isDeleting, setIsDeleting] = useState({})
+  const [guestData, setGuestData] = useState(guest)
 
   const filterOptions = [
     { value: 'all', label: 'All' },
@@ -123,7 +132,7 @@ export default function Renders(props) {
     };
   }, [search]);
 
-  const filteredCurrentRenders = rendersFilter(currentRenders.images);
+  const filteredCurrentRenders = rendersFilter(currentRenders);
 
   // END SEARCHING
 
@@ -170,7 +179,7 @@ export default function Renders(props) {
 
   async function getRenders() {
     const getRenders = await RenderApiLibrary.getRenders('12', 'user')
-    setCurrentRenders(getRenders.data)
+    setCurrentRenders(getRenders.data.images)
   }
 
   async function postFavorite(render) {
@@ -191,17 +200,20 @@ export default function Renders(props) {
     if (!like) {
         const postLike = await LikeApiLibrary.postLike(id)
         if (postLike.data) {
-            setTimeout(function () {
-                getRenders()
-            }, 300);
+              getRenders()
         }
     } else {
         const postDelete = await LikeApiLibrary.deleteLike(id)
         if (postDelete.data) {
-            setTimeout(function () {
-                getRenders()
-            }, 300);
+              getRenders()
         }
+    }
+    getGuest()
+  }
+  async function getGuest() {
+    const getGuest = await GuestApiLibrary.getGuest()
+    if (getGuest.data) {
+      setGuestData(getGuest.data);
     }
   }
 
@@ -228,6 +240,8 @@ export default function Renders(props) {
           <meta name="twitter:image" content={meta.image}/>
           <link rel="icon" href="/images/favicon.ico" />
       </Head>
+      
+        <GenerateHeaderComponent guest={guestData} renders={currentRenders} />
         <div className="gallery">
           <div className="details">
               <div className="container column">

@@ -15,6 +15,8 @@ import InputComponent from '../../components/InputComponent/InputComponent'
 import SelectComponent from '../../components/SelectComponent/SelectComponent'
 import LikeApiLibrary from '../../libraries/LikeApiLibrary'
 import { debounce, filter } from 'lodash'
+import GenerateHeaderComponent from '../../components/GenerateHeaderComponent/GenerateHeaderComponent'
+import GuestApiLibrary from '../../libraries/GuestApiLibrary'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
@@ -22,6 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let returnBody = {
       props: {
           meta: {},
+          guest: {},
       }
   }
 
@@ -33,14 +36,20 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       image: 'https://renders.rod.dev/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
   }
 
+  const getGuest = await GuestApiLibrary.getGuest()
+  if (getGuest.data) {
+    returnBody.props.guest = getGuest.data;
+  }
+
   return returnBody;
 }
 
 export default function Renders(props) {
-  const { meta } = props
+  const { meta, guest } = props
   const router = useRouter()
   const currentPage = usePathname()
-  const [currentRenders, setCurrentRenders] = useState([])
+  const [likedRenders, setLikedRenders] = useState([])
+  const [renders, setRenders] = useState([])
   const [isSharing, setIsSharing] = useState(false)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
@@ -59,11 +68,14 @@ export default function Renders(props) {
     { value: 'oldest', label: 'Oldest' },
   ]
 
-  // START FILTERING
+  async function getRenders() {
+    const getRenders = await RenderApiLibrary.getRenders('12', 'user')
+    setRenders(getRenders.data.images)
+  }
 
-
-
-  // END FILTERING
+  useEffect(() => {
+    getRenders()
+  }, [])
 
   useEffect(() => {
   }, [sort])
@@ -123,7 +135,7 @@ export default function Renders(props) {
     };
   }, [search]);
 
-  const filteredCurrentRenders = rendersFilter(currentRenders.images);
+  const filteredCurrentRenders = rendersFilter(likedRenders);
 
   // END SEARCHING
 
@@ -170,7 +182,7 @@ export default function Renders(props) {
 
   async function getLikedRenders() {
     const getLikedRenders = await RenderApiLibrary.getLikedRenders()
-    setCurrentRenders(getLikedRenders.data)
+    setLikedRenders(getLikedRenders.data.images)
   }
 
   async function postFavorite(render) {
@@ -228,6 +240,8 @@ export default function Renders(props) {
           <meta name="twitter:image" content={meta.image}/>
           <link rel="icon" href="/images/favicon.ico" />
       </Head>
+      
+      <GenerateHeaderComponent guest={guest} renders={renders} />
         <div className="gallery">
           <div className="details">
               <div className="container column">
