@@ -222,12 +222,12 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     )}
                 </div>
                 <p className="description">{generatedImageDescription}</p>
-                <ButtonComponent 
+                {/* <ButtonComponent 
                 className="secondary"
                 label="Buy"
                 disabled
                 type="button" 
-                ></ButtonComponent>
+                ></ButtonComponent> */}
                 <ButtonComponent 
                 className="secondary"
                 label="Share"
