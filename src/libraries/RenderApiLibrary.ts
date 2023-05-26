@@ -85,6 +85,15 @@ const EventApiLibrary = {
         if (mode) { searchParams.append('mode', mode) }
         return await FetchWrapper.fetch(method, url, headers, body, searchParams)
     },
+    async getLikedRenders(limit?: string) {
+        const method = 'GET';
+        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/likes`;
+        const headers = new Headers({})
+        const body = {}
+        const searchParams = new URLSearchParams({})
+        if (limit) { searchParams.append('limit', limit) }
+        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+    },
     async getRender(id?: string) {
         const method = 'GET';
         let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
