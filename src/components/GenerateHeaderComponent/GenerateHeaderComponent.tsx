@@ -34,7 +34,7 @@ const GenerateHeaderComponent: React.FC = (props) => {
         <div className={styles.GenerateHeaderComponent}>
             <ButtonComponent 
                 className="secondary mini filled black"
-                label="Liked Renders"
+                label={`Liked Renders (${guest.likes ? guest.likes : '0'})`}
                 type="button" 
                 onClick={goToLikes}
                 disabled={!getGuest?.likes}
