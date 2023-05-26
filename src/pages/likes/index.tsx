@@ -159,10 +159,16 @@ export default function Renders(props) {
   }
 
   function goToGeneration(id) {
-    router.push({
-      pathname: '/generate',
-      query: { id: id },
-    })
+    if (id) {
+      router.push({
+        pathname: '/generate',
+        query: { id: id },
+      })
+    } else {
+      router.push({
+        pathname: '/generate',
+      })
+    }
   }
 
   function downloadGeneration(generation) {
@@ -183,6 +189,9 @@ export default function Renders(props) {
   async function getLikedRenders() {
     const getLikedRenders = await RenderApiLibrary.getLikedRenders()
     setLikedRenders(getLikedRenders.data.images)
+    if (!getLikedRenders.data.images.length) {
+      goToGeneration()
+    }
   }
 
   async function postFavorite(render) {
@@ -203,16 +212,12 @@ export default function Renders(props) {
     if (!like) {
         const postLike = await LikeApiLibrary.postLike(id)
         if (postLike.data) {
-            setTimeout(function () {
-                getLikedRenders()
-            }, 300);
+              getLikedRenders()
         }
     } else {
         const postDelete = await LikeApiLibrary.deleteLike(id)
         if (postDelete.data) {
-            setTimeout(function () {
-                getLikedRenders()
-            }, 300);
+              getLikedRenders()
         }
     }
   }
