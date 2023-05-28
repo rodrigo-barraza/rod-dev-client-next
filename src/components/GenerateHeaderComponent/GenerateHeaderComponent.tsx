@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import ActiveLink from '../ActiveLink'
 import styles from './GenerateHeaderComponent.module.scss'
-import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
+import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
 
 const GenerateHeaderComponent: React.FC = (props) => {
     const { guest, renders } = props;
+    console.log(guest, renders)
     const router = useRouter()
     const [getGuest, setGuest] = useState(guest)
     const [getRenders, setRenders] = useState(renders)

@@ -1,8 +1,24 @@
 .GenerateHeaderComponent {
-    height: 40px;
     display: flex;
     justify-content: flex-end;
     width: 100%;
     max-width: 1432px;
     align-self: center;
+    padding: 0 36px;
+    box-sizing: border-box;
+    gap: 32px;
+    &.mini {
+      position: fixed;
+      z-index: 9;
+      display: flex;
+      background: black;
+      bottom: 0px;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px dashed white;
+      max-width: none;
+    }
+    @media (max-width: 900px) {
+      padding: 0 4vw;
+    }
   }

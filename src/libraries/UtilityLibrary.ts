@@ -1,9 +1,35 @@
 import moment from 'moment'
 import EventLibrary from './EventLibrary';
+import SamplerCollection from '@/collections/SamplerCollection'
+import StyleCollection from '@/collections/StyleCollection'
 
 const useS3: boolean = true;
 
 const UtilityLibrary = {
+    findSamplerLabel(sampler) {
+        if (sampler) {
+            const foundSampler = SamplerCollection.find((samplerOption) => samplerOption.value === sampler);
+            if (foundSampler && foundSampler.label) {
+                return `🖌️ ${foundSampler.label}`
+            }
+        }
+    },
+    findStyleLabel(style) {
+        if (style) {
+            const foundStyle = StyleCollection.find((styleOption) => styleOption.value === style);
+            if (foundStyle && foundStyle.label != 'None') {
+                return `🎨 ${foundStyle.label}`
+            }
+        }
+    },
+    findStyle(style) {
+        if (style) {
+            const foundStyle = StyleCollection.find((styleOption) => styleOption.value === style);
+            return foundStyle;
+        } else {
+            return '';
+        }
+    },
     downloadImage(imagePath: string, imageId: string) {
         var a = document.createElement("a");
         a.href = imagePath

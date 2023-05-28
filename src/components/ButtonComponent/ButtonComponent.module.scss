@@ -5,6 +5,17 @@
     transition: all 0.1s;
     color: white;
     // border: 3px solid rgb(55, 55, 55);
+    button {
+        transition: all 0.1s;
+        font-weight: 700;
+        width: 100%;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        color: inherit;
+        padding: 20px;
+        font-size: 24px;
+    }
     &:hover {
         transform: translateY(-2px);
         background: rgb(44, 117, 253, 0.8);
@@ -78,8 +89,9 @@
         &.black {
             background: transparent;
             color: white;
-            border: 3px solid rgb(5,5,5);
+            border: none;
             button {
+                padding: 0;
                 color: inherit;
                 font-family: 'Ubuntu';
                 font-weight: 200;
@@ -110,7 +122,7 @@
     }
     &.mini {
         button {
-            padding: 8px 12px;
+            padding: 8px 16px;
             font-size: 16px;
         }
     }
@@ -122,20 +134,6 @@
         button {
             color: rgba(210,210,210);
             cursor: not-allowed;
-        }
-    }
-    :global {
-        button {
-            transition: all 0.1s;
-            font-weight: 700;
-            width: 100%;
-            cursor: pointer;
-            background: transparent;
-            border: 0;
-            color: inherit;
-            padding: 20px;
-            font-size: 24px;
-            // font-family: Ubuntu, sans-serif;
         }
     }
 }

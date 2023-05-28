@@ -5,8 +5,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Head from 'next/head'
 import styles from './[id].module.scss'
-import UtilityLibrary from '../../libraries/UtilityLibrary'
-import ArtCollectionsCollection from '../../collections/ArtCollectionsCollection'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
+import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
 
 export const getServerSideProps = async (context: any) => {
     const { req, query, res, resolvedUrl } = context

@@ -4,8 +4,8 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import lodash from 'lodash'
 import styles from './index.module.scss'
-import ArtCollectionsCollection from '../collections/ArtCollectionsCollection'
-import UtilityLibrary from '../libraries/UtilityLibrary'
+import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
 import { useRouter } from 'next/router'
 
 export const getServerSideProps = async (context: any) => {

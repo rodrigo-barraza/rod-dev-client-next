@@ -1,23 +1,21 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import React from 'react'
-import { InferGetServerSidePropsType, GetServerSideProps  } from 'next'
-import EventApiLibrary from '../../libraries/EventApiLibrary'
-import RenderApiLibrary from '../../libraries/RenderApiLibrary'
-import styles from './Txt2ImageComponent.module.scss'
-import InputComponent from '../InputComponent/InputComponent'
-import SelectComponent from '../SelectComponent/SelectComponent'
-import SliderComponent from '../SliderComponent/SliderComponent'
-import ButtonComponent from '../ButtonComponent/ButtonComponent'
-import TextAreaComponent from '../TextAreaComponent/TextAreaComponent'
-import StyleCollection from '../../collections/StyleCollection'
-import SamplerCollection from '../../collections/SamplerCollection'
-import UtilityLibrary from '../../libraries/UtilityLibrary'
-import LikeApiLibrary from '../../libraries/LikeApiLibrary'
 import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
-import { useContext } from 'react'
-import { useAlertContext } from '../../contexts/AlertContext'
-import GuestApiLibrary from '../../libraries/GuestApiLibrary'
+import StyleCollection from '@/collections/StyleCollection'
+import SamplerCollection from '@/collections/SamplerCollection'
+import EventApiLibrary from '@/libraries/EventApiLibrary'
+import RenderApiLibrary from '@/libraries/RenderApiLibrary'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
+import LikeApiLibrary from '@/libraries/LikeApiLibrary'
+import GuestApiLibrary from '@/libraries/GuestApiLibrary'
+import SelectComponent from '@/components//SelectComponent/SelectComponent'
+import SliderComponent from '@/components//SliderComponent/SliderComponent'
+import ButtonComponent from '@/components//ButtonComponent/ButtonComponent'
+import BadgeComponent from '@/components//BadgeComponent/BadgeComponent'
+import TextAreaComponent from '@/components//TextAreaComponent/TextAreaComponent'
+import { useAlertContext } from '@/contexts/AlertContext'
+import styles from './Txt2ImageComponent.module.scss'
 
 export default function Txt2ImageComponent({render, setGuest}) {
     const router = useRouter();
@@ -48,13 +46,11 @@ export default function Txt2ImageComponent({render, setGuest}) {
         .then(response => response.text())
         .then(result => {
             const parsedResult = JSON.parse(result)
-            const samplerResult = SamplerCollection.find((samplerOption) => samplerOption.value === parsedResult.data.sampler);
-            const samplerLabel = `🖌️ ${samplerResult.label}`
-            let styleLabel
-            const currentStyle = StyleCollection.find((styleOption) => styleOption.value === parsedResult.data.style)
-            if (currentStyle && currentStyle.label != 'None') {
-                styleLabel = `🎨 ${currentStyle.label}`
-            }
+            const samplerLabel = UtilityLibrary.findSamplerLabel(parsedResult.data.sampler)
+            const styleLabel = UtilityLibrary.findStyleLabel(parsedResult.data.style)
+            console.log(parsedResult.data.style)
+            const currentStyle = UtilityLibrary.findStyle(parsedResult.data.style)
+
             router.query.id = parsedResult.data.id
             router.push(router)
 
@@ -82,12 +78,11 @@ export default function Txt2ImageComponent({render, setGuest}) {
     useEffect(() => {
         async function getRender() {
             if (render) {
-                const samplerLabel = `🖌️ ${SamplerCollection.find((samplerOption) => samplerOption.value === render.sampler).label}`
-                let styleLabel
-                const currentStyle = StyleCollection.find((styleOption) => styleOption.value === render.style)
-                if (currentStyle && currentStyle.label != 'None') {
-                    styleLabel = `🎨 ${currentStyle.label}`
-                }
+                const samplerLabel = UtilityLibrary.findSamplerLabel(render.sampler)
+                const currentStyle = UtilityLibrary.findStyle(render.style)
+                console.log(1, render.style)
+                const styleLabel = UtilityLibrary.findStyleLabel(render.style)
+
                 setSampler(render.sampler)
                 setNewStyle(render.style)
                 setCfg(render.cfg)
@@ -212,36 +207,36 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 </form>
                 
             </div>
-            <div className={`Card Label${image && !isImageLoading ? '' : ' loading'}`}>
-                <h1>{render.id}</h1>
+            <div className={`RenderCardComponent ${image && !isImageLoading ? '' : ' loading'}`}>
+                <h1 className="title">{render.id}</h1>
                 <p className="date">{date}</p>
-                <div className="properties">
-                    <p className="sampler">{generatedImageSampler}</p>
-                    { generatedImageStyle && (
-                        <p className={`style ${styleLabelColor}`} style={{ backgroundColor: styleLabelColor}}>{generatedImageStyle}</p>
-                    )}
+                <div className="badges">
+                    <BadgeComponent type="sampler" value={render.sampler}/>
+                    <BadgeComponent type="style" value={render.style}/>
                 </div>
                 <p className="description">{generatedImageDescription}</p>
-                {/* <ButtonComponent 
-                className="secondary"
-                label="Buy"
-                disabled
-                type="button" 
-                ></ButtonComponent> */}
-                <ButtonComponent 
-                className="secondary"
-                label="Share"
-                type="button" 
-                onClick={shareGeneration}
-                ></ButtonComponent>
-                <ButtonComponent 
-                className="secondary"
-                label="Download"
-                type="button" 
-                onClick={downloadGeneration}
-                ></ButtonComponent>
+                <div className="actions">
+                    {/* <ButtonComponent 
+                    className="secondary"
+                    label="Buy"
+                    disabled
+                    type="button" 
+                    ></ButtonComponent> */}
+                    <ButtonComponent 
+                    className="secondary mini"
+                    label="Share"
+                    type="button" 
+                    onClick={shareGeneration}
+                    ></ButtonComponent>
+                    <ButtonComponent 
+                    className="secondary mini"
+                    label="Download"
+                    type="button" 
+                    onClick={downloadGeneration}
+                    ></ButtonComponent>
+                </div>
             </div>
-            <picture className={`image ${isImageLoading ? 'loading' : ''}`}>
+            <picture className={`RenderPictureComponent image ${isImageLoading ? 'loading' : ''}`}>
                 { !likes ? (
                     <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}><span className="icon">{like ? '❤️' : '🤍'}</span></div>
                 ) : (

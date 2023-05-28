@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styles from './FooterComponent.module.scss'
-import ArtCollectionsCollection from '../../collections/ArtCollectionsCollection'
-import SocialsCollection from '../../collections/SocialsCollection'
+import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
+import SocialsCollection from '@/collections/SocialsCollection'
 
 // const FooterComponent: React.FC<{ userId: string }> = () => {
 const FooterComponent: React.FC = () => {

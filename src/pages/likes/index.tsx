@@ -3,20 +3,19 @@ import { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import PromptCollection from '../../collections/PromptCollection'
-import Txt2ImageComponent from '../../components/Txt2ImageComponent/Txt2ImageComponent'
-import style from './index.module.scss'
-import RenderApiLibrary from '../../libraries/RenderApiLibrary'
-import FavoriteApiLibrary from '../../libraries/FavoriteApiLibrary'
-import UtilityLibrary from '../../libraries/UtilityLibrary'
-import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import { usePathname } from 'next/navigation';
-import InputComponent from '../../components/InputComponent/InputComponent'
-import SelectComponent from '../../components/SelectComponent/SelectComponent'
-import LikeApiLibrary from '../../libraries/LikeApiLibrary'
 import { debounce, filter } from 'lodash'
-import GenerateHeaderComponent from '../../components/GenerateHeaderComponent/GenerateHeaderComponent'
-import GuestApiLibrary from '../../libraries/GuestApiLibrary'
+import LikeApiLibrary from '@/libraries/LikeApiLibrary'
+import GuestApiLibrary from '@/libraries/GuestApiLibrary'
+import RenderApiLibrary from '@/libraries/RenderApiLibrary'
+import FavoriteApiLibrary from '@/libraries/FavoriteApiLibrary'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
+import InputComponent from '@/components/InputComponent/InputComponent'
+import SelectComponent from '@/components/SelectComponent/SelectComponent'
+import BadgeComponent from '@/components/BadgeComponent/BadgeComponent'
+import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
+import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
+import style from './index.module.scss'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
@@ -284,7 +283,7 @@ export default function Renders(props) {
           { filteredCurrentRenders?.map((render, index) => (
           <div key={index} className="item">
             <div className="container">
-              <picture className="image">
+              <picture className="RenderPictureComponent image">
                   { !render.likes ? (
                         <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
                     ) : (
@@ -292,7 +291,7 @@ export default function Renders(props) {
                     )}
                   <img src={render.image}></img>
               </picture>
-              <div className="card">
+              {/* <div className="card">
 
                   { isDeleting[render.id] && (
                     <div className="delete">
@@ -326,13 +325,13 @@ export default function Renders(props) {
                   <div className="prompt">{render.prompt}</div>
                   <div className="buttons">
                       <ButtonComponent 
-                      className="secondary"
+                      className="secondary mini"
                       label="Share"
                       type="button" 
                       onClick={() => shareGeneration(render)}
                       ></ButtonComponent>
                       <ButtonComponent 
-                      className="secondary"
+                      className="secondary mini"
                       label="Download"
                       type="button"
                       onClick={() => downloadGeneration(render)}
@@ -340,18 +339,44 @@ export default function Renders(props) {
                   </div>
                   <div className="buttons">
                       <ButtonComponent 
-                      className="secondary"
+                      className="secondary mini"
                       label="Load"
                       type="button" 
                       onClick={() => goToGeneration(render.id)}
                       ></ButtonComponent>
-                      {/* <ButtonComponent 
-                      className="secondary red"
-                      label="Delete"
+                  </div>
+              </div> */}
+              
+              <div className="RenderCardComponent">
+                  <div className="title">
+                    <span className={`favorite ${render.favorite ? 'favorited' : ''}`} onClick={() => postFavorite(render)}>{render.favorite ? '📀' : '💿'}</span>
+                    {render.id}
+                  </div>
+                  <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
+                  <div className="badges">
+                      <BadgeComponent type="sampler" value={render.sampler}/>
+                      <BadgeComponent type="style" value={render.style}/>
+                  </div>
+                  <p className="description">{render.prompt}</p>
+                  <div className="actions">
+                      <ButtonComponent 
+                      className="secondary mini"
+                      label="Share"
+                      type="button" 
+                      onClick={() => shareGeneration(render)}
+                      ></ButtonComponent>
+                      <ButtonComponent 
+                      className="secondary mini"
+                      label="Download"
                       type="button"
-                      disabled={isDeleting[render.id]}
-                      onClick={() => startDeleteRender(render.id)}
-                      ></ButtonComponent> */}
+                      onClick={() => downloadGeneration(render)}
+                      ></ButtonComponent>
+                      <ButtonComponent 
+                      className="secondary mini"
+                      label="Load"
+                      type="button" 
+                      onClick={() => goToGeneration(render.id)}
+                      ></ButtonComponent>
                   </div>
               </div>
             </div>

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import ActiveLink from '../ActiveLink'
+import ActiveLink from '@/components/ActiveLink'
 import styles from './HeaderComponent.module.scss'
-import SocialsCollection from '../../collections/SocialsCollection'
-import PagesCollection from '../../collections/PagesCollection'
-import UtilityLibrary from '../../libraries/UtilityLibrary'
+import SocialsCollection from '@/collections/SocialsCollection'
+import PagesCollection from '@/collections/PagesCollection'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
 
 const HeaderComponent: React.FC = () => {
     const [pageOffset, setPageOffset] = useState(0)

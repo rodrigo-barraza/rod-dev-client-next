@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import SocialsCollection from '../../collections/SocialsCollection'
-import AboutCollection from '../../collections/AboutCollection'
+import SocialsCollection from '@/collections/SocialsCollection'
+import AboutCollection from '@/collections/AboutCollection'
 import styles from './index.module.scss'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
