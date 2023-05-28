@@ -33,10 +33,17 @@
             }
         }
         &.landscape{
+            grid-template-columns: 440px minmax(768px, 968px);
             :global {
                 img, picture, .RenderCardComponent, .Interface {
                     max-width: 960px;
                 }
+                img {
+                    width: 100%;
+                }
+            }
+            @media (max-width: 1320px) {
+                grid-template-columns: 1fr;
             }
         }
         &.portrait, &.square{

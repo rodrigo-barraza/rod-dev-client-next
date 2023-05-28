@@ -245,11 +245,14 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 </div>
             </div>
             <picture className={`RenderPictureComponent image ${isImageLoading ? 'loading' : ''}`}>
-                { !likes ? (
-                    <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}><span className="icon">{like ? '❤️' : '🤍'}</span></div>
-                ) : (
-                    <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}><span className="icon">{like ? '❤️' : '🤍'}</span> {likes} {likes == 1 ? 'like' : 'likes'}</div>
-                )}
+                <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}>
+                    <span className="icon">{like ? '❤️' : '🤍'}</span>
+                    { !isImageLoading && !!likes && (
+                        <span>{likes} {likes == 1 ? 'like' : 'likes'}</span>
+                    )}
+                    { !isImageLoading && !!likes && (
+                        <span></span>)}
+                </div>
                 <img className={`${isImageLoading ? 'loading' : ''}`} src={image} alt={newPrompt}/>
             </picture>
         </div>
