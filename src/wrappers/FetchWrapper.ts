@@ -1,15 +1,19 @@
 import UtilityLibrary from "../libraries/UtilityLibrary";
 
 const FetchWrapper = {
-    async fetch (method: string, url: string, headers: object, body: object, searchParams: object ) {
+    async fetch (method: string, url: string, headers: Headers, body: object, searchParams: object ) {
         let data, error, response;
         try {
             const mergedHeaders = new Headers({
                 'Content-Type': 'application/json',
-                ...headers,
             })
-            const mergedUrl = `${url}?${searchParams.toString()}`
+            
+            for (const [key,value] of headers.entries()) {
+                mergedHeaders.append(key, value)
+            }
 
+
+            const mergedUrl = `${url}?${searchParams.toString()}`
             response = await fetch(mergedUrl, {
                 method: method,
                 headers: mergedHeaders,

@@ -59,7 +59,9 @@ export const getServerSideProps = async (context) => {
     url: `https://rod.dev${resolvedUrl}`,
   }
 
-  const getGuest = await GuestApiLibrary.getGuest()
+  const forwarded = req.headers["x-forwarded-for"]
+  const ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
+  const getGuest = await GuestApiLibrary.getGuest(ip)
   if (getGuest.data) {
     returnBody.props.guest = getGuest.data;
   }

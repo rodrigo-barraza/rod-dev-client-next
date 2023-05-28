@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let returnBody = {
       props: {
           meta: {},
-          guest: {},
+          guest: {}
       }
   }
 
@@ -35,7 +35,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       image: 'https://renders.rod.dev/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
   }
 
-  const getGuest = await GuestApiLibrary.getGuest()
+  const forwarded = req.headers["x-forwarded-for"]
+  const ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
+  const getGuest = await GuestApiLibrary.getGuest(ip)
   if (getGuest.data) {
     returnBody.props.guest = getGuest.data;
   }
@@ -55,6 +57,7 @@ export default function Renders(props) {
   const [sort, setSort] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isDeleting, setIsDeleting] = useState({})
+  const [guestData, setGuestData] = useState(guest)
 
   const filterOptions = [
     { value: 'all', label: 'All' },
@@ -70,6 +73,12 @@ export default function Renders(props) {
   async function getRenders() {
     const getRenders = await RenderApiLibrary.getRenders('12', 'user')
     setRenders(getRenders.data.images)
+  }
+  async function getGuest() {
+    const getGuest = await GuestApiLibrary.getGuest()
+    if (getGuest.data) {
+      setGuestData(getGuest.data);
+    }
   }
 
   useEffect(() => {
@@ -219,6 +228,7 @@ export default function Renders(props) {
               getLikedRenders()
         }
     }
+    getGuest()
   }
 
   useEffect(() => {
@@ -245,7 +255,7 @@ export default function Renders(props) {
           <link rel="icon" href="/images/favicon.ico" />
       </Head>
       
-      <GenerateHeaderComponent guest={guest} renders={renders} />
+      <GenerateHeaderComponent guest={guestData} renders={renders} />
         <div className="gallery">
           <div className="details">
               <div className="container column">

@@ -35,7 +35,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       image: 'https://renders.rod.dev/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
   }
 
-  const getGuest = await GuestApiLibrary.getGuest()
+  const forwarded = req.headers["x-forwarded-for"]
+  const ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
+  const getGuest = await GuestApiLibrary.getGuest(ip)
   if (getGuest.data) {
     returnBody.props.guest = getGuest.data;
   }

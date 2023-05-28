@@ -5,7 +5,6 @@ import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
 
 const GenerateHeaderComponent: React.FC = (props) => {
     const { guest, renders } = props;
-    console.log(guest, renders)
     const router = useRouter()
     const [getGuest, setGuest] = useState(guest)
     const [getRenders, setRenders] = useState(renders)

@@ -48,7 +48,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
             const parsedResult = JSON.parse(result)
             const samplerLabel = UtilityLibrary.findSamplerLabel(parsedResult.data.sampler)
             const styleLabel = UtilityLibrary.findStyleLabel(parsedResult.data.style)
-            console.log(parsedResult.data.style)
             const currentStyle = UtilityLibrary.findStyle(parsedResult.data.style)
 
             router.query.id = parsedResult.data.id
@@ -80,7 +79,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
             if (render) {
                 const samplerLabel = UtilityLibrary.findSamplerLabel(render.sampler)
                 const currentStyle = UtilityLibrary.findStyle(render.style)
-                console.log(1, render.style)
                 const styleLabel = UtilityLibrary.findStyleLabel(render.style)
 
                 setSampler(render.sampler)
