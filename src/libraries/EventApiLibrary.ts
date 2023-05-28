@@ -59,12 +59,12 @@ const EventApiLibrary = {
         //     console.log(error)
         // }
     },
-    async postRender(prompt: string, sampling: string, cfg: number, style: string, negativePrompt: string, aspectRatio: string): Promise<Response> {
+    async postRender(prompt: string, sampler: string, cfg: number, style: string, negativePrompt: string, aspectRatio: string): Promise<Response> {
         const method = 'POST';
         const form = {
             prompt,
             negativePrompt,
-            sampling,
+            sampler,
             cfg,
             style,
             aspectRatio,
