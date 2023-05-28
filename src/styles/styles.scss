@@ -570,7 +570,7 @@ p {
   overflow: hidden;
   width: 100%;
   max-width: 960px;
-  align-self: center;
+  align-self: flex-start;
   justify-self: center;
   &.hidden {
       display: none;
