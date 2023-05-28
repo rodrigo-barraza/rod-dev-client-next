@@ -250,8 +250,8 @@ p {
           height: 100%;
           -o-object-fit: contain;
           object-fit: contain;
-          max-width: 768px;
-          max-height: 768px;
+          // max-width: 768px;
+          // max-height: 768px;
           min-width: 15vw;
           min-height: 15vw;
           cursor: pointer;
@@ -488,7 +488,7 @@ p {
 
 .RenderCardComponent {
   justify-self: center;
-  max-width: 768px;
+  max-width: 960px;
   width: 100%;
   flex: 1;
   background: white;
@@ -569,10 +569,15 @@ p {
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: 768px;
+  max-width: 960px;
   align-self: center;
   justify-self: center;
   &.hidden {
       display: none;
+  }
+  img {
+    object-fit: contain;
+    max-width: 960px;
+    max-height: 960px;
   }
 }

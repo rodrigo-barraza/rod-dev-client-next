@@ -59,14 +59,15 @@ const EventApiLibrary = {
         //     console.log(error)
         // }
     },
-    async postRender(prompt: string, sampling: string, cfg: number, style: string, negativePrompt: string): Promise<Response> {
+    async postRender(prompt: string, sampling: string, cfg: number, style: string, negativePrompt: string, aspectRatio: string): Promise<Response> {
         const method = 'POST';
         const form = {
-            prompt: prompt,
-            negativePrompt: negativePrompt,
-            sampler: sampling,
-            cfg: cfg,
-            style: style,
+            prompt,
+            negativePrompt,
+            sampling,
+            cfg,
+            style,
+            aspectRatio,
         };
         const url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
         try {

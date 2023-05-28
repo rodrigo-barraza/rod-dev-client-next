@@ -142,10 +142,10 @@
         }
         @media (max-width: 1320px) {
             .gallery {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
                 grid-column: 1/2;
                 justify-self: center;
-                max-width: 768px;
+                max-width: 100%;
             }
         }
         @media (max-width: 550px) {

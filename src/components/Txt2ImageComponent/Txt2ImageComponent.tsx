@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { usePathname } from 'next/navigation';
 import StyleCollection from '@/collections/StyleCollection'
 import SamplerCollection from '@/collections/SamplerCollection'
+import AspectRatioCollection from '@/collections/AspectRatioCollection'
 import EventApiLibrary from '@/libraries/EventApiLibrary'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
@@ -37,12 +38,13 @@ export default function Txt2ImageComponent({render, setGuest}) {
     const [like, setLike] = useState(render.like)
     const [likes, setLikes] = useState(render.likes)
     const formReference = useRef(null)
+    const [aspectRatio, setAspectRatio] = useState(AspectRatioCollection[0].value)
 
     const { setMessage } = useAlertContext();
 
     const renderImage = useCallback(() => {
         setIsImageLoading(true)
-        EventApiLibrary.postRender(newPrompt, sampler, cfg, newStyle, '')
+        EventApiLibrary.postRender(newPrompt, sampler, cfg, newStyle, '', aspectRatio)
         .then(response => response.text())
         .then(result => {
             const parsedResult = JSON.parse(result)
@@ -72,7 +74,7 @@ export default function Txt2ImageComponent({render, setGuest}) {
 
         })
         .catch(error => console.log('error', error));
-    },[newStyle, newPrompt, sampler, cfg])
+    },[newStyle, newPrompt, sampler, cfg, aspectRatio])
 
     useEffect(() => {
         async function getRender() {
@@ -85,6 +87,8 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 setNewStyle(render.style)
                 setCfg(render.cfg)
                 setNewPrompt(render.prompt)
+                console.log(render)
+                setAspectRatio(render.aspectRatio)
 
                 setStyleLabelColor(currentStyle.color)
                 setGeneratedImageId(render.id)
@@ -161,7 +165,7 @@ export default function Txt2ImageComponent({render, setGuest}) {
     }
 
     return (
-        <div className={styles.Txt2ImageComponent}>
+        <div className={`${styles.Txt2ImageComponent} ${render.aspectRatio == 'square' ? styles.square : render.aspectRatio == 'landscape' ? styles.landscape : styles.portrait}`}>
             <div className="Card Interface">
                 <h1>Generate an image from text</h1>
                 <p>Try out Rodrigo Barraza&apos;s text-to-image realism-model, trained on more than 120,000 images, photographs and captions.</p>
@@ -180,10 +184,10 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     onChange={setNewPrompt}
                     ></InputComponent> */}
                     <SelectComponent 
-                    label="Sampler"
-                    value={sampler} 
-                    options={SamplerCollection}
-                    onChange={setSampler}
+                    label="Style"
+                    value={newStyle} 
+                    options={StyleCollection}
+                    onChange={setNewStyle}
                     ></SelectComponent>
                     <SliderComponent 
                     label="Strength"
@@ -191,10 +195,16 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     onChange={setCfg}
                     ></SliderComponent>
                     <SelectComponent 
-                    label="Style"
-                    value={newStyle} 
-                    options={StyleCollection}
-                    onChange={setNewStyle}
+                    label="Aesthetic"
+                    value={sampler} 
+                    options={SamplerCollection}
+                    onChange={setSampler}
+                    ></SelectComponent>
+                    <SelectComponent 
+                    label="Aspect Ratio"
+                    value={aspectRatio} 
+                    options={AspectRatioCollection}
+                    onChange={setAspectRatio}
                     ></SelectComponent>
                     <ButtonComponent 
                     label="Generate"
@@ -242,12 +252,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 )}
                 <img className={`${isImageLoading ? 'loading' : ''}`} src={image} alt={newPrompt}/>
             </picture>
-            { isSharing && (
-                <div className="test">Copied Link!</div>
-            )}
-            { isImageLoading && (
-                <div className="test">Generate</div>
-            )}
         </div>
     )
 }
