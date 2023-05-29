@@ -87,8 +87,9 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 setNewStyle(render.style)
                 setCfg(render.cfg)
                 setNewPrompt(render.prompt)
-                console.log(render)
-                setAspectRatio(render.aspectRatio)
+                
+                if (render.aspectRatio) setAspectRatio(render.aspectRatio)
+                else setAspectRatio(AspectRatioCollection[0].value)
 
                 setStyleLabelColor(currentStyle.color)
                 setGeneratedImageId(render.id)
