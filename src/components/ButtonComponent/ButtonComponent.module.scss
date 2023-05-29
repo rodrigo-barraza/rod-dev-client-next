@@ -61,6 +61,16 @@
         &.blue {
             background: rgb(37, 97, 209);
             color: white;
+            &[disabled] {
+                border: 3px solid white;
+                background: rgba(235,235,235);
+                pointer-events: none;
+                box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
+                button {
+                    color: rgba(210,210,210);
+                    cursor: not-allowed;
+                }
+            }
         }
         &.red {
             background: rgb(218, 11, 11);

@@ -211,7 +211,7 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     label="Generate"
                     type="submit" 
                     className="filled blue"
-                    disabled={isImageLoading}
+                    disabled={!newPrompt || isImageLoading}
                     ></ButtonComponent>
                 </form>
                 
