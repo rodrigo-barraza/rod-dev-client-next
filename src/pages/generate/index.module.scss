@@ -7,7 +7,7 @@
         .sectionTitle {
             text-transform: uppercase;
             text-align: left;
-            font-size: 28px;
+            font-size: calc(--FONT_SIZE_H1);
             text-transform: capitalize;
             color: black;
             font-weight: 500;
@@ -74,7 +74,7 @@
                         box-shadow: inset 0px -160px 50px -100px rgba(0,0,0,0.5);
                         opacity: 0;
                         .prompt {
-                            font-size: 14px;
+                            font-size: var(--FONT_SIZE_SMALL);
                             color: white;
                             text-align: left;
                             font-weight: 500;
@@ -97,47 +97,6 @@
                         }
                     }
                 }
-                // .miniCard {
-                //     background: white;
-                //     padding: 16px;
-                //     display: grid;
-                //     gap: 8px;
-                //     grid-template-columns: 1fr 1fr 1fr 1fr;
-                //     grid-template-rows: auto auto 80px auto;
-                //     .name {
-                //         text-align: left;
-                //         grid-column: 1/5;
-                //         font-weight: 500;
-                //         font-size: 24px;
-                //         color: black;
-                //     }
-                //     .date {
-                //         grid-column: 1/5;
-                //         text-align: left;
-                //         font-weight: 100;
-                //         font-size: 16px;
-                //     }
-                //     .prompt {
-                //         grid-column: 1/5;
-                //         text-align: justify;
-                //         font-weight: 100;
-                //     }
-                //     .properties {
-                //         grid-column: 1/5;
-                //         grid-row: 4;
-                //         display: flex;
-                //         gap: 8px;
-                //         div {
-                //             flex: 0 1 auto;
-                //             font-size: 12px;
-                //             background: black;
-                //             color: white;
-                //             padding: 4px 8px;
-                //             border-radius: 24px;
-
-                //         }
-                //     }
-                // }
             }
         }
         @media (max-width: 1320px) {

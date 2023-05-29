@@ -16,12 +16,7 @@ const PagesCollection = [
     {
         path: '/rodrigo-barraza',
         name: 'about'
-    },
-    // {
-    //     path: '/renders',
-    //     name: 'My Art',
-    //     emoji: '💾'
-    // },
+    }
 ];
 
 export default PagesCollection;

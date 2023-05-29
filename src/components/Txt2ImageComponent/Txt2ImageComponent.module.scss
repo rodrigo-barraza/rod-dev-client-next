@@ -69,7 +69,7 @@
             transition: opacity 0.3s;
             h1 {
                 grid-column: 1/5;
-                font-size: 28px;
+                font-size: var(--FONT_SIZE_H3);
                 color: black;
                 font-weight: 500;
             }

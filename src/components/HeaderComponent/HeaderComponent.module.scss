@@ -73,7 +73,7 @@
                 display: flex;
                 .name {
                     font-weight: 300;
-                    font-size: 28px;
+                    font-size: var(--FONT_SIZE_H3);
                     display: flex;
                     height: 100%;
                     display: flex;
@@ -128,7 +128,7 @@
                         li {
                             // padding: 8px 16px;
                             a {
-                                font-size: 18px;
+                                font-size: var(--FONT_SIZE_MEDIUM);
                             }
                             &.about {
                                 color: white;
@@ -173,7 +173,7 @@
                         nav {
                         }
                         .hamburger {
-                            font-size: 18px;
+                            font-size: var(--FONT_SIZE_MEDIUM);
                         }
                     }
                 }
@@ -193,7 +193,7 @@
             justify-content: center;
             align-items: center;
             color: white;
-            font-size: 10vw;
+            font-size: var(--FONT_SIZE_MENU);
             z-index: 3;
             ul {
                 display: flex;

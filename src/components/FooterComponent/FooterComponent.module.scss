@@ -124,14 +124,14 @@
             }
         }
         ul {
-            font-size: 16px;
+            font-size: var(--FONT_SIZE_MEDIUM);
             gap: 4px;
             display: flex;
             flex-direction: column;
         }
         h1 {
             font-weight: 500;
-            font-size: 16px;
+            font-size: var(--FONT_SIZE_MEDIUM);
         }
         @media (max-width: 1432px) {
         }

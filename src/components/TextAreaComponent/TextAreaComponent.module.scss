@@ -4,7 +4,7 @@
     align-items: flex-start;
     gap: 8px;
     label {
-        font-size: calc(0.25vw + 14px);
+        font-size: var(--FONT_SIZE_MEDIUM_FLEXIBLE);
         color: black;
         font-weight: 100;
         line-height: 26px;
@@ -12,7 +12,7 @@
     }
     textarea {
         font-family: 'Ubuntu', sans-serif;
-        font-size: calc(0.25vw + 14px);
+        font-size: var(--FONT_SIZE_MEDIUM_FLEXIBLE);
         color: black;
         font-weight: 100;
         line-height: 26px;

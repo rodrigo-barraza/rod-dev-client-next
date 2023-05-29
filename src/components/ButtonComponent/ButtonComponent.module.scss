@@ -1,10 +1,10 @@
 .ButtonComponent {
-    background: rgb(44, 117, 253, 0.8);
     cursor: pointer;
     border-radius: 4px;
     transition: all 0.1s;
-    color: white;
-    // border: 3px solid rgb(55, 55, 55);
+    background: white;
+    border: 3px solid rgb(55,55,55);
+    color: rgb(55,55,55);
     button {
         transition: all 0.1s;
         font-weight: 700;
@@ -14,126 +14,72 @@
         border: 0;
         color: inherit;
         padding: 20px;
-        font-size: 24px;
+        font-size: var(--FONT_SIZE_BIG);
     }
     &:hover {
         transform: translateY(-2px);
-        background: rgb(44, 117, 253, 0.8);
-        background: rgb(44, 117, 253);
+        background: var(--COLOR_BLUE);
         box-shadow: 4px 4px 0px rgb(0,0,0,0.9);
+        border: 3px solid rgb(15,15,15);
+        color: white;
     }
     &:active {
         transform: translateY(-1px);
-        background: rgb(44, 117, 253, 0.8);
-        background: rgb(44, 117, 253);
         box-shadow: 2px 2px 0px rgb(0,0,0,1);
-        background: rgb(44, 117, 253, 0.9);
-    }
-    &.secondary {
-        background: white;
-        border: 3px solid rgb(55,55,55);
-        color: rgb(55,55,55);
-        &:hover {
-            border: 3px solid rgb(15,15,15);
-            color: rgb(15,15,15);
-        }
-        &:active {
-            background: rgb(44, 117, 253);
-            color: white;
-        }
-        &.blue {
-            &:active {
-                background: rgb(44, 117, 253);
-                color: white;
-            }
-        }
-        &.red {
-            &:active {
-                background: rgb(218, 11, 11);
-                color: white;
-            }
-        }
-    }
-    &.filled {
-        background: rgb(37, 97, 209);
-        border: 3px solid rgb(55,55,55);
+        background: var(--COLOR_BLUE);
         color: white;
-        &.blue {
-            background: rgb(37, 97, 209);
-            color: white;
-            &[disabled] {
-                border: 3px solid white;
-                background: rgba(235,235,235);
-                pointer-events: none;
-                box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
-                button {
-                    color: rgba(210,210,210);
-                    cursor: not-allowed;
-                }
-            }
-        }
-        &.red {
-            background: rgb(218, 11, 11);
-            color: white;
-            &:hover {
-                background: rgb(218, 11, 11);
-                color: white;
-            }
-        }
-        &.green {
-            background: rgb(35, 144, 58);
-            color: white;
-            &:hover {
-                background: rgb(44, 170, 71);
-                color: white;
-            }
-        }
-        &.yellow {
-            background: rgb(218, 201, 11);
-            color: white;
-            &:hover {
-                background: rgb(218, 201, 11);
-                color: white;
-            }
-        }
-        &.black {
-            background: transparent;
-            color: white;
-            border: none;
-            button {
-                padding: 0;
-                color: inherit;
-                font-family: 'Ubuntu';
-                font-weight: 200;
-                font-size: 18px;
-                text-underline-offset: 5px;
-            }
-            &:hover {
-                background: transparent;
-                transform: translateY(0);
-                button {
-                    text-decoration: underline;
-                }
-            }
-            &[disabled] {
-                background: transparent;
-                box-shadow: none;
-                color: rgba(255,255,255,0.35);
-            }
-        }
-        &:hover {
-            background: rgb(44, 117, 253);
-            color: white;
-        }
-        &:active {
-            background: rgb(39, 102, 219);
-            color: white;
-        }
     }
     &.mini {
         button {
             padding: 8px 16px;
-            font-size: 16px;
+            font-size: var(--FONT_SIZE_MEDIUM);
+        }
+    }
+    &.blue {
+        background: var(--COLOR_BLUE_HIGHLIGHT);
+        color: white;
+        &[disabled] {
+            border: 3px solid white;
+            background: rgba(235,235,235);
+            pointer-events: none;
+            box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
+            button {
+                color: rgba(210,210,210);
+                cursor: not-allowed;
+            }
+        }
+        &:hover {
+            background: var(--COLOR_BLUE);
+            color: white;
+        }
+        &:active {
+            background: var(--COLOR_BLUE_HIGHLIGHT);
+            color: white;
+        }
+    }
+    &.transparent-night {
+        background: transparent;
+        color: white;
+        border: none;
+        button {
+            padding: 0;
+            color: inherit;
+            font-family: 'Ubuntu';
+            font-weight: 200;
+            font-size: var(--FONT_SIZE_MEDIUM);
+            text-underline-offset: 5px;
+        }
+        &:hover {
+            background: transparent;
+            transform: translateY(0);
+            button {
+                text-decoration: underline;
+            }
+        }
+        &[disabled] {
+            background: transparent;
+            box-shadow: none;
+            color: rgba(255,255,255,0.35);
         }
     }
     &[disabled] {

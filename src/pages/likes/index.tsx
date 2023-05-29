@@ -106,7 +106,7 @@ export default function Renders(props) {
       if (sort === 'oldest') {
         return filteredArray.reverse();
       }
-      return filteredArray;
+      return [filteredArray[0]];
     }
   };
 
@@ -308,13 +308,13 @@ export default function Renders(props) {
                       <div className="label">Are you sure you want to delete this?</div>	
                       <div className="buttons">
                           <ButtonComponent 
-                          className="secondary"
+                          className=""
                           label="Cancel"
                           type="button" 
                           onClick={() => cancelDeleteRender(render.id)}
                           ></ButtonComponent>
                           <ButtonComponent 
-                          className="secondary red"
+                          className="red"
                           label="Delete"
                           type="button"
                           onClick={() => deleteRender(render.id)}
@@ -335,13 +335,13 @@ export default function Renders(props) {
                   <div className="prompt">{render.prompt}</div>
                   <div className="buttons">
                       <ButtonComponent 
-                      className="secondary mini"
+                      className="mini"
                       label="Share"
                       type="button" 
                       onClick={() => shareGeneration(render)}
                       ></ButtonComponent>
                       <ButtonComponent 
-                      className="secondary mini"
+                      className="mini"
                       label="Download"
                       type="button"
                       onClick={() => downloadGeneration(render)}
@@ -349,7 +349,7 @@ export default function Renders(props) {
                   </div>
                   <div className="buttons">
                       <ButtonComponent 
-                      className="secondary mini"
+                      className="mini"
                       label="Load"
                       type="button" 
                       onClick={() => goToGeneration(render.id)}
@@ -370,19 +370,19 @@ export default function Renders(props) {
                   <p className="description">{render.prompt}</p>
                   <div className="actions">
                       <ButtonComponent 
-                      className="secondary mini"
+                      className="mini"
                       label="Share"
                       type="button" 
                       onClick={() => shareGeneration(render)}
                       ></ButtonComponent>
                       <ButtonComponent 
-                      className="secondary mini"
+                      className="mini"
                       label="Download"
                       type="button"
                       onClick={() => downloadGeneration(render)}
                       ></ButtonComponent>
                       <ButtonComponent 
-                      className="secondary mini"
+                      className="mini"
                       label="Load"
                       type="button" 
                       onClick={() => goToGeneration(render.id)}

@@ -31,14 +31,14 @@ const GenerateHeaderComponent: React.FC = (props) => {
     return (
         <div className={styles.GenerateHeaderComponent}>
             <ButtonComponent 
-                className="secondary mini filled black"
+                className="transparent-night"
                 label={`Liked Renders (${guest.likes ? guest.likes : '0'})`}
                 type="button" 
                 onClick={goToLikes}
                 disabled={!getGuest?.likes}
               ></ButtonComponent>
             <ButtonComponent 
-              className="secondary mini filled black"
+              className="transparent-night"
               label={`My ${getRenders.length > 1 ? 'Renders' : 'Render'} (${getRenders.length ? getRenders.length : '0'})`}
               type="button" 
               onClick={goToRenders}

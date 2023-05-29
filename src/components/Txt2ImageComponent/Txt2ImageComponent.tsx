@@ -154,7 +154,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
 
     function shareGeneration() {
         setMessage('Copied Link!')
-        // setIsSharing(true)
         const shareLink = `${window.location.origin}${currentPage}?id=${generatedImageId}`
         navigator.clipboard.writeText(shareLink);
         
@@ -226,19 +225,19 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 <p className="description">{generatedImageDescription}</p>
                 <div className="actions">
                     {/* <ButtonComponent 
-                    className="secondary"
+                    className=""
                     label="Buy"
                     disabled
                     type="button" 
                     ></ButtonComponent> */}
                     <ButtonComponent 
-                    className="secondary mini"
+                    className="mini"
                     label="Share"
                     type="button" 
                     onClick={shareGeneration}
                     ></ButtonComponent>
                     <ButtonComponent 
-                    className="secondary mini"
+                    className="mini"
                     label="Download"
                     type="button" 
                     onClick={downloadGeneration}
