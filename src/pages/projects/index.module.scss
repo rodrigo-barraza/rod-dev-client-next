@@ -116,6 +116,19 @@
                     background-color: #3390ff;
                     color: white;
                     }
+                    .source {
+                        display: flex;
+                        gap: 8px;
+                    }
+                    .languages {
+                        margin-top: 16px;
+                        display: flex;
+                        gap: 8px;
+                        align-items: center;
+                        p {
+                            margin: 0;
+                        }
+                    }
                 }
                 [about-image] {
                     video {
