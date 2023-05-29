@@ -38,10 +38,15 @@ export default function Projects(props) {
                 <meta property="og:site_name" content="Rodrigo Barraza"/>
                 <meta property="og:description" content={meta.description}/>
                 <meta property="og:title" content={meta.title}/>
-            <meta property="og:image" content={meta.image} />
+                <meta property="og:image" content={meta.image} />
                 {meta.date && (
                     <meta property='article:published_time' content={meta.date}/>
                 )}
+                <meta name="twitter:card" content="summary_large_image"/>
+                <meta name="twitter:title" content={meta.title}/>
+                <meta name="twitter:site" content="@rawdreygo"/>
+                <meta name="twitter:url" content={`https://rod.dev${router.asPath}`}/>
+                <meta name="twitter:image" content={meta.image}/>
                 <link rel="icon" href="/images/favicon.ico" />
             </Head>
             <div className="container">
