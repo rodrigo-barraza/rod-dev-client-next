@@ -106,7 +106,7 @@ export default function Renders(props) {
       if (sort === 'oldest') {
         return filteredArray.reverse();
       }
-      return [filteredArray[0]];
+      return filteredArray;
     }
   };
 
