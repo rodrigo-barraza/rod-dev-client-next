@@ -7,13 +7,10 @@ import style from './index.module.scss'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
 import GuestApiLibrary from '@/libraries/GuestApiLibrary'
 import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
+import Link from 'next/link'
 
 export const getServerSideProps = async (context) => {
   const { req, query, res, resolvedUrl } = context
-
-  // console.log(req.headers.referer)
-  // console.log(`${context.req.headers.host}`)
-  // console.log(`${context.req.headers.host}${resolvedUrl}`)
 
   let returnBody = {
     props: {
@@ -37,7 +34,6 @@ export const getServerSideProps = async (context) => {
       returnBody = {
         redirect: {
           permanent: false,
-          // destination: resolvedUrl.split("?")[0],
           destination: '/generate',
         },
       };
@@ -73,25 +69,6 @@ export default function Playground(props) {
   const [renders, setRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
   const [theGuest, setGuest] = useState(guest)
-
-  function goToGenerate(id) {
-    router.push({
-      pathname: '/generate',
-      query: { id: id },
-    })
-  }
-
-  function goToRenders() {
-    router.push({
-      pathname: '/renders'
-    })
-  }
-
-  function goToLikes() {
-    router.push({
-      pathname: '/likes'
-    })
-  }
 
   async function getCount() {
     const count = await RenderApiLibrary.getCount()
@@ -152,14 +129,14 @@ export default function Playground(props) {
             <div className="refresh" onClick={getRandomRenders}>♻️</div>
           </div>
           { exploreRenders.map((render, index) => (
-            <div key={index} className="gallery-item" onClick={() => goToGenerate(render.id)}>
+            <Link key={index} href={`?id=${render.id}`}>
               <div className="image">
                 <div className="overlay">
                   <div className="prompt">{render.prompt}</div>
                 </div>
-                <img src={render.image}></img>
+                <img src={render.thumbnail || render.image}></img>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
     </main>
