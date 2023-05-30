@@ -3,7 +3,6 @@ import SocialsCollection from '@/collections/SocialsCollection'
 import AboutCollection from '@/collections/AboutCollection'
 import styles from './index.module.scss'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 
 export const getServerSideProps = async (context: any) => {
     const { req, query, res, resolvedUrl } = context
@@ -15,6 +14,7 @@ export const getServerSideProps = async (context: any) => {
     }
 
     returnBody.props.meta = {
+        url: `https://rod.dev${resolvedUrl}`,
         title: 'The Software Engineer, Photographer, Artist: Rodrigo Barraza',
         description: 'About Rodrigo Barraza, a Vancouver software engineer, photographer and artist.',
         keywords: 'rodrigo, barraza, rodrigo barraza, vancouver, photographer, software engineer, artist, ai artist, animator, emily carr university',
@@ -28,7 +28,6 @@ export const getServerSideProps = async (context: any) => {
 
 export default function AboutView(props) {
     const { meta } = props
-    const router = useRouter()
 
     return (
         <main className={ styles.AboutView }>
@@ -36,7 +35,7 @@ export default function AboutView(props) {
                 <title>{meta.title}</title>
                 <meta name="description" content={meta.description}/>
                 <meta name="keywords" content={meta.keywords}/>
-                <meta property="og:url" content={`https://rod.dev${router.asPath}`}/>
+                <meta property="og:url" content={meta.url}/>
                 <meta property="og:type" content={meta.type}/>
                 <meta property="og:site_name" content="Rodrigo Barraza"/>
                 <meta property="og:description" content={meta.description}/>
@@ -48,7 +47,7 @@ export default function AboutView(props) {
                 <meta name="twitter:card" content="summary_large_image"/>
                 <meta name="twitter:title" content={meta.title}/>
                 <meta name="twitter:site" content="@rawdreygo"/>
-                <meta name="twitter:url" content={`https://rod.dev${router.asPath}`}/>
+                <meta name="twitter:url" content={meta.url}/>
                 <meta name="twitter:image" content={meta.image}/>
                 <link rel="icon" href="/images/favicon.ico" />
             </Head>

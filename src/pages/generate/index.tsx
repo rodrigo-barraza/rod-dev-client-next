@@ -1,15 +1,11 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import { InferGetServerSidePropsType, GetServerSideProps  } from 'next'
 import { useRouter } from 'next/router'
-import PromptCollection from '@/collections/PromptCollection'
 import Txt2ImageComponent from '@/components/Txt2ImageComponent/Txt2ImageComponent'
 import style from './index.module.scss'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
 import GuestApiLibrary from '@/libraries/GuestApiLibrary'
-import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
-import UtilityLibrary from '@/libraries/UtilityLibrary'
 import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
 
 export const getServerSideProps = async (context) => {
@@ -51,6 +47,7 @@ export const getServerSideProps = async (context) => {
     returnBody.props.render = getRender.data;
   }
   returnBody.props.meta = {
+    url: `https://rod.dev${resolvedUrl}`,
     title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
     description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
     keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
@@ -130,7 +127,7 @@ export default function Playground(props) {
             <title>{meta.title}</title>
             <meta name="description" content={meta.description}/>
             <meta name="keywords" content={meta.keywords}/>
-            <meta property="og:url" content={`https://rod.dev${router.asPath}`}/>
+            <meta property="og:url" content={meta.url}/>
             <meta property="og:type" content={meta.type}/>
             <meta property="og:site_name" content="Rodrigo Barraza"/>
             <meta property="og:description" content={meta.description}/>
@@ -142,7 +139,7 @@ export default function Playground(props) {
             <meta name="twitter:card" content="summary_large_image"/>
             <meta name="twitter:title" content={meta.title}/>
             <meta name="twitter:site" content="@rawdreygo"/>
-            <meta name="twitter:url" content={`https://rod.dev${router.asPath}`}/>
+            <meta name="twitter:url" content={meta.url}/>
             <meta name="twitter:image" content={meta.image}/>
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
@@ -162,15 +159,6 @@ export default function Playground(props) {
                 </div>
                 <img src={render.image}></img>
               </div>
-              {/* <div className="miniCard">
-                <div className="name">Generated Image #{render.count}</div>
-                <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
-                <div className="prompt">{render.prompt}</div>
-                <div className="properties">
-                  <div>🖌️ {render.sampler}</div>
-                  <div>🎨 {render.style}</div>
-                </div>
-              </div> */}
             </div>
           ))}
         </div>
