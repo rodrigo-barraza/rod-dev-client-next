@@ -46,7 +46,7 @@
             }
         }
         .gallery{
-            display: grid;
+            display: flex;
             grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 4px;
             width: 100%;

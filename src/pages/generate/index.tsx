@@ -8,6 +8,7 @@ import RenderApiLibrary from '@/libraries/RenderApiLibrary'
 import GuestApiLibrary from '@/libraries/GuestApiLibrary'
 import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
 import GalleryComponent from '@/components/GalleryComponent/GalleryComponent'
+import PaginationComponent from '@/components/PaginationComponent/PaginationComponent'
 import Link from 'next/link'
 
 export const getServerSideProps = async (context) => {
@@ -22,7 +23,7 @@ export const getServerSideProps = async (context) => {
     }
   }
   
-  const getRenders = await RenderApiLibrary.getRenders('12')
+  const getRenders = await RenderApiLibrary.getRenders('240')
   const randomRenders = getRenders.data.images
   returnBody.props.randomRenders = randomRenders;
   if (query?.id) {
@@ -70,6 +71,8 @@ export default function Playground(props) {
   const [renders, setRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
   const [theGuest, setGuest] = useState(guest)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostsPerPage] = useState(12)
 
   async function getCount() {
     const count = await RenderApiLibrary.getCount()
@@ -82,7 +85,7 @@ export default function Playground(props) {
   }
 
   async function getRandomRenders() {
-    const getRandomRenders = await RenderApiLibrary.getRenders('12');
+    const getRandomRenders = await RenderApiLibrary.getRenders('24');
     setExploreRenders(getRandomRenders.data.images);
   }
 
@@ -98,6 +101,14 @@ export default function Playground(props) {
     getCount()
     getRenders()
   }, [render])
+
+  
+  // Pagination
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const filteredCurrentRenders = exploreRenders;
+  const filteredCurrentRendersList = filteredCurrentRenders?.slice(indexOfFirstPost, indexOfLastPost);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <main className={style.GeneratePage}>
@@ -127,13 +138,17 @@ export default function Playground(props) {
         <div className="gallery">
           <div className="sectionTitle">
             <div>Explore {renderCount} Renders</div>
-            <div className="refresh" onClick={getRandomRenders}>♻️</div>
+            {/* <div className="refresh" onClick={getRandomRenders}>♻️</div> */}
           </div>
 
-          
-          {/* <GalleryComponent renders={exploreRenders} mode='grid' /> */}
+          <PaginationComponent 
+          postsPerPage={postsPerPage} 
+          totalPosts={filteredCurrentRenders?.length} 
+          paginate={paginate} 
+          currentPage={currentPage}/>
+          <GalleryComponent renders={filteredCurrentRendersList} mode='grid' />
 
-          { exploreRenders.map((render, index) => (
+          {/* { exploreRenders.map((render, index) => (
             <Link key={index} href={`?id=${render.id}`}>
               <div className="image">
                 <div className="overlay">
@@ -142,7 +157,7 @@ export default function Playground(props) {
                 <img src={render.thumbnail || render.image}></img>
               </div>
             </Link>
-          ))}
+          ))} */}
         </div>
     </main>
   )
