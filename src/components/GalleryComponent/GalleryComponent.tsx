@@ -16,6 +16,7 @@ export default function GalleryComponent(props) {
     const [isSharing, setIsSharing] = useState(false)
 
     async function likeRender(id, like) {
+        console.log(id, like);
         if (!like) {
             const postLike = await LikeApiLibrary.postLike(id)
             if (postLike.data) {
@@ -97,7 +98,7 @@ export default function GalleryComponent(props) {
                             <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
                         )}
                         { mode == 'grid' && (
-                            <img className="thumbnail" src={render.thumbnail || render.image}></img>
+                            <img className="thumbnail" onClick={() => goToGeneration(render.id)} src={render.thumbnail || render.image}></img>
                         )}
                         { mode == 'list' && (
                             <img className="image" src={render.image}></img>

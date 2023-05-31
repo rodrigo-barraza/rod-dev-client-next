@@ -7,6 +7,7 @@ import style from './index.module.scss'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
 import GuestApiLibrary from '@/libraries/GuestApiLibrary'
 import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
+import GalleryComponent from '@/components/GalleryComponent/GalleryComponent'
 import Link from 'next/link'
 
 export const getServerSideProps = async (context) => {
@@ -128,6 +129,10 @@ export default function Playground(props) {
             <div>Explore {renderCount} Renders</div>
             <div className="refresh" onClick={getRandomRenders}>♻️</div>
           </div>
+
+          
+          {/* <GalleryComponent renders={exploreRenders} mode='grid' /> */}
+
           { exploreRenders.map((render, index) => (
             <Link key={index} href={`?id=${render.id}`}>
               <div className="image">
