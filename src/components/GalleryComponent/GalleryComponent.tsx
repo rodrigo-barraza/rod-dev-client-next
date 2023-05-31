@@ -96,8 +96,12 @@ export default function GalleryComponent(props) {
                         ) : (
                             <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
                         )}
-                        <img className="image" src={render.image}></img>
-                        {/* <img className="thumbnail" src={render.thumbnail}></img> */}
+                        { mode == 'grid' && (
+                            <img className="thumbnail" src={render.thumbnail || render.image}></img>
+                        )}
+                        { mode == 'list' && (
+                            <img className="image" src={render.image}></img>
+                        )}
                     </picture>
                     <div className="RenderCardComponent">
                         { isDeleting[render.id] && (
