@@ -1,20 +1,17 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { debounce } from 'lodash'
+import style from './index.module.scss'
+import GuestApiLibrary from '@/libraries/GuestApiLibrary'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
-import FavoriteApiLibrary from '@/libraries/FavoriteApiLibrary'
-import UtilityLibrary from '@/libraries/UtilityLibrary'
-import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
 import InputComponent from '@/components/InputComponent/InputComponent'
 import SelectComponent from '@/components/SelectComponent/SelectComponent'
 import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
-import LikeApiLibrary from '@/libraries/LikeApiLibrary'
-import GuestApiLibrary from '@/libraries/GuestApiLibrary'
-import BadgeComponent from '@/components/BadgeComponent/BadgeComponent'
-import style from './index.module.scss'
+import PaginationComponent from '@/components/PaginationComponent/PaginationComponent'
+import GalleryComponent from '@/components/GalleryComponent/GalleryComponent'
+import FilterComponent from '@/components/FilterComponent/FilterComponent'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
@@ -47,15 +44,16 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
 export default function Renders(props) {
   const { meta, guest } = props
-  const router = useRouter()
   const [currentRenders, setCurrentRenders] = useState([])
-  const [isSharing, setIsSharing] = useState(false)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
   const [sort, setSort] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [isDeleting, setIsDeleting] = useState({})
   const [guestData, setGuestData] = useState(guest)
+  const [galleryMode, setGalleryMode] = useState('grid')
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostsPerPage] = useState(12)
 
   const filterOptions = [
     { value: 'all', label: 'All' },
@@ -67,15 +65,6 @@ export default function Renders(props) {
     { value: 'newest', label: 'Newest' },
     { value: 'oldest', label: 'Oldest' },
   ]
-
-  // START FILTERING
-
-
-
-  // END FILTERING
-
-  useEffect(() => {
-  }, [sort])
 
   // START SEARCHING
 
@@ -99,28 +88,13 @@ export default function Renders(props) {
     }
   };
 
-  const searchFilter = (array) => {
-    if (array && array.length) {
-      return array.filter((item) => {
-        return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase())
-      });
-    }
-  };
-
-  const favoritesFilter = (array) => {
-    if (array && array.length) {
-      return array.filter((item) => {
-        if (filter === 'favorites') {
-          return item.favorite === true
-        } else {
-          return item;
-        }
-      });
-    }
-  };
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter])
 
   useEffect(() => {
     const debouncedSearchValue = debounce((value) => {
+      setCurrentPage(1);
       setDebouncedSearch(value);
     }, 600);
   
@@ -132,83 +106,16 @@ export default function Renders(props) {
     };
   }, [search]);
 
+  // Pagination
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const filteredCurrentRenders = rendersFilter(currentRenders);
-
-  // END SEARCHING
-
-  async function deleteRender(id) {
-    const deleteRender = await RenderApiLibrary.deleteRender(id);
-    if (deleteRender.data.success) {
-      getRenders();
-    }
-  }
-
-  async function startDeleteRender(id) {
-    const deleteObject = { ...isDeleting };
-    deleteObject[id] = true;
-    setIsDeleting(deleteObject);
-  }
-
-  async function cancelDeleteRender(id) {
-    const deleteObject = { ...isDeleting };
-    deleteObject[id] = false;
-    setIsDeleting(deleteObject);
-  }
-
-  function goToGeneration(id) {
-    router.push({
-      pathname: '/generate',
-      query: { id: id },
-    })
-  }
-
-  function downloadGeneration(generation) {
-    UtilityLibrary.downloadImage(generation.image, generation.id);
-  }
-
-  function shareGeneration(generation) {
-      setIsSharing(true)
-      const shareLink = `${window.location.origin}/generate?id=${generation.id}`
-      navigator.clipboard.writeText(shareLink);
-      
-      const timeoutTimer = setTimeout(function () {
-          setIsSharing(false)
-          clearTimeout(timeoutTimer)
-      }, 1000);
-  }
+  const filteredCurrentRendersList = filteredCurrentRenders?.slice(indexOfFirstPost, indexOfLastPost);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   async function getRenders() {
     const getRenders = await RenderApiLibrary.getRenders('12', 'user')
     setCurrentRenders(getRenders.data.images)
-  }
-
-  async function postFavorite(render) {
-    if (!render.favorite) {
-      const postFavorite = await FavoriteApiLibrary.postFavorite(render.id)
-      if (postFavorite.data) {
-        getRenders()
-      }
-    } else {
-      const deleteFavorite = await FavoriteApiLibrary.deleteFavorite(render.id)
-      if (deleteFavorite.data) {
-        getRenders()
-      }
-    }
-  }
-
-  async function likeRender(id, like) {
-    if (!like) {
-        const postLike = await LikeApiLibrary.postLike(id)
-        if (postLike.data) {
-              getRenders()
-        }
-    } else {
-        const postDelete = await LikeApiLibrary.deleteLike(id)
-        if (postDelete.data) {
-              getRenders()
-        }
-    }
-    getGuest()
   }
   async function getGuest() {
     const getGuest = await GuestApiLibrary.getGuest()
@@ -250,169 +157,10 @@ export default function Renders(props) {
                   <p>Your collection of AI-generated images</p>
               </div>
           </div>
-          <div className="search">
-            <div className="nav container column">
-              <div className="CardComponent">
-                <InputComponent 
-                  label="Search"
-                  type="text"
-                  value={search} 
-                  onChange={setSearch}
-                ></InputComponent>
-                <SelectComponent 
-                  label="Filter"
-                  type="text"
-                  value={filter} 
-                  onChange={setFilter}
-                  options={filterOptions}
-                ></SelectComponent>
-                <SelectComponent 
-                  label="Sort"
-                  type="text"
-                  value={sort} 
-                  onChange={setSort}
-                  options={sortOptions}
-                ></SelectComponent>
-              </div>
-            </div>
-          </div>
-          { filteredCurrentRenders?.map((render, index) => (
-          <div key={index} className="item">
-            <div className="container">
-              <picture className="RenderPictureComponent image">
-                  { !render.likes ? (
-                      <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
-                  ) : (
-                      <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
-                  )}
-                  <img src={render.image}></img>
-              </picture>
-              {/* <div className="card">
-
-                  { isDeleting[render.id] && (
-                    <div className="delete">
-                      <div className="label">Are you sure you want to delete this?</div>	
-                      <div className="buttons">
-                          <ButtonComponent 
-                          className=""
-                          label="Cancel"
-                          type="button" 
-                          onClick={() => cancelDeleteRender(render.id)}
-                          ></ButtonComponent>
-                          <ButtonComponent 
-                          className="red"
-                          label="Delete"
-                          type="button"
-                          onClick={() => deleteRender(render.id)}
-                          ></ButtonComponent>
-                        </div>
-                    </div>
-                  )}
-
-                  <div className="name">
-                    <span className={`favorite ${render.favorite ? 'favorited' : ''}`} onClick={() => postFavorite(render)}>{render.favorite ? '📀' : '💿'}</span>
-                    {render.id}
-                  </div>
-                  <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
-                  <div className="properties">
-                      <div className="sampler">🖌️ {render.sampler}</div>
-                      <div className="style">🎨 {render.style}</div>
-                  </div>
-                  <div className="prompt">{render.prompt}</div>
-                  <div className="buttons">
-                      <ButtonComponent 
-                      className="mini"
-                      label="Share"
-                      type="button" 
-                      onClick={() => shareGeneration(render)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini"
-                      label="Download"
-                      type="button"
-                      onClick={() => downloadGeneration(render)}
-                      ></ButtonComponent>
-                  </div>
-                  <div className="buttons">
-                      <ButtonComponent 
-                      className="mini"
-                      label="Load"
-                      type="button" 
-                      onClick={() => goToGeneration(render.id)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini red"
-                      label="Delete"
-                      type="button"
-                      disabled={isDeleting[render.id]}
-                      onClick={() => startDeleteRender(render.id)}
-                      ></ButtonComponent>
-                  </div>
-              </div> */}
-              
-              <div className="RenderCardComponent">
-
-                  { isDeleting[render.id] && (
-                    <div className="overlay">
-                      <div className="label">Are you sure you want to delete this?</div>	
-                      <div className="actions">
-                          <ButtonComponent 
-                          className="mini "
-                          label="Cancel"
-                          type="button" 
-                          onClick={() => cancelDeleteRender(render.id)}
-                          ></ButtonComponent>
-                          <ButtonComponent 
-                          className="mini red"
-                          label="Delete"
-                          type="button"
-                          onClick={() => deleteRender(render.id)}
-                          ></ButtonComponent>
-                        </div>
-                    </div>
-                  )}
-
-                  <div className="title">
-                    <span className={`favorite ${render.favorite ? 'favorited' : ''}`} onClick={() => postFavorite(render)}>{render.favorite ? '📀' : '💿'}</span>
-                    {render.id}
-                  </div>
-                  <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
-                  <div className="badges">
-                      <BadgeComponent type="sampler" value={render.sampler}/>
-                      <BadgeComponent type="style" value={render.style}/>
-                  </div>
-                  <div className="description">{render.prompt}</div>
-                  <div className="actions">
-                      <ButtonComponent 
-                      className="mini"
-                      label="Share"
-                      type="button" 
-                      onClick={() => shareGeneration(render)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini"
-                      label="Download"
-                      type="button"
-                      onClick={() => downloadGeneration(render)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini"
-                      label="Load"
-                      type="button" 
-                      onClick={() => goToGeneration(render.id)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini red"
-                      label="Delete"
-                      type="button"
-                      disabled={isDeleting[render.id]}
-                      onClick={() => startDeleteRender(render.id)}
-                      ></ButtonComponent>
-                  </div>
-              </div>
-            </div>
-          </div>
-            ))}
+          <FilterComponent setSearch={setSearch} setFilter={setFilter} setSort={setSort} setGalleryMode={setGalleryMode} search={search} filter={filter} sort={sort}/>
+          <PaginationComponent postsPerPage={postsPerPage} totalPosts={filteredCurrentRenders?.length} paginate={paginate} currentPage={currentPage}/>
+          <GalleryComponent renders={filteredCurrentRendersList} getRenders={getRenders} getGuest={getGuest} mode={galleryMode} />
+          <PaginationComponent postsPerPage={postsPerPage} totalPosts={filteredCurrentRenders?.length} paginate={paginate} currentPage={currentPage}/>
         </div>
     </main>
   )

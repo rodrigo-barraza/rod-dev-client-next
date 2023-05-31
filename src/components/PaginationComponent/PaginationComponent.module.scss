@@ -1,0 +1,63 @@
+.PaginationComponent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  li {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    a:global {
+      font-size: var(--FONT_SIZE_SMALL);
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-sizing: border-box;
+      border-radius: 4px;
+      transition: all 0.1s;
+      background: white;
+      border: 2px dashed var(--COLOR_BLUE);
+      color: var(--COLOR_BLUE);
+      font-weight: 400;
+      opacity: 0.5;
+
+      &.current {
+        opacity: 1;
+        border: 2px solid rgb(55, 55, 55);
+        color: rgb(55, 55, 55);
+        font-weight: 800;
+      }
+
+      &:hover {
+          opacity: 1;
+          transform: translateY(-2px);
+          background: var(--COLOR_BLUE);
+          box-shadow: 2px 2px 0px rgb(0,0,0,0.9);
+          border: 2px solid rgb(15,15,15);
+          color: white;
+      }
+      &:active {
+          opacity: 1;
+          transform: translateY(-1px);
+          box-shadow: 2px 2px 0px rgb(0,0,0,1);
+          background: var(--COLOR_BLUE);
+          color: white;
+      }
+    }
+  }
+  // :global {
+  //   li {
+  //     a {
+  //       &.current {
+  //         border: 2px solid rgb(55, 55, 55);
+  //         color: rgb(55, 55, 55);
+  
+  //       }
+  //     }
+  //   }
+  // }
+}

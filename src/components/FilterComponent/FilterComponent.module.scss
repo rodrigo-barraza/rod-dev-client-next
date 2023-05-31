@@ -1,0 +1,32 @@
+.FilterComponent {
+    :global {
+        .container {
+            padding: 0;
+            display: flex;
+            align-items: center;
+            margin-top: 32px;
+            .CardComponent {
+                max-width: none;
+                display: flex;
+                align-items: flex-end;
+                div {
+                    flex: 1 1 100%;
+                }
+            }
+        }
+    }
+    @media (max-width: 960px) {
+      :global {
+        .container {
+          .CardComponent {
+            flex-wrap: wrap;
+            div {
+              &:nth-of-type(2), &:nth-of-type(3), &:nth-of-type(4), &:nth-of-type(5) {
+                flex: 1 1 40%;
+              }
+            }
+          }
+        }
+      }
+    }
+}

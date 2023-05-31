@@ -3,19 +3,14 @@ import { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import { usePathname } from 'next/navigation';
 import { debounce, filter } from 'lodash'
-import LikeApiLibrary from '@/libraries/LikeApiLibrary'
 import GuestApiLibrary from '@/libraries/GuestApiLibrary'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
-import FavoriteApiLibrary from '@/libraries/FavoriteApiLibrary'
-import UtilityLibrary from '@/libraries/UtilityLibrary'
-import InputComponent from '@/components/InputComponent/InputComponent'
-import SelectComponent from '@/components/SelectComponent/SelectComponent'
-import BadgeComponent from '@/components/BadgeComponent/BadgeComponent'
-import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
 import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
 import style from './index.module.scss'
+import PaginationComponent from '@/components/PaginationComponent/PaginationComponent'
+import GalleryComponent from '@/components/GalleryComponent/GalleryComponent'
+import FilterComponent from '@/components/FilterComponent/FilterComponent'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
@@ -50,29 +45,19 @@ export default function Renders(props) {
   const { meta, guest } = props
   const router = useRouter()
   const [likedRenders, setLikedRenders] = useState([])
-  const [renders, setRenders] = useState([])
-  const [isSharing, setIsSharing] = useState(false)
+  const [currentRenders, setCurrentRenders] = useState([])
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
   const [sort, setSort] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [isDeleting, setIsDeleting] = useState({})
   const [guestData, setGuestData] = useState(guest)
-
-  const filterOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'favorites', label: 'Favorites' },
-    { value: 'unfavorites', label: 'Unfavorites' },
-  ]
-
-  const sortOptions = [
-    { value: 'newest', label: 'Newest' },
-    { value: 'oldest', label: 'Oldest' },
-  ]
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostsPerPage] = useState(12)
+  const [galleryMode, setGalleryMode] = useState('grid')
 
   async function getRenders() {
     const getRenders = await RenderApiLibrary.getRenders('12', 'user')
-    setRenders(getRenders.data.images)
+    setCurrentRenders(getRenders.data.images)
   }
   async function getGuest() {
     const getGuest = await GuestApiLibrary.getGuest()
@@ -84,9 +69,6 @@ export default function Renders(props) {
   useEffect(() => {
     getRenders()
   }, [])
-
-  useEffect(() => {
-  }, [sort])
 
   // START SEARCHING
 
@@ -110,28 +92,13 @@ export default function Renders(props) {
     }
   };
 
-  const searchFilter = (array) => {
-    if (array && array.length) {
-      return array.filter((item) => {
-        return item.prompt.toLowerCase().includes(debouncedSearch.toLowerCase())
-      });
-    }
-  };
-
-  const favoritesFilter = (array) => {
-    if (array && array.length) {
-      return array.filter((item) => {
-        if (filter === 'favorites') {
-          return item.favorite === true
-        } else {
-          return item;
-        }
-      });
-    }
-  };
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter])
 
   useEffect(() => {
     const debouncedSearchValue = debounce((value) => {
+      setCurrentPage(1);
       setDebouncedSearch(value);
     }, 600);
   
@@ -142,29 +109,6 @@ export default function Renders(props) {
       debouncedSearchValue.cancel();
     };
   }, [search]);
-
-  const filteredCurrentRenders = rendersFilter(likedRenders);
-
-  // END SEARCHING
-
-  async function deleteRender(id) {
-    const deleteRender = await RenderApiLibrary.deleteRender(id);
-    if (deleteRender.data.success) {
-      getLikedRenders();
-    }
-  }
-
-  async function startDeleteRender(id) {
-    const deleteObject = { ...isDeleting };
-    deleteObject[id] = true;
-    setIsDeleting(deleteObject);
-  }
-
-  async function cancelDeleteRender(id) {
-    const deleteObject = { ...isDeleting };
-    deleteObject[id] = false;
-    setIsDeleting(deleteObject);
-  }
 
   function goToGeneration(id) {
     if (id) {
@@ -179,21 +123,6 @@ export default function Renders(props) {
     }
   }
 
-  function downloadGeneration(generation) {
-    UtilityLibrary.downloadImage(generation.image, generation.id);
-  }
-
-  function shareGeneration(generation) {
-      setIsSharing(true)
-      const shareLink = `${window.location.origin}/generate?id=${generation.id}`
-      navigator.clipboard.writeText(shareLink);
-      
-      const timeoutTimer = setTimeout(function () {
-          setIsSharing(false)
-          clearTimeout(timeoutTimer)
-      }, 1000);
-  }
-
   async function getLikedRenders() {
     const getLikedRenders = await RenderApiLibrary.getLikedRenders()
     setLikedRenders(getLikedRenders.data.images)
@@ -202,38 +131,17 @@ export default function Renders(props) {
     }
   }
 
-  async function postFavorite(render) {
-    if (!render.favorite) {
-      const postFavorite = await FavoriteApiLibrary.postFavorite(render.id)
-      if (postFavorite.data) {
-        getLikedRenders()
-      }
-    } else {
-      const deleteFavorite = await FavoriteApiLibrary.deleteFavorite(render.id)
-      if (deleteFavorite.data) {
-        getLikedRenders()
-      }
-    }
-  }
-
-  async function likeRender(id, like) {
-    if (!like) {
-        const postLike = await LikeApiLibrary.postLike(id)
-        if (postLike.data) {
-              getLikedRenders()
-        }
-    } else {
-        const postDelete = await LikeApiLibrary.deleteLike(id)
-        if (postDelete.data) {
-              getLikedRenders()
-        }
-    }
-    getGuest()
-  }
-
   useEffect(() => {
     getLikedRenders();
   }, [])
+
+  
+  // Pagination
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const filteredCurrentRenders = rendersFilter(likedRenders);
+  const filteredCurrentRendersList = filteredCurrentRenders?.slice(indexOfFirstPost, indexOfLastPost);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <main className={style.RendersPage}>
@@ -255,7 +163,7 @@ export default function Renders(props) {
           <link rel="icon" href="/images/favicon.ico" />
       </Head>
       
-      <GenerateHeaderComponent guest={guestData} renders={renders} />
+      <GenerateHeaderComponent guest={guestData} renders={currentRenders} />
         <div className="gallery">
           <div className="details">
               <div className="container column">
@@ -264,134 +172,11 @@ export default function Renders(props) {
                   <p>A collection of liked AI-generated images</p>
               </div>
           </div>
-          <div className="search">
-            <div className="nav container column">
-              <div className="CardComponent">
-                <InputComponent 
-                  label="Search"
-                  type="text"
-                  value={search} 
-                  onChange={setSearch}
-                ></InputComponent>
-                <SelectComponent 
-                  label="Filter"
-                  type="text"
-                  value={filter} 
-                  onChange={setFilter}
-                  options={filterOptions}
-                ></SelectComponent>
-                <SelectComponent 
-                  label="Sort"
-                  type="text"
-                  value={sort} 
-                  onChange={setSort}
-                  options={sortOptions}
-                ></SelectComponent>
-              </div>
-            </div>
-          </div>
-          { filteredCurrentRenders?.map((render, index) => (
-          <div key={index} className="item">
-            <div className="container">
-              <picture className="RenderPictureComponent image">
-                  { !render.likes ? (
-                        <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
-                    ) : (
-                        <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
-                    )}
-                  <img src={render.image}></img>
-              </picture>
-              {/* <div className="card">
-
-                  { isDeleting[render.id] && (
-                    <div className="delete">
-                      <div className="label">Are you sure you want to delete this?</div>	
-                      <div className="buttons">
-                          <ButtonComponent 
-                          className=""
-                          label="Cancel"
-                          type="button" 
-                          onClick={() => cancelDeleteRender(render.id)}
-                          ></ButtonComponent>
-                          <ButtonComponent 
-                          className="red"
-                          label="Delete"
-                          type="button"
-                          onClick={() => deleteRender(render.id)}
-                          ></ButtonComponent>
-                        </div>
-                    </div>
-                  )}
-
-                  <div className="name">
-                    <span className={`favorite ${render.favorite ? 'favorited' : ''}`} onClick={() => postFavorite(render)}>{render.favorite ? '📀' : '💿'}</span>
-                    {render.id}
-                  </div>
-                  <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
-                  <div className="properties">
-                      <div className="sampler">🖌️ {render.sampler}</div>
-                      <div className="style">🎨 {render.style}</div>
-                  </div>
-                  <div className="prompt">{render.prompt}</div>
-                  <div className="buttons">
-                      <ButtonComponent 
-                      className="mini"
-                      label="Share"
-                      type="button" 
-                      onClick={() => shareGeneration(render)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini"
-                      label="Download"
-                      type="button"
-                      onClick={() => downloadGeneration(render)}
-                      ></ButtonComponent>
-                  </div>
-                  <div className="buttons">
-                      <ButtonComponent 
-                      className="mini"
-                      label="Load"
-                      type="button" 
-                      onClick={() => goToGeneration(render.id)}
-                      ></ButtonComponent>
-                  </div>
-              </div> */}
-              
-              <div className="RenderCardComponent">
-                  <div className="title">
-                    <span className={`favorite ${render.favorite ? 'favorited' : ''}`} onClick={() => postFavorite(render)}>{render.favorite ? '📀' : '💿'}</span>
-                    {render.id}
-                  </div>
-                  <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
-                  <div className="badges">
-                      <BadgeComponent type="sampler" value={render.sampler}/>
-                      <BadgeComponent type="style" value={render.style}/>
-                  </div>
-                  <p className="description">{render.prompt}</p>
-                  <div className="actions">
-                      <ButtonComponent 
-                      className="mini"
-                      label="Share"
-                      type="button" 
-                      onClick={() => shareGeneration(render)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini"
-                      label="Download"
-                      type="button"
-                      onClick={() => downloadGeneration(render)}
-                      ></ButtonComponent>
-                      <ButtonComponent 
-                      className="mini"
-                      label="Load"
-                      type="button" 
-                      onClick={() => goToGeneration(render.id)}
-                      ></ButtonComponent>
-                  </div>
-              </div>
-            </div>
-          </div>
-            ))}
+          
+          <FilterComponent setSearch={setSearch} setFilter={setFilter} setSort={setSort} setGalleryMode={setGalleryMode} search={search} filter={filter} sort={sort}/>
+          <PaginationComponent postsPerPage={postsPerPage} totalPosts={filteredCurrentRenders?.length} paginate={paginate} currentPage={currentPage}/>
+          <GalleryComponent renders={filteredCurrentRendersList} getRenders={getRenders} getGuest={getGuest} mode={galleryMode} />
+          <PaginationComponent postsPerPage={postsPerPage} totalPosts={filteredCurrentRenders?.length} paginate={paginate} currentPage={currentPage}/>
         </div>
     </main>
   )
