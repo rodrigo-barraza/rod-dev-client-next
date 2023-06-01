@@ -397,13 +397,20 @@ p {
     width: 100%;
     grid-column: 1/4;
     gap: 16px;
-    // justify-content: flex-end;
-    display: grid;
     grid-template-columns: 1fr 1fr;
-  }
-  .super-actions {
     display: flex;
-    grid-column: 1/4;
+    grid-column: 1/2;
+    align-items: center;
+  }
+  .super-actions2 {
+    color: inherit;
+    width: 100%;
+    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    display: flex;
+    grid-column: 2/4;
+    align-items: center;
+    justify-content: flex-end;
   }
   .overlay {
     animation: fadeIn 0.3s ease forwards;

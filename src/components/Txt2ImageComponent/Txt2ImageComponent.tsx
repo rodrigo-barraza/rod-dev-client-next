@@ -214,23 +214,23 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     disabled
                     type="button" 
                     ></ButtonComponent> */}
-                    <ButtonComponent 
-                    className="mini"
-                    label="Share"
-                    type="button" 
-                    onClick={shareGeneration}
-                    icon="🔗"
-                    ></ButtonComponent>
-                    <ButtonComponent 
-                    className="mini"
-                    label="Download"
-                    type="button" 
-                    onClick={downloadGeneration}
-                    icon="⏬"
-                    ></ButtonComponent>
                 </div>
                 <div className="super-actions">
                     <LikeComponent render={theRender} setFunction={getRender} setGuest={setGuest}></LikeComponent>
+                </div>
+                <div className="super-actions2">
+                    <ButtonComponent 
+                    className="mini"
+                    type="action" 
+                    onClick={shareGeneration}
+                    icon="forward"
+                    ></ButtonComponent>
+                    <ButtonComponent 
+                    className="mini"
+                    type="action" 
+                    onClick={downloadGeneration}
+                    icon="download"
+                    ></ButtonComponent>
                 </div>
             </div>
             <picture className={`RenderPictureComponent image ${isImageLoading ? 'loading' : ''}`}>

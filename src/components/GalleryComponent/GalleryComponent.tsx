@@ -136,20 +136,6 @@ export default function GalleryComponent(props) {
                         <div className="actions">
                             <ButtonComponent 
                             className="mini"
-                            label="Share"
-                            type="button" 
-                            onClick={() => shareGeneration(render)}
-                            icon="🔗"
-                            ></ButtonComponent>
-                            <ButtonComponent 
-                            className="mini"
-                            label="Download"
-                            type="button"
-                            onClick={() => downloadGeneration(render)}
-                            icon="⏬"
-                            ></ButtonComponent>
-                            <ButtonComponent 
-                            className="mini"
                             label="Load"
                             type="button" 
                             onClick={() => goToGeneration(render.id)}
@@ -163,17 +149,23 @@ export default function GalleryComponent(props) {
                             onClick={() => startDeleteRender(render.id)}
                             icon="❌"
                             ></ButtonComponent>
-                            <ButtonComponent 
-                            className="mini red"
-                            label="Delete"
-                            type="like"
-                            disabled={isDeleting[render.id]}
-                            onClick={() => startDeleteRender(render.id)}
-                            icon="❌"
-                            ></ButtonComponent>
                         </div>
                         <div className="super-actions">
                           <LikeComponent render={render} setFunction={getRenders}></LikeComponent>
+                        </div>
+                        <div className="super-actions2">
+                          <ButtonComponent 
+                          className="mini"
+                          type="action" 
+                          onClick={() => shareGeneration(render)}
+                          icon="forward"
+                          ></ButtonComponent>
+                          <ButtonComponent 
+                          className="mini"
+                          type="action" 
+                          onClick={() => downloadGeneration(render)}
+                          icon="download"
+                          ></ButtonComponent>
                         </div>
                     </div>
                     </div>

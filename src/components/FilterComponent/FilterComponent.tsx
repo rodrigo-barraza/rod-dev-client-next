@@ -42,19 +42,14 @@ export default function FilterComponent(props) {
                 options={sortOptions}
             ></SelectComponent>
             <ButtonComponent 
-            className="mini"
-            label="List"
-            type="button"
-            // onClick={set}
+            type="action" 
             onClick={() => setGalleryMode('list')}
-            icon="📄"
+            icon="table_rows"
             ></ButtonComponent>
             <ButtonComponent 
-            className="mini"
-            label="Grid"
-            type="button"
+            type="action" 
             onClick={() => setGalleryMode('grid')}
-            icon="🪟"
+            icon="grid_on"
             ></ButtonComponent>
             </div>
         </div>

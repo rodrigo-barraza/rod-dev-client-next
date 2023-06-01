@@ -15,12 +15,14 @@ export default function ButtonComponent(props: any) {
     }
 
     return (
-        <div className={`${style.ButtonComponent} ${combinedClassNames}`} disabled={disabled} onClick={onClick}>
+        <div className={`${style.ButtonComponent} ${combinedClassNames} ${style[type]} ${style[icon]}`} disabled={disabled} onClick={onClick}>
             <button type={buttonType} disabled={disabled}>
                 { icon && (
-                    <span>{icon}</span>
+                    <span className={style.icon}>
+                        {icon}
+                    </span>
                 )}
-                {label}
+                <span className="label">{label}</span>
             </button>
         </div>
     )
