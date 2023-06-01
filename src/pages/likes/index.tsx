@@ -174,8 +174,12 @@ export default function Renders(props) {
           </div>
           
           <FilterComponent setSearch={setSearch} setFilter={setFilter} setSort={setSort} setGalleryMode={setGalleryMode} search={search} filter={filter} sort={sort}/>
-          <PaginationComponent postsPerPage={postsPerPage} totalPosts={filteredCurrentRenders?.length} paginate={paginate} currentPage={currentPage}/>
-          <GalleryComponent renders={filteredCurrentRendersList} getRenders={getRenders} getGuest={getGuest} mode={galleryMode} />
+          <PaginationComponent 
+          postsPerPage={postsPerPage} 
+          totalPosts={filteredCurrentRenders?.length} 
+          paginate={paginate} 
+          currentPage={currentPage}/>
+          <GalleryComponent renders={filteredCurrentRendersList} getRenders={getLikedRenders} getGuest={getGuest} mode={galleryMode} />
           <PaginationComponent postsPerPage={postsPerPage} totalPosts={filteredCurrentRenders?.length} paginate={paginate} currentPage={currentPage}/>
         </div>
     </main>

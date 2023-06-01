@@ -8,13 +8,12 @@ import AspectRatioCollection from '@/collections/AspectRatioCollection'
 import EventApiLibrary from '@/libraries/EventApiLibrary'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
-import LikeApiLibrary from '@/libraries/LikeApiLibrary'
-import GuestApiLibrary from '@/libraries/GuestApiLibrary'
 import SelectComponent from '@/components//SelectComponent/SelectComponent'
 import SliderComponent from '@/components//SliderComponent/SliderComponent'
 import ButtonComponent from '@/components//ButtonComponent/ButtonComponent'
 import BadgeComponent from '@/components//BadgeComponent/BadgeComponent'
 import TextAreaComponent from '@/components//TextAreaComponent/TextAreaComponent'
+import LikeComponent from '@/components//LikeComponent/LikeComponent'
 import { useAlertContext } from '@/contexts/AlertContext'
 import styles from './Txt2ImageComponent.module.scss'
 
@@ -37,6 +36,7 @@ export default function Txt2ImageComponent({render, setGuest}) {
     const [isSharing, setIsSharing] = useState(false)
     const [like, setLike] = useState(render.like)
     const [likes, setLikes] = useState(render.likes)
+    const [theRender, setTheRender] = useState(render)
     const formReference = useRef(null)
     const [aspectRatio, setAspectRatio] = useState(AspectRatioCollection[0].value)
 
@@ -55,6 +55,9 @@ export default function Txt2ImageComponent({render, setGuest}) {
             router.query.id = parsedResult.data.id
             router.push(router)
 
+            setTheRender(parsedResult.data)
+            console.log(parsedResult.data.likes)
+
             setStyleLabelColor(currentStyle.color)
             setGeneratedImageId(parsedResult.data.id)
             setGeneratedImageTitle(`Generated Image #${parsedResult.data.count}`)
@@ -62,8 +65,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
             setDate(UtilityLibrary.toHumanDateAndTime(parsedResult.data.createdAt))
             setGeneratedImageSampler(samplerLabel)
             setGeneratedImageStyle(styleLabel)
-            setLikes(parsedResult.data.likes)
-            setLike(parsedResult.data.like)
 
             const img = new Image()
             img.onload = function () {
@@ -83,6 +84,9 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 const currentStyle = UtilityLibrary.findStyle(render.style)
                 const styleLabel = UtilityLibrary.findStyleLabel(render.style)
 
+                setTheRender(render)
+                console.log(render.likes)
+
                 setSampler(render.sampler)
                 setNewStyle(render.style)
                 setCfg(render.cfg)
@@ -98,8 +102,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 setDate(UtilityLibrary.toHumanDateAndTime(render.createdAt))
                 setGeneratedImageSampler(samplerLabel)
                 setGeneratedImageStyle(styleLabel)
-                setLikes(render.likes)
-                setLike(render.like)
 
 
                 setImage(render.image)
@@ -130,25 +132,7 @@ export default function Txt2ImageComponent({render, setGuest}) {
         if (render) {
             setLike(render.like)
             setLikes(render.likes)
-        }
-    }
-
-    async function likeRender(id, like) {
-        setLike(!like)
-        if (!like) {
-            const postLike = await LikeApiLibrary.postLike(id)
-            if (postLike.data) {
-                getRender(id)
-            }
-        } else {
-            const postDelete = await LikeApiLibrary.deleteLike(id)
-            if (postDelete.data) {
-                getRender(id)
-            }
-        }
-        const getGuest = await GuestApiLibrary.getGuest()
-        if (getGuest.data) {
-          setGuest(getGuest.data)
+            setTheRender(render)
         }
     }
 
@@ -235,24 +219,19 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     label="Share"
                     type="button" 
                     onClick={shareGeneration}
+                    icon="🔗"
                     ></ButtonComponent>
                     <ButtonComponent 
                     className="mini"
                     label="Download"
                     type="button" 
                     onClick={downloadGeneration}
+                    icon="⏬"
                     ></ButtonComponent>
+                    <LikeComponent render={theRender} setFunction={getRender} setGuest={setGuest}></LikeComponent>
                 </div>
             </div>
             <picture className={`RenderPictureComponent image ${isImageLoading ? 'loading' : ''}`}>
-                <div className={`action ${like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, like)}>
-                    <span className="icon">{like ? '❤️' : '🤍'}</span>
-                    { !isImageLoading && !!likes && (
-                        <span>{likes} {likes == 1 ? 'like' : 'likes'}</span>
-                    )}
-                    { !isImageLoading && !!likes && (
-                        <span></span>)}
-                </div>
                 <img className={`${isImageLoading ? 'loading' : ''}`} src={image} alt={newPrompt}/>
             </picture>
         </div>

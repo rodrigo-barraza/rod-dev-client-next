@@ -8,6 +8,7 @@ import BadgeComponent from '../BadgeComponent/BadgeComponent';
 import RenderApiLibrary from '@/libraries/RenderApiLibrary';
 import UtilityLibrary from '@/libraries/UtilityLibrary';
 import FavoriteApiLibrary from '@/libraries/FavoriteApiLibrary';
+import LikeComponent from '../LikeComponent/LikeComponent';
 
 export default function GalleryComponent(props) {
     const router = useRouter()
@@ -62,6 +63,8 @@ export default function GalleryComponent(props) {
     }
   
     function shareGeneration(generation) {
+        const dialog = document.getElementById("dialog");
+        dialog.show();
         setIsSharing(true)
         const shareLink = `${window.location.origin}/generate?id=${generation.id}`
         navigator.clipboard.writeText(shareLink);
@@ -88,15 +91,11 @@ export default function GalleryComponent(props) {
 
     return (
         <div className={`${style.GalleryComponent} ${style[mode]}`}>
+            <dialog id="dialog"></dialog>
             { renders?.map((render, index) => (
                 <div key={index} className="item">
                     <div className="container">
                     <picture className="RenderPictureComponent image">
-                        { !render.likes ? (
-                            <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
-                        ) : (
-                            <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
-                        )}
                         { mode == 'grid' && (
                             <img className="thumbnail" onClick={() => goToGeneration(render.id)} src={render.thumbnail || render.image}></img>
                         )}
@@ -140,18 +139,21 @@ export default function GalleryComponent(props) {
                             label="Share"
                             type="button" 
                             onClick={() => shareGeneration(render)}
+                            icon="🔗"
                             ></ButtonComponent>
                             <ButtonComponent 
                             className="mini"
                             label="Download"
                             type="button"
                             onClick={() => downloadGeneration(render)}
+                            icon="⏬"
                             ></ButtonComponent>
                             <ButtonComponent 
                             className="mini"
                             label="Load"
                             type="button" 
                             onClick={() => goToGeneration(render.id)}
+                            icon="⏪"
                             ></ButtonComponent>
                             <ButtonComponent 
                             className="mini red"
@@ -159,8 +161,24 @@ export default function GalleryComponent(props) {
                             type="button"
                             disabled={isDeleting[render.id]}
                             onClick={() => startDeleteRender(render.id)}
+                            icon="❌"
+                            ></ButtonComponent>
+                            <ButtonComponent 
+                            className="mini red"
+                            label="Delete"
+                            type="like"
+                            disabled={isDeleting[render.id]}
+                            onClick={() => startDeleteRender(render.id)}
+                            icon="❌"
                             ></ButtonComponent>
                         </div>
+                        {/* { !render.likes ? (
+                            <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
+                        ) : (
+                            <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
+                        )} */}
+                        
+                        <LikeComponent render={render} setFunction={getRenders}></LikeComponent>
                     </div>
                     </div>
                 </div>

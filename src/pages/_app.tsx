@@ -1,11 +1,11 @@
 import { AppProps } from 'next/app'
+import Head from 'next/head'
 import { Analytics } from '@vercel/analytics/react';
 import { useEffect } from 'react'
 import Layout from '@/components/Layout';
 import EventLibrary from '@/libraries/EventLibrary';
 import '@/styles/styles.scss'
 import '@/styles/animations.scss'
-import Script from 'next/script'
 import { AlertProvider, useAlertContext } from '@/contexts/AlertContext'
 
 
@@ -44,33 +44,6 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
 
     return (
         <Layout>
-            <Script
-                id="google-tag-manager"
-                src="https://www.googletagmanager.com/gtag/js?id=G-R61CVJFDVF"
-                strategy="afterInteractive"
-            />
-            <Script 
-                id="google-tag-manager2"
-                strategy="afterInteractive">
-                {`
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-
-                    gtag('config', 'G-R61CVJFDVF');
-                `}
-            </Script>
-            <Script 
-                id="google-analytics"
-                strategy="afterInteractive">
-                {`
-                    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                    })(window,document,'script','dataLayer','GTM-T62WJS5');
-                `}
-            </Script>
             <AlertProvider>
                 {message}
                 <Component {...pageProps} />

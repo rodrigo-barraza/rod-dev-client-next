@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 :root {
   --COLOR_BLUE: rgb(44, 117, 253);
@@ -319,7 +319,7 @@ p {
 .action {
   z-index: 1;
   cursor: pointer;
-  position: absolute;
+  // position: absolute;
   background: rgba(0,0,0,0.8);
   left: 8px;
   bottom: 8px;

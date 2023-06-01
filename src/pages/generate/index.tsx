@@ -102,8 +102,6 @@ export default function Playground(props) {
     getRenders()
   }, [render])
 
-  
-  // Pagination
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const filteredCurrentRenders = exploreRenders;
@@ -138,7 +136,6 @@ export default function Playground(props) {
         <div className="gallery">
           <div className="sectionTitle">
             <div>Explore {renderCount} Renders</div>
-            {/* <div className="refresh" onClick={getRandomRenders}>♻️</div> */}
           </div>
 
           <PaginationComponent 
@@ -147,17 +144,6 @@ export default function Playground(props) {
           paginate={paginate} 
           currentPage={currentPage}/>
           <GalleryComponent renders={filteredCurrentRendersList} mode='grid' />
-
-          {/* { exploreRenders.map((render, index) => (
-            <Link key={index} href={`?id=${render.id}`}>
-              <div className="image">
-                <div className="overlay">
-                  <div className="prompt">{render.prompt}</div>
-                </div>
-                <img src={render.thumbnail || render.image}></img>
-              </div>
-            </Link>
-          ))} */}
         </div>
     </main>
   )

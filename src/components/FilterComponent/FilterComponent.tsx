@@ -43,16 +43,18 @@ export default function FilterComponent(props) {
             ></SelectComponent>
             <ButtonComponent 
             className="mini"
-            label="📄List"
+            label="List"
             type="button"
             // onClick={set}
             onClick={() => setGalleryMode('list')}
+            icon="📄"
             ></ButtonComponent>
             <ButtonComponent 
             className="mini"
-            label="🪟Grid"
+            label="Grid"
             type="button"
             onClick={() => setGalleryMode('grid')}
+            icon="🪟"
             ></ButtonComponent>
             </div>
         </div>
