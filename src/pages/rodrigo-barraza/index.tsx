@@ -3,6 +3,7 @@ import SocialsCollection from '@/collections/SocialsCollection'
 import AboutCollection from '@/collections/AboutCollection'
 import styles from './index.module.scss'
 import Head from 'next/head'
+import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
 
 export const getServerSideProps = async (context: any) => {
     const { req, query, res, resolvedUrl } = context
@@ -61,12 +62,14 @@ export default function AboutView(props) {
                             height={ 250 }>
                         </Image>
                         <div className="socials">
-                            <h1 className="title">Socials</h1>
                                 {SocialsCollection.map((social, socialIndex) => (
-                                    <a className={`social ${social.type}`} href={social.url} key={socialIndex} target="_blank">
-                                        <div className="logo">{social.type}</div>
-                                        <div className="social-name">{social.name}</div>
-                                    </a>
+                                    <ButtonComponent 
+                                        key={socialIndex}
+                                        href={social.url}
+                                        label={social.name}
+                                        className="mini"
+                                        logo={social.type}
+                                ></ButtonComponent>
                                 ))}
                         </div>
                     </div>

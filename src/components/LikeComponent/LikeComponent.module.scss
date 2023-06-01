@@ -66,7 +66,7 @@
         }
     }
     &.blue {
-        background: var(--COLOR_BLUE_HIGHLIGHT);
+        background: var(--COLOR_BLUE_SHADOW);
         color: white;
         &[disabled] {
             border: 3px solid white;
@@ -83,7 +83,7 @@
             color: white;
         }
         &:active {
-            background: var(--COLOR_BLUE_HIGHLIGHT);
+            background: var(--COLOR_BLUE_SHADOW);
             color: white;
         }
     }

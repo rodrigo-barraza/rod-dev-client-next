@@ -11,60 +11,6 @@ function Layout({ children }: { children: React.ReactNode }) {
         const head = document.head;
         const style = document.createElement('style');
         const css = `
-            .social.instagram .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/instagram.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.facebook .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/facebook.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.twitter .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/twitter.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.github .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/github.png', undefined)}");
-                background-size: 100%;
-                background-color: white;
-                border-radius: 100%;
-            }
-            .social.deviantart .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/deviantart.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.behance .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/behance.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.flickr .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/flickr.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.foundationapp .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/foundationapp.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.opensea .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/opensea.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.superrare .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/superrare.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.discord .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/discord.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.keybase .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/keybase.png', undefined)}");
-                background-size: 100%;
-            }
-            .social.linkedin .logo {
-                background-image: url("${UtilityLibrary.renderAssetPath('icons/linkedin.png', undefined)}");
-                background-size: 100%;
-            }
             .brand .logo {
                 background-image: url("${UtilityLibrary.renderAssetPath('images/rodrigo-barraza-logo.png', undefined)}");
             }

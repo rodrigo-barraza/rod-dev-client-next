@@ -5,7 +5,8 @@
     background: white;
     border: 3px solid rgb(55,55,55);
     color: rgb(55,55,55);
-    button {
+    button, a {
+        font-family: Arial, Helvetica, sans-serif;
         transition: all 0.1s;
         font-weight: 700;
         width: 100%;
@@ -20,8 +21,64 @@
             font-family: 'Material Symbols Outlined';
             margin-right: 8px;
             font-size: 24px;
-            // font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48;
-            // font-size: 32px;
+        }
+    }
+    a {
+        display: flex;
+        box-sizing: border-box;
+        text-decoration: none;
+        .logo {
+            flex: 0 0 30px;
+            height: 30px;
+            background-size: 100%;
+            margin-right: 8px;
+            &.instagram {
+                background-image: url("https://assets.rod.dev/icons/instagram.png");
+            }
+            &.instagram {
+                background-image: url("https://assets.rod.dev/icons/instagram.png");
+            }
+            &.facebook {
+                background-image: url("https://assets.rod.dev/icons/facebook.png");
+            }
+            &.twitter {
+                background-image: url("https://assets.rod.dev/icons/twitter.png");
+            }
+            &.github {
+                background-image: url("https://assets.rod.dev/icons/github.png");
+            }
+            &.deviantart {
+                background-image: url("https://assets.rod.dev/icons/deviantart.png");
+            }
+            &.behance {
+                background-image: url("https://assets.rod.dev/icons/behance.png");
+            }
+            &.flickr {
+                background-image: url("https://assets.rod.dev/icons/flickr.png");
+            }
+            &.foundationapp {
+                background-image: url("https://assets.rod.dev/icons/foundationapp.png");
+            }
+            &.opensea {
+                background-image: url("https://assets.rod.dev/icons/opensea.png");
+            }
+            &.superrare {
+                background-image: url("https://assets.rod.dev/icons/superrare.png");
+            }
+            &.discord {
+                background-image: url("https://assets.rod.dev/icons/discord.png");
+            }
+            &.keybase {
+                background-image: url("https://assets.rod.dev/icons/keybase.png");
+            }
+            &.linkedin {
+                background-image: url("https://assets.rod.dev/icons/linkedin.png");
+            }
+        }
+        .label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     }
     &:hover {
@@ -38,30 +95,30 @@
         color: white;
     }
     &.mini {
-        button {
+        button, a {
             padding: 8px 16px;
             font-size: var(--FONT_SIZE_MEDIUM);
         }
     }
     &.blue {
-        background: var(--COLOR_BLUE_HIGHLIGHT);
+        background: var(--COLOR_BLUE);
         color: white;
         &[disabled] {
             border: 3px solid white;
             background: rgba(235,235,235);
             pointer-events: none;
             box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
-            button {
+            button, a {
                 color: rgba(210,210,210);
                 cursor: not-allowed;
             }
         }
         &:hover {
-            background: var(--COLOR_BLUE);
+            background: var(--COLOR_BLUE_SHADOW);
             color: white;
         }
         &:active {
-            background: var(--COLOR_BLUE_HIGHLIGHT);
+            background: var(--COLOR_BLUE_SHADOW);
             color: white;
         }
     }
@@ -69,7 +126,7 @@
         background: transparent;
         color: white;
         border: none;
-        button {
+        button, a {
             padding: 0;
             color: inherit;
             font-family: 'Ubuntu';
@@ -80,7 +137,7 @@
         &:hover {
             background: transparent;
             transform: translateY(0);
-            button {
+            button, a {
                 text-decoration: underline;
             }
         }
@@ -95,7 +152,7 @@
         height: 40px;
         border-radius: 40px;
         background: black;
-        button {
+        button, a {
             color: white;
             padding: 8px;
             display: flex;
@@ -117,9 +174,61 @@
         background: rgba(235,235,235);
         pointer-events: none;
         box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
-        button {
+        button, a {
             color: rgba(210,210,210);
             cursor: not-allowed;
         }
+    }
+    &.logo {
+        border: 0;
+        // &.instagram {
+        //     &:hover {
+        //         background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+        //         color: white;
+        //         // border: 3px solid transparent;
+        //         .label {
+        //             text-shadow: 2px 2px 6px black;
+        //         }
+        //     }
+        // }
+        // &.github {
+        //     &:hover {
+        //         background: rgb(22,22,22);
+        //         color: white;
+        //         .logo {
+        //             filter: invert(1)
+        //         }
+        //     }
+        // }
+        // &.facebook {
+        //     &:hover {
+        //         background: #039be5;
+        //         color: white;
+        //     }
+        // }
+        // &.behance {
+        //     &:hover {
+        //         background: #2196f3;
+        //         color: white;
+        //     }
+        // }
+        // &.deviantart {
+        //     &:hover {
+        //         background: #06070d;
+        //         color: white;
+        //     }
+        // }
+        // &.flickr {
+        //     &:hover {
+        //         background: rgba(21,21,23,.95);
+        //         color: white;
+        //     }
+        // }
+        // &.linkedin {
+        //     &:hover {
+        //         background: #0077d3;
+        //         color: white;
+        //     }
+        // }
     }
 }
