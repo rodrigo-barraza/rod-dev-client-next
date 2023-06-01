@@ -135,7 +135,6 @@
         :global {
             .item {
                 flex: 1 1 228px;
-                height: 228px;
                 .container {
                     grid-template-columns: 1fr;
                     height: 100%;
@@ -148,11 +147,21 @@
             .RenderCardComponent {
                 display: none;
             }
-            // @media (max-width: 1432px) {
-            //   .item {
-            //     flex: 1 1 228px;
-            //   }
-            // }
+            @media (max-width: 1432px) {
+              .item {
+                flex: 1 1 14vw;
+              }
+            }
+            @media (max-width: 960px) {
+              .item {
+                flex: 1 1 20vw;
+              }
+            }
+            @media (max-width: 640px) {
+              .item {
+                flex: 1 1 24vw;
+              }
+            }
         }
     }
 }
