@@ -5,7 +5,7 @@
             position: absolute!important;
             top: 0;
             height: 270px;
-            z-index: -1;
+            z-index: var(--Z_INDEX_BACKGROUND);
             background: black;
             overflow: hidden;
             transition: all 1s ease-in-out;
@@ -187,7 +187,7 @@
             right: 0;
             top: 0;
             bottom: 0;
-            z-index: 2;
+            z-index: var(--Z_INDEX_AUDIENCE);
              display: flex;
             flex-direction: column;
             justify-content: center;

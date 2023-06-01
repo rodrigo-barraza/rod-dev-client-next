@@ -32,6 +32,7 @@
             height: 30px;
             background-size: 100%;
             margin-right: 8px;
+            filter: saturate(0);
             &.instagram {
                 background-image: url("https://assets.rod.dev/icons/instagram.png");
             }
@@ -87,6 +88,9 @@
         box-shadow: 4px 4px 0px rgb(0,0,0,0.9);
         border: 3px solid rgb(15,15,15);
         color: white;
+        .logo {
+            filter: saturate(1)
+        }
     }
     &:active {
         transform: translateY(-1px);

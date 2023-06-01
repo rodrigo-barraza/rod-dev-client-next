@@ -202,11 +202,11 @@ export default function Txt2ImageComponent({render, setGuest}) {
             <div className={`RenderCardComponent ${image && !isImageLoading ? '' : ' loading'}`}>
                 <h1 className="title">{render.id}</h1>
                 <p className="date">{date}</p>
+                <p className="description">{generatedImageDescription}</p>
                 <div className="badges">
                     <BadgeComponent type="sampler" value={render.sampler}/>
                     <BadgeComponent type="style" value={render.style}/>
                 </div>
-                <p className="description">{generatedImageDescription}</p>
                 <div className="actions">
                     {/* <ButtonComponent 
                     className=""

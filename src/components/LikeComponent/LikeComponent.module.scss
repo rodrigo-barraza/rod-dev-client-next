@@ -1,5 +1,5 @@
 .LikeComponent {
-    z-index: 1;
+    z-index: var(--Z_INDEX_FOREGROUND);
     cursor: pointer;
     // background: rgba(0,0,0,0.8);
     left: 8px;

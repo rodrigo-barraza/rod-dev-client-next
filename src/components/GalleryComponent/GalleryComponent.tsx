@@ -106,20 +106,20 @@ export default function GalleryComponent(props) {
                     <div className="RenderCardComponent">
                         { isDeleting[render.id] && (
                             <div className="overlay">
-                            <div className="label">Are you sure you want to delete this?</div>	
-                            <div className="actions">
-                                <ButtonComponent 
-                                className="mini "
-                                label="Cancel"
-                                type="button" 
-                                onClick={() => cancelDeleteRender(render.id)}
-                                ></ButtonComponent>
-                                <ButtonComponent 
-                                className="mini red"
-                                label="Delete"
-                                type="button"
-                                onClick={() => deleteRender(render.id)}
-                                ></ButtonComponent>
+                              <div className="message">Are you sure you want to delete this?</div>	
+                              <div className="actions">
+                                  <ButtonComponent 
+                                  className="mini "
+                                  label="Cancel"
+                                  type="button" 
+                                  onClick={() => cancelDeleteRender(render.id)}
+                                  ></ButtonComponent>
+                                  <ButtonComponent 
+                                  className="mini red"
+                                  label="Delete"
+                                  type="button"
+                                  onClick={() => deleteRender(render.id)}
+                                  ></ButtonComponent>
                                 </div>
                             </div>
                         )}
@@ -128,11 +128,11 @@ export default function GalleryComponent(props) {
                             {render.id}
                         </div>
                         <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
+                        <div className="description">{render.prompt}</div>
                         <div className="badges">
                             <BadgeComponent type="sampler" value={render.sampler}/>
                             <BadgeComponent type="style" value={render.style}/>
                         </div>
-                        <div className="description">{render.prompt}</div>
                         <div className="actions">
                             <ButtonComponent 
                             className="mini"
@@ -140,13 +140,15 @@ export default function GalleryComponent(props) {
                             type="button" 
                             onClick={() => goToGeneration(render.id)}
                             ></ButtonComponent>
-                            <ButtonComponent 
-                            className="mini red"
-                            label="Delete"
-                            type="button"
-                            disabled={isDeleting[render.id]}
-                            onClick={() => startDeleteRender(render.id)}
-                            ></ButtonComponent>
+                            { render.isCreator && (
+                              <ButtonComponent 
+                              className="mini red"
+                              label="Delete"
+                              type="button"
+                              disabled={isDeleting[render.id]}
+                              onClick={() => startDeleteRender(render.id)}
+                              ></ButtonComponent>
+                            )}
                         </div>
                         <div className="super-actions">
                           <LikeComponent render={render} setFunction={getRenders}></LikeComponent>
