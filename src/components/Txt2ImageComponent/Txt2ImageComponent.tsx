@@ -228,6 +228,8 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     onClick={downloadGeneration}
                     icon="⏬"
                     ></ButtonComponent>
+                </div>
+                <div className="super-actions">
                     <LikeComponent render={theRender} setFunction={getRender} setGuest={setGuest}></LikeComponent>
                 </div>
             </div>

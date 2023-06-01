@@ -316,38 +316,6 @@ p {
 .image {
   position: relative;
 }
-.action {
-  z-index: 1;
-  cursor: pointer;
-  // position: absolute;
-  background: rgba(0,0,0,0.8);
-  left: 8px;
-  bottom: 8px;
-  padding: 4px 12px 4px 12px;
-  font-size: var(--FONT_SIZE_MEDIUM);
-  font-weight: 500;
-  color: white;
-  border-radius: 4px;
-  transition: all 0.1s;
-  .icon {
-    display: inline-block;
-    opacity: 1;
-    font-size: var(--FONT_SIZE_MEDIUM);
-    margin-bottom: 2px;
-  }
-  &.liked {
-    .icon {
-      opacity: 1;
-      animation: growDown 0.3s ease forwards;
-    }
-  }
-  &:hover {
-      transform: translateY(-2px);
-      background: rgb(44, 117, 253, 0.8);
-      background: rgb(44, 117, 253);
-      box-shadow: 4px 4px 0px rgb(0,0,0,0.9);
-  }
-}
 
 @keyframes growDown {
   0% { transform: scale(1.5) }
@@ -423,6 +391,19 @@ p {
     justify-content: flex-end;
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+  .super-actions {
+    color: inherit;
+    width: 100%;
+    grid-column: 1/4;
+    gap: 16px;
+    // justify-content: flex-end;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .super-actions {
+    display: flex;
+    grid-column: 1/4;
   }
   .overlay {
     animation: fadeIn 0.3s ease forwards;

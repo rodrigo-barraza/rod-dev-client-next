@@ -1,10 +1,15 @@
 .LikeComponent {
+    z-index: 1;
     cursor: pointer;
+    // background: rgba(0,0,0,0.8);
+    left: 8px;
+    bottom: 8px;
+    // padding: 4px 12px 4px 12px;
+    font-size: var(--FONT_SIZE_MEDIUM);
+    font-weight: 500;
+    color: white;
     border-radius: 4px;
     transition: all 0.1s;
-    background: white;
-    border: 3px solid rgb(55,55,55);
-    color: rgb(55,55,55);
     button {
         transition: all 0.1s;
         font-weight: 700;
@@ -13,27 +18,47 @@
         background: transparent;
         border: 0;
         color: inherit;
-        padding: 20px;
-        font-size: var(--FONT_SIZE_BIG);
-        span {
-            font-family: 'Noto Color Emoji', sans-serif;
+        padding: 8px;
+        font-size: inherit;
+        .icon {
+            font-family: 'Noto Emoji', sans-serif;
             margin-right: 8px;
-            // font-size: 32px;
+            color: black;
+            background: rgba(235,235,235);
+            padding: 8px;
+            border-radius: 100px;
+        }
+        .likes {
+            color: black;
         }
     }
-    &:hover {
-        transform: translateY(-2px);
-        background: var(--COLOR_BLUE);
-        box-shadow: 4px 4px 0px rgb(0,0,0,0.9);
-        border: 3px solid rgb(15,15,15);
-        color: white;
+    &.liked {
+        button {
+            .icon {
+                color: red;
+                opacity: 1;
+                animation: growDown 0.3s ease forwards;
+            }
+        }
     }
-    &:active {
-        transform: translateY(-1px);
-        box-shadow: 2px 2px 0px rgb(0,0,0,1);
-        background: var(--COLOR_BLUE);
-        color: white;
+    .icon {
+        display: inline-block;
+        opacity: 1;
+        font-size: var(--FONT_SIZE_MEDIUM);
+        margin-bottom: 2px;
     }
+    // &:hover {
+    //     transform: translateY(-2px);
+    //     background: rgb(44, 117, 253, 0.8);
+    //     background: rgb(44, 117, 253);
+    //     box-shadow: 4px 4px 0px rgb(0,0,0,0.9);
+    // }
+    // &:active {
+    //     transform: translateY(-1px);
+    //     box-shadow: 2px 2px 0px rgb(0,0,0,1);
+    //     background: var(--COLOR_BLUE);
+    //     color: white;
+    // }
     &.mini {
         button {
             padding: 8px 16px;

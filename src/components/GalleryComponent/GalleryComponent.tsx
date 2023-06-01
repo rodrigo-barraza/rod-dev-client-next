@@ -172,13 +172,9 @@ export default function GalleryComponent(props) {
                             icon="❌"
                             ></ButtonComponent>
                         </div>
-                        {/* { !render.likes ? (
-                            <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span></div>
-                        ) : (
-                            <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}><span className="icon">{render.like ? '❤️' : '🤍'}</span> {render.likes} {render.likes == 1 ? 'like' : 'likes'}</div>
-                        )} */}
-                        
-                        <LikeComponent render={render} setFunction={getRenders}></LikeComponent>
+                        <div className="super-actions">
+                          <LikeComponent render={render} setFunction={getRenders}></LikeComponent>
+                        </div>
                     </div>
                     </div>
                 </div>

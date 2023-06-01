@@ -30,15 +30,18 @@ export default function LikeComponent(props: any) {
     }
 
     return (
-        // <div className={`${style.LikeComponent}`} disabled={disabled} onClick={onClick}>
-        //     <button type={buttonType} disabled={disabled}>
-        //     </button>
-        // </div>
-        <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}>
-            <span className="icon">{render.like ? '❤️' : '🤍'}</span>
-            { !!render.likes && (
-                <span>{render.likes} {render.likes == 1 ? 'like' : 'likes'}</span>
-            )}
+        <div className={`${style.LikeComponent} action ${render.like ? style.liked : ''}`} onClick={()=>likeRender(render.id, render.like)}>
+            <button className="icon">
+                <span className={style.icon}>{render.like ? '♥️' : '♥️'}</span>
+                <span className={style.likes}>{render.likes}</span>
+            </button>
         </div>
+        // <div className={`action ${render.like ? 'liked' : ''}`} onClick={()=>likeRender(render.id, render.like)}>
+        //     <span className="icon">{render.like ? '❤️' : '🤍'}</span>
+        //     {/* { !!render.likes && (
+        //         <span>{render.likes} {render.likes == 1 ? 'like' : 'likes'}</span>
+        //     )} */}
+        //     <span>{render.likes}</span>
+        // </div>
     )
 }
