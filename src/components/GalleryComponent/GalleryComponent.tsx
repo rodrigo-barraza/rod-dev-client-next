@@ -139,7 +139,6 @@ export default function GalleryComponent(props) {
                             label="Load"
                             type="button" 
                             onClick={() => goToGeneration(render.id)}
-                            icon="⏪"
                             ></ButtonComponent>
                             <ButtonComponent 
                             className="mini red"
@@ -147,7 +146,6 @@ export default function GalleryComponent(props) {
                             type="button"
                             disabled={isDeleting[render.id]}
                             onClick={() => startDeleteRender(render.id)}
-                            icon="❌"
                             ></ButtonComponent>
                         </div>
                         <div className="super-actions">
