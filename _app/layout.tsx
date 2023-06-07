@@ -15,8 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         {/* Start Google Tag Manager (noscript) */}
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T62WJS5"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        {/* <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T62WJS5"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> */}
         {/* End Google Tag Manager (noscript) */}
         {children}
       </body>

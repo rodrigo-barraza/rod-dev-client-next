@@ -8,6 +8,10 @@
   --COLOR_GREEN: rgb(35, 144, 58);
   --COLOR_GREEN_HIGHLIGHT: rgb(35, 144, 58);
 
+  --FONT_FAMILY_MATERIAL_SYMBOLS: 'Material Symbols Outlined';
+  --FONT_FAMILY_UBUNTU: 'Ubuntu', sans-serif;
+  --FONT_FAMILY_MONTSERRAT: 'Montserrat';
+  --FONT_FAMILY_NOTO-EMOJI: 'Noto Emoji', sans-serif;
   
   --FONT_SIZE_MINI: 12px;
   --FONT_SIZE_SMALL: 14px;
@@ -297,26 +301,26 @@ p {
 }
 
 
-.favorite, .like {
-  cursor: pointer;
-  display: inline-block;
-  transition: all 0.3s;
-  opacity: 0.5;
-  &:hover {
-    opacity: 1;
-  }
-  &:active {
-    opacity: 1;
-  }
-  &.favorited {
-    opacity: 1;
-    animation: growDown 0.3s ease forwards;
-  }
-  &.liked {
-    opacity: 1;
-    animation: growDown 0.3s ease forwards;
-  }
-}
+// .favorite, .like {
+//   cursor: pointer;
+//   display: inline-block;
+//   transition: all 0.3s;
+//   opacity: 0.5;
+//   &:hover {
+//     opacity: 1;
+//   }
+//   &:active {
+//     opacity: 1;
+//   }
+//   &.favorited {
+//     opacity: 1;
+//     animation: growDown 0.3s ease forwards;
+//   }
+//   &.liked {
+//     opacity: 1;
+//     animation: growDown 0.3s ease forwards;
+//   }
+// }
 
 
 .image {
@@ -404,7 +408,6 @@ p {
     color: inherit;
     width: 100%;
     grid-column: 1/4;
-    gap: 16px;
     grid-template-columns: 1fr 1fr;
     display: flex;
     grid-column: 1/2;

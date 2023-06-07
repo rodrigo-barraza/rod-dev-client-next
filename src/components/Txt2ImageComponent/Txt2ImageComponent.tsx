@@ -216,7 +216,8 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     ></ButtonComponent> */}
                 </div>
                 <div className="super-actions">
-                    <LikeComponent render={theRender} setFunction={getRender} setGuest={setGuest}></LikeComponent>
+                    <LikeComponent type="like" render={theRender} setFunction={getRender} setGuest={setGuest}></LikeComponent>
+                    <LikeComponent type="favorite" render={theRender} setFunction={getRender} setGuest={setGuest}></LikeComponent>
                 </div>
                 <div className="super-actions2">
                     <ButtonComponent 

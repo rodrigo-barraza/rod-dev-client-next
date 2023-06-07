@@ -21,26 +21,46 @@
         padding: 8px;
         font-size: inherit;
         .icon {
-            font-family: 'Noto Emoji', sans-serif;
+            font-family: var(--FONT_FAMILY_MATERIAL_SYMBOLS);
+            font-variation-settings: 'FILL' 1;
             margin-right: 8px;
             color: black;
             background: rgba(235,235,235);
             padding: 8px;
             border-radius: 100px;
         }
-        .likes {
+        .amount {
             color: black;
         }
-    }
-    &.liked {
-        button {
+        &.active {
             .icon {
-                color: red;
+                font-variation-settings: 'FILL' 1;
+                color: var(--COLOR_RED);
                 opacity: 1;
                 animation: growDown 0.3s ease forwards;
             }
+            &.favorite {
+                .icon {
+                    color: var(--COLOR_BLUE);
+                }
+            }
         }
     }
+    // &.liked {
+    //     button {
+    //         .icon {
+    //             font-variation-settings: 'FILL' 1;
+    //             color: red;
+    //             opacity: 1;
+    //             animation: growDown 0.3s ease forwards;
+    //         }
+    //         &.favorite {
+    //             .icon {
+    //                 color: yellow;
+    //             }
+    //         }
+    //     }
+    // }
     .icon {
         display: inline-block;
         opacity: 1;

@@ -124,7 +124,6 @@ export default function GalleryComponent(props) {
                             </div>
                         )}
                         <div className="title">
-                            <span className={`favorite ${render.favorite ? 'favorited' : ''}`} onClick={() => postFavorite(render)}>{render.favorite ? '📀' : '💿'}</span>
                             {render.id}
                         </div>
                         <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
@@ -151,7 +150,8 @@ export default function GalleryComponent(props) {
                             )}
                         </div>
                         <div className="super-actions">
-                          <LikeComponent render={render} setFunction={getRenders}></LikeComponent>
+                          <LikeComponent type="like" render={render} setFunction={getRenders}></LikeComponent>
+                          <LikeComponent type="favorite" render={render} setFunction={getRenders}></LikeComponent>
                         </div>
                         <div className="super-actions2">
                           <ButtonComponent 
