@@ -25,55 +25,52 @@
     }
     a {
         display: flex;
+        gap: 8px;
         box-sizing: border-box;
         text-decoration: none;
         .logo {
             flex: 0 0 30px;
             height: 30px;
             background-size: 100%;
-            margin-right: 8px;
             filter: saturate(0);
             &.instagram {
-                background-image: url("https://assets.rod.dev/icons/instagram.png");
-            }
-            &.instagram {
-                background-image: url("https://assets.rod.dev/icons/instagram.png");
+                background-image: var(--URL_ICON_INSTAGRAM)
             }
             &.facebook {
-                background-image: url("https://assets.rod.dev/icons/facebook.png");
+                background-image: var(--URL_ICON_FACEBOOK)
             }
             &.twitter {
-                background-image: url("https://assets.rod.dev/icons/twitter.png");
+                background-image: var(--URL_ICON_TWITTER)
             }
             &.github {
-                background-image: url("https://assets.rod.dev/icons/github.png");
+                background-image: var(--URL_ICON_GITHUB)
             }
             &.deviantart {
-                background-image: url("https://assets.rod.dev/icons/deviantart.png");
+                background-image: var(--URL_ICON_DEVIANTART)
             }
             &.behance {
-                background-image: url("https://assets.rod.dev/icons/behance.png");
+                background-image: var(--URL_ICON_BEHANCE)
             }
             &.flickr {
-                background-image: url("https://assets.rod.dev/icons/flickr.png");
+                background-image: var(--URL_ICON_FLICKR)
             }
             &.foundationapp {
-                background-image: url("https://assets.rod.dev/icons/foundationapp.png");
+                background-image: var(--URL_ICON_FOUNDATION_APP)
             }
             &.opensea {
-                background-image: url("https://assets.rod.dev/icons/opensea.png");
+                background-image: var(--URL_ICON_OPENSEA)
             }
             &.superrare {
-                background-image: url("https://assets.rod.dev/icons/superrare.png");
+                background-image: var(--URL_ICON_SUPER_RARE)
             }
             &.discord {
-                background-image: url("https://assets.rod.dev/icons/discord.png");
+                background-image: var(--URL_ICON_DISCORD)
             }
             &.keybase {
-                background-image: url("https://assets.rod.dev/icons/keybase.png");
+                background-image: var(--URL_ICON_KEYBASE)
             }
             &.linkedin {
-                background-image: url("https://assets.rod.dev/icons/linkedin.png");
+                background-image: var(--URL_ICON_LINKEDIN)
             }
         }
         .label {
@@ -100,7 +97,11 @@
     }
     &.mini {
         button, a {
-            padding: 8px 16px;
+            padding-right: clamp(4px, 1.4vw, 16px);
+            padding-left: clamp(4px, 1.4vw, 16px);
+            padding-top: clamp(2px, 0.7vw, 8px);
+            padding-bottom: clamp(2px, 0.7vw, 8px);
+            // padding: 1vw 2vw;
             font-size: var(--FONT_SIZE_MEDIUM);
         }
     }

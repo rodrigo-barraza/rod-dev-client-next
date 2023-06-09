@@ -126,9 +126,15 @@
                         display: flex;
                         grid-gap: 64px;
                         li {
-                            // padding: 8px 16px;
                             a {
+                                color: rgb(220,220,220);
                                 font-size: var(--FONT_SIZE_MEDIUM);
+                                &:hover {
+                                    color: white;
+                                }
+                                &.active {
+                                    color: white;
+                                }
                             }
                             &.about {
                                 color: white;
@@ -206,28 +212,28 @@
                 flex-direction: row;
                 position: absolute;
                 bottom: 20px;
-                background-color: #e8e8e8;
+                background-color: white;
                 padding: 4px 12px;
                 border-radius: 30px;
                 gap: 0;
                 .social {
                     a {
-                        display: block;
-                        border-radius: 8px;
-                        padding: 4px;
-                        .logo {
-                            display: block;
-                            height: 30px;
-                            width: 30px;
-                            filter: grayscale(1) opacity(0.9);
-                            pointer-events: none;
-                        }
-                        &:hover {
-                            text-decoration: none;
-                            background: #3390ff;
-                            transform: translate(0, -2px);
-                            color: black;
-                        }
+                        // display: block;
+                        // border-radius: 8px;
+                        // padding: 4px;
+                        // .logo {
+                        //     display: block;
+                        //     height: 30px;
+                        //     width: 30px;
+                        //     filter: grayscale(1) opacity(0.9);
+                        //     pointer-events: none;
+                        // }
+                        // &:hover {
+                        //     text-decoration: none;
+                        //     background: #3390ff;
+                        //     transform: translate(0, -2px);
+                        //     color: black;
+                        // }
                     }
                 }
             }

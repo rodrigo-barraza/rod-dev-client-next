@@ -3,20 +3,23 @@ import styles from './FooterComponent.module.scss'
 import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
 import SocialsCollection from '@/collections/SocialsCollection'
 
+
 // const FooterComponent: React.FC<{ userId: string }> = () => {
 const FooterComponent: React.FC = () => {
+    function getLogo(logo) {
+        return `https://assets.rod.dev/icons/${logo}.png`
+    }
+
     return (
         <footer className={styles.FooterComponent}>
-            <div className="bar1">
-            </div>
-            <div className="bar2">
-            </div>
+            <div className="spacer"></div>
+            <div className="stripe"></div>
             <div className="container">
                 <div className="footer-menu">
-                    <div>
+                    <div className="">
                         <div>
                             <div>
-                                <div className="brand">
+                                <div className="BrandComponent">
                                     <div className="logo"></div>
                                     <h3>RODRIGO BARRAZA</h3>
                                 </div>
@@ -89,15 +92,16 @@ const FooterComponent: React.FC = () => {
                             </ul>
                         </div>
                     </div>
-                    <div className="socials-new">
+                    <div className="socials">
                         <div>
                             <h1>Socials</h1>
                             <ul>
                                 { SocialsCollection.map((social, socialIndex) => (
                                     <li className={`social ${social.type}`} key={socialIndex}>
                                         <Link target="_blank" href={social.url}>
-                                            <div className="logo"></div>
-                                            {social.name}
+                                            {/* <div className="logo"></div> */}
+                                            <img className="logo" src={getLogo(social.type)} alt={social.type}></img>
+                                            <span>{social.name}</span>
                                         </Link>
                                     </li>
                                 ))}

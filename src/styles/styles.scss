@@ -31,6 +31,22 @@
   --Z_INDEX_MIDDLEGROUND: 0;
   --Z_INDEX_FOREGROUND: 1;
   --Z_INDEX_AUDIENCE: 2;
+
+  --URL_ICON_BRAND: url("https://assets.rod.dev/images/rodrigo-barraza-logo.png");
+  --URL_ICON_BRAND_ANIMATED: url("https://assets.rod.dev/images/rodrigo-barraza-logo-animated.gif");
+  --URL_ICON_INSTAGRAM: url("https://assets.rod.dev/icons/instagram.png");
+  --URL_ICON_FACEBOOK: url("https://assets.rod.dev/icons/facebook.png");
+  --URL_ICON_TWITTER: url("https://assets.rod.dev/icons/twitter.png");
+  --URL_ICON_GITHUB: url("https://assets.rod.dev/icons/github.png");
+  --URL_ICON_DEVIANTART: url("https://assets.rod.dev/icons/deviantart.png");
+  --URL_ICON_BEHANCE: url("https://assets.rod.dev/icons/behance.png");
+  --URL_ICON_FLICKR: url("https://assets.rod.dev/icons/flickr.png");
+  --URL_ICON_FOUNDATION_APP: url("https://assets.rod.dev/icons/foundationapp.png");
+  --URL_ICON_OPENSEA: url("https://assets.rod.dev/icons/opensea.png");
+  --URL_ICON_SUPER_RARE: url("https://assets.rod.dev/icons/superrare.png");
+  --URL_ICON_DISCORD: url("https://assets.rod.dev/icons/discord.png");
+  --URL_ICON_KEYBASE: url("https://assets.rod.dev/icons/keybase.png");
+  --URL_ICON_LINKEDIN: url("https://assets.rod.dev/icons/linkedin.png");
   
 }
 
@@ -300,29 +316,6 @@ p {
   }
 }
 
-
-// .favorite, .like {
-//   cursor: pointer;
-//   display: inline-block;
-//   transition: all 0.3s;
-//   opacity: 0.5;
-//   &:hover {
-//     opacity: 1;
-//   }
-//   &:active {
-//     opacity: 1;
-//   }
-//   &.favorited {
-//     opacity: 1;
-//     animation: growDown 0.3s ease forwards;
-//   }
-//   &.liked {
-//     opacity: 1;
-//     animation: growDown 0.3s ease forwards;
-//   }
-// }
-
-
 .image {
   position: relative;
 }
@@ -332,14 +325,7 @@ p {
   100% { transform: scale(1) }
 }
 
-
-.header {
-  height: 40px;
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  max-width: 1432px;
-}
+// PSEUDO COMPONENTS
 
 .CardComponent {
   justify-self: center;
@@ -354,7 +340,6 @@ p {
   box-sizing: border-box;
   transition: opacity 0.3s;
 }
-
 
 .RenderCardComponent {
   justify-self: center;
@@ -470,5 +455,16 @@ p {
   img {
     max-width: 960px;
     max-height: 960px;
+  }
+}
+
+.BrandComponent {
+  .logo {
+    background-image: var(--URL_ICON_BRAND);
+  }
+  &:hover {
+    .logo {
+      background-image: var(--URL_ICON_BRAND_ANIMATED);
+    }
   }
 }

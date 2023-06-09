@@ -17,7 +17,6 @@ export default function GalleryComponent(props) {
     const [isSharing, setIsSharing] = useState(false)
 
     async function likeRender(id, like) {
-        console.log(id, like);
         if (!like) {
             const postLike = await LikeApiLibrary.postLike(id)
             if (postLike.data) {
@@ -103,71 +102,73 @@ export default function GalleryComponent(props) {
                             <img className="image" src={render.image}></img>
                         )}
                     </picture>
-                    <div className="RenderCardComponent">
-                        { isDeleting[render.id] && (
-                            <div className="overlay">
-                              <div className="message">Are you sure you want to delete this?</div>	
-                              <div className="actions">
-                                  <ButtonComponent 
-                                  className="mini "
-                                  label="Cancel"
-                                  type="button" 
-                                  onClick={() => cancelDeleteRender(render.id)}
-                                  ></ButtonComponent>
-                                  <ButtonComponent 
-                                  className="mini red"
-                                  label="Delete"
-                                  type="button"
-                                  onClick={() => deleteRender(render.id)}
-                                  ></ButtonComponent>
-                                </div>
-                            </div>
-                        )}
-                        <div className="title">
-                            {render.id}
-                        </div>
-                        <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
-                        <div className="description">{render.prompt}</div>
-                        <div className="badges">
-                            <BadgeComponent type="sampler" value={render.sampler}/>
-                            <BadgeComponent type="style" value={render.style}/>
-                        </div>
-                        <div className="actions">
+                    { mode == 'list' && (
+                      <div className="RenderCardComponent">
+                          { isDeleting[render.id] && (
+                              <div className="overlay">
+                                <div className="message">Are you sure you want to delete this?</div>	
+                                <div className="actions">
+                                    <ButtonComponent 
+                                    className="mini "
+                                    label="Cancel"
+                                    type="button" 
+                                    onClick={() => cancelDeleteRender(render.id)}
+                                    ></ButtonComponent>
+                                    <ButtonComponent 
+                                    className="mini red"
+                                    label="Delete"
+                                    type="button"
+                                    onClick={() => deleteRender(render.id)}
+                                    ></ButtonComponent>
+                                  </div>
+                              </div>
+                          )}
+                          <div className="title">
+                              {render.id}
+                          </div>
+                          <div className="date">{UtilityLibrary.toHumanDateAndTime(render.createdAt)}</div>
+                          <div className="description">{render.prompt}</div>
+                          <div className="badges">
+                              <BadgeComponent type="sampler" value={render.sampler}/>
+                              <BadgeComponent type="style" value={render.style}/>
+                          </div>
+                          <div className="actions">
+                              <ButtonComponent 
+                              className="mini"
+                              label="Load"
+                              type="button" 
+                              onClick={() => goToGeneration(render.id)}
+                              ></ButtonComponent>
+                              { render.isCreator && (
+                                <ButtonComponent 
+                                className="mini red"
+                                label="Delete"
+                                type="button"
+                                disabled={isDeleting[render.id]}
+                                onClick={() => startDeleteRender(render.id)}
+                                ></ButtonComponent>
+                              )}
+                          </div>
+                          <div className="super-actions">
+                            <LikeComponent type="like" render={render} setFunction={getRenders}></LikeComponent>
+                            <LikeComponent type="favorite" render={render} setFunction={getRenders}></LikeComponent>
+                          </div>
+                          <div className="super-actions2">
                             <ButtonComponent 
                             className="mini"
-                            label="Load"
-                            type="button" 
-                            onClick={() => goToGeneration(render.id)}
+                            type="action" 
+                            onClick={() => shareGeneration(render)}
+                            icon="forward"
                             ></ButtonComponent>
-                            { render.isCreator && (
-                              <ButtonComponent 
-                              className="mini red"
-                              label="Delete"
-                              type="button"
-                              disabled={isDeleting[render.id]}
-                              onClick={() => startDeleteRender(render.id)}
-                              ></ButtonComponent>
-                            )}
-                        </div>
-                        <div className="super-actions">
-                          <LikeComponent type="like" render={render} setFunction={getRenders}></LikeComponent>
-                          <LikeComponent type="favorite" render={render} setFunction={getRenders}></LikeComponent>
-                        </div>
-                        <div className="super-actions2">
-                          <ButtonComponent 
-                          className="mini"
-                          type="action" 
-                          onClick={() => shareGeneration(render)}
-                          icon="forward"
-                          ></ButtonComponent>
-                          <ButtonComponent 
-                          className="mini"
-                          type="action" 
-                          onClick={() => downloadGeneration(render)}
-                          icon="download"
-                          ></ButtonComponent>
-                        </div>
-                    </div>
+                            <ButtonComponent 
+                            className="mini"
+                            type="action" 
+                            onClick={() => downloadGeneration(render)}
+                            icon="download"
+                            ></ButtonComponent>
+                          </div>
+                      </div>
+                    )}
                     </div>
                 </div>
             ))}

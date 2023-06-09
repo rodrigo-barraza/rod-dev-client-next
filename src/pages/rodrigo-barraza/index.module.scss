@@ -21,7 +21,7 @@
                     padding: 20px;
                     gap: 20px;
                     box-shadow: 0px 15px 30px -35px black;
-                    img {
+                    > img {
                         height: 150px;
                         width: 150px;
                         background: rgba(0,0,0,0.05);
@@ -239,7 +239,7 @@
                     flex-direction: column;
                     .sidebar {
                         width: 100%;
-                        img {
+                        > img {
                             height: 150px;
                             width: 150px;
                         }

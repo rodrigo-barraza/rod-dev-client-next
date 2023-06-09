@@ -56,7 +56,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
             router.push(router)
 
             setTheRender(parsedResult.data)
-            console.log(parsedResult.data.likes)
 
             setStyleLabelColor(currentStyle.color)
             setGeneratedImageId(parsedResult.data.id)

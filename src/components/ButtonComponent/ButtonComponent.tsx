@@ -1,7 +1,9 @@
 import React from 'react'
 import style from './ButtonComponent.module.scss'
+import { useState, useEffect } from 'react'
 
 export default function ButtonComponent(props: any) {
+    const [getLogo, setLogo] = useState('')
     const {label, type, className, disabled, onClick, icon, href, logo}: {label: string, type: string, className: string, disabled: boolean, onClick: any, icon: string, href:string, logo:string} = props
 
     let buttonType = type === 'button' ? 'button' : type === 'submit' ? 'submit' : 'button';
@@ -10,6 +12,10 @@ export default function ButtonComponent(props: any) {
     if (className) {
         combinedClassNames = className.split(' ').map((name) => style[name]).join(' ');
     }
+
+    useEffect(() => {
+        setLogo(`https://assets.rod.dev/icons/${logo}.png`)
+    }, [logo])
 
     return (
         <div className={`${style.ButtonComponent} ${combinedClassNames} ${type ? style[type] : ''} ${icon ? style[icon] : ''} ${logo ? style.logo : ''} ${logo ? style[logo] : ''}`} disabled={disabled} onClick={onClick}>
@@ -21,9 +27,10 @@ export default function ButtonComponent(props: any) {
             )}
             { href && (
                 <a href={href} target="_blank">
-                    { logo && ( <span className={`${style.logo} ${style[logo]}`}></span> )}
+                    {/* { logo && ( <span className={`${style.logo} ${style[logo]}`}></span> )} */}
+                    { logo && ( <img src={getLogo} className={style.logo} alt={icon}></img> )}
                     { icon && ( <span className={style.icon}>{icon}</span> )}
-                    <span className={style.label}>{label}</span>
+                    { label && ( <span className={style.label}>{label}</span> )}
                 </a>
             )}
         </div>

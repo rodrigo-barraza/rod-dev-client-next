@@ -6,6 +6,7 @@ import styles from './HeaderComponent.module.scss'
 import SocialsCollection from '@/collections/SocialsCollection'
 import PagesCollection from '@/collections/PagesCollection'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
+import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
 
 const HeaderComponent: React.FC = () => {
     const [pageOffset, setPageOffset] = useState(0)
@@ -63,7 +64,7 @@ const HeaderComponent: React.FC = () => {
             <div className="fixed"></div>
             <div className={`floaty ${pageOffset > 35 ? "tiny" : ""}`}>
                 <div className="container">
-                    <div className="name">
+                    <div className="name BrandComponent">
                         <Link href="/">
                             <div className="logo"></div>
                             <div className="text">RODRIGO BARRAZA</div>
@@ -105,7 +106,14 @@ const HeaderComponent: React.FC = () => {
                     <ul className="socials">
                         { SocialsCollection.map((social, socialIndex) => (
                             <li key={socialIndex} className={`social ${social.type}`}>
-                                <a target="_blank" href={social.url}><div className="logo"></div></a>
+                                <ButtonComponent 
+                                        key={socialIndex}
+                                        href={social.url}
+                                        // label="1"
+                                        className="mini"
+                                        logo={social.type}
+                                ></ButtonComponent>
+                                {/* <a target="_blank" href={social.url}><div className="logo"></div></a> */}
                             </li>
                         ))}
                     </ul>
