@@ -2,11 +2,31 @@
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    max-width: 1432px;
+    max-width: 100%;
     align-self: center;
-    padding: 0 36px;
+    // padding: 8px 36px;
     box-sizing: border-box;
     gap: 32px;
+    position: sticky;
+    top: 48px;
+    background: rgba(0,0,0,0.85);
+    z-index: var(--Z_INDEX_FOREGROUND);
+    padding: 8px 0;
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1432px;
+      margin: 0 auto;
+      padding: 0 36px;
+      box-sizing: border-box;
+
+      justify-content: flex-end;
+      align-self: center;
+      gap: 24px;
+      @media (max-width: 900px) {
+        padding: 0 4vw;
+      }
+    }
     &.mini {
       position: fixed;
       z-index: 9;
@@ -19,6 +39,6 @@
       max-width: none;
     }
     @media (max-width: 900px) {
-      padding: 0 4vw;
+      // padding: 0 4vw;
     }
   }

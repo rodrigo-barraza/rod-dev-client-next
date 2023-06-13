@@ -84,7 +84,6 @@ export default function Txt2ImageComponent({render, setGuest}) {
                 const styleLabel = UtilityLibrary.findStyleLabel(render.style)
 
                 setTheRender(render)
-                console.log(render.likes)
 
                 setSampler(render.sampler)
                 setNewStyle(render.style)

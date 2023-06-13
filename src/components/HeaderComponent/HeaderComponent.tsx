@@ -73,10 +73,11 @@ const HeaderComponent: React.FC = () => {
                     <nav className="full">
                         <ul>
                             { PagesCollection.map((page, pageIndex) => (
-                                <li className="ai-art" key={pageIndex}>
+                                <li key={pageIndex}>
                                     <ActiveLink activeClassName="active" href={page.path}>
-                                        {page.emoji && <span className="emoji">{page.emoji}</span>}
-                                        {UtilityLibrary.capitalize(page.name)}
+                                        {page.icon && <span className={styles.icon}>{page.icon}</span>}
+                                        {/* {page.emoji && <span className="emoji">{page.emoji}</span>} */}
+                                        <span className={styles.label}>{UtilityLibrary.capitalize(page.name)}</span>
                                     </ActiveLink>
                                 </li>
                             ))}
@@ -99,7 +100,7 @@ const HeaderComponent: React.FC = () => {
                     <nav className="shrink">
                         <ul>
                             { PagesCollection.map((page, pageIndex) => (
-                                <li className="ai-art" key={pageIndex}><ActiveLink activeClassName="active" href={page.path} onClick={() => setMobileMenu(false)} >{UtilityLibrary.capitalize(page.name)}</ActiveLink></li>
+                                <li key={pageIndex}><ActiveLink activeClassName="active" href={page.path} onClick={() => setMobileMenu(false)} >{UtilityLibrary.capitalize(page.name)}</ActiveLink></li>
                             ))}
                         </ul>
                     </nav>

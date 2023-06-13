@@ -30,20 +30,40 @@ const GenerateHeaderComponent: React.FC = (props) => {
 
     return (
         <div className={styles.GenerateHeaderComponent}>
-            <ButtonComponent 
-                className="transparent-night"
-                label={`Liked Renders (${guest.likes ? guest.likes : '0'})`}
-                type="button" 
-                onClick={goToLikes}
-                disabled={!getGuest?.likes}
-              ></ButtonComponent>
+          <div className={styles.container}>
             <ButtonComponent 
               className="transparent-night"
-              label={`My ${getRenders.length > 1 ? 'Renders' : 'Render'} (${getRenders.length ? getRenders.length : '0'})`}
+              label="Generate"
+              icon="add_photo_alternate"
               type="button" 
-              onClick={goToRenders}
+              disabled={!getGuest?.likes}
+              routeHref="generate"
+            ></ButtonComponent>
+            {/* <ButtonComponent 
+              className="transparent-night"
+              label="Explore"
+              icon="search"
+              type="button" 
+              routeHref="explore"
+              disabled={!getGuest?.likes}
+            ></ButtonComponent> */}
+            <ButtonComponent 
+              className="transparent-night"
+              icon="favorite"
+              label={`Liked (${guest.likes ? guest.likes : '0'})`}
+              type="button" 
+              routeHref="likes"
+              disabled={!getGuest?.likes}
+            ></ButtonComponent>
+            <ButtonComponent 
+              className="transparent-night"
+              icon="photo_library"
+              label={`Images (${getRenders.length ? getRenders.length : '0'})`}
+              type="button" 
+              routeHref="renders"
               disabled={!getRenders.length}
             ></ButtonComponent>
+          </div>
         </div>
     )
 }

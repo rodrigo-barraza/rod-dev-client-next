@@ -1,8 +1,9 @@
 const PagesCollection = [
     {
         path: '/generate',
-        name: 'Generate',
-        emoji: '✨'
+        name: 'Text to Image',
+        emoji: '✨',
+        icon: 'add_photo_alternate'
         // name: '✨Generate'
     },
     {

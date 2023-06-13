@@ -97,10 +97,10 @@ a {
   transition: 0.33s all;
   text-underline-offset: 5px;
   &:hover{
-      text-decoration: underline;
+      // text-decoration: underline;
   }
-  &.active{
-      text-decoration: underline;
+  &.active {
+      // text-decoration: underline;
   }
   .emoji {
     font-size: 15px;

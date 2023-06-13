@@ -70,7 +70,7 @@ export default function Playground(props) {
   const [exploreRenders, setExploreRenders] = useState(randomRenders)
   const [renders, setRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
-  const [theGuest, setGuest] = useState(guest)
+  const [guestData, setGuestData] = useState(guest)
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(12)
 
@@ -92,7 +92,7 @@ export default function Playground(props) {
   async function getGuest() {
     const getGuest = await GuestApiLibrary.getGuest()
     if (getGuest.data) {
-      setGuest(getGuest.data)
+      setGuestData(getGuest.data)
     }
   }
 
@@ -131,8 +131,8 @@ export default function Playground(props) {
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
         
-        <GenerateHeaderComponent guest={theGuest} renders={renders} />
-        <Txt2ImageComponent render={render} setGuest={setGuest}/>
+        <GenerateHeaderComponent guest={guestData} renders={renders} />
+        <Txt2ImageComponent render={render} setGuestData={setGuestData}/>
         <div className="gallery">
           <div className="sectionTitle">
             <div>Explore {renderCount} Renders</div>

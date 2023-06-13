@@ -6,6 +6,7 @@
     border: 3px solid rgb(55,55,55);
     color: rgb(55,55,55);
     button, a {
+        // gap: 8px;
         font-family: Arial, Helvetica, sans-serif;
         transition: all 0.1s;
         font-weight: 700;
@@ -17,15 +18,20 @@
         color: inherit;
         padding: 20px;
         font-size: var(--FONT_SIZE_BIG);
+        display: flex;
+        justify-content: center;
+        align-items: center;
         .icon {
             font-family: var(--FONT_FAMILY_MATERIAL_SYMBOLS);
-            margin-right: 8px;
+            // margin-right: 8px;
             font-size: 24px;
+        }
+        &.active {
+            text-decoration: underline;
         }
     }
     a {
         display: flex;
-        gap: 8px;
         box-sizing: border-box;
         text-decoration: none;
         .logo {
@@ -127,29 +133,25 @@
             color: white;
         }
     }
-    &.transparent-night {
-        background: transparent;
-        color: white;
-        border: none;
+    &.vertical {
         button, a {
-            padding: 0;
-            color: inherit;
-            font-family: 'Ubuntu';
-            font-weight: 200;
-            font-size: var(--FONT_SIZE_MEDIUM);
-            text-underline-offset: 5px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
         }
         &:hover {
-            background: transparent;
-            transform: translateY(0);
             button, a {
-                text-decoration: underline;
+                text-decoration: none;
+                .label {
+                    text-decoration: underline;
+                }
             }
         }
-        &[disabled] {
-            background: transparent;
-            box-shadow: none;
-            color: rgba(255,255,255,0.35);
+    }
+    &:not(.vertical) {
+        button, a {
+            gap: 8px;
         }
     }
     &.action {
@@ -177,11 +179,47 @@
     &[disabled] {
         border: none;
         background: rgba(235,235,235);
-        pointer-events: none;
+        // cursor: not-allowed;
         box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
         button, a {
+            pointer-events: none;
             color: rgba(210,210,210);
-            cursor: not-allowed;
+        }
+    }
+    &.transparent-night {
+        background: transparent;
+        color: rgb(170, 170, 170);
+        border: none;
+        transition: all 0.3s;
+        box-shadow: none;
+        button, a {
+            padding: 0;
+            color: inherit;
+            font-family: 'Ubuntu';
+            font-weight: 500;
+            font-size: var(--FONT_SIZE_MINI);
+            text-underline-offset: 5px;
+        }
+        &:hover {
+            background: transparent;
+            transform: translateY(0);
+            color: rgb(255, 255, 255);
+        }
+        &[disabled] {
+            background: transparent;
+            box-shadow: none;
+            color: rgb(100, 100, 100);
+            pointer-events: none;
+        }
+        :global {
+            a.active {
+                color: rgb(255, 255, 255);
+                :local {
+                    .label {
+                        text-decoration: underline;
+                    }
+                }
+            }
         }
     }
     &.logo {
