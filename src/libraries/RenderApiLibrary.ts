@@ -118,6 +118,14 @@ const EventApiLibrary = {
         const searchParams = new URLSearchParams({})
         return await FetchWrapper.fetch(method, url, headers, body, searchParams)
     },
+    async getStatus() {
+        const method = 'GET';
+        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/status`;
+        const headers = new Headers({})
+        const body = {}
+        const searchParams = new URLSearchParams({})
+        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+    },
 };
 
 export default EventApiLibrary;

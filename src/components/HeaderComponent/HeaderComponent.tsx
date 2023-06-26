@@ -29,6 +29,7 @@ const HeaderComponent: React.FC = () => {
         }
         window.addEventListener('scroll', onScroll);
     })
+
     useEffect(() => {
         const setStripeStyles = function() {
             const style: Object = {};

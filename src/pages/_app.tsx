@@ -1,16 +1,31 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Analytics } from '@vercel/analytics/react';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Layout from '@/components/Layout';
 import EventLibrary from '@/libraries/EventLibrary';
 import '@/styles/styles.scss'
 import '@/styles/animations.scss'
 import { AlertProvider, useAlertContext } from '@/contexts/AlertContext'
+import RenderApiLibrary from '@/libraries/RenderApiLibrary';
+import { useApplicationState } from "@/stores/ZustandStore";
 
 
 function App({ Component, pageProps }: AppProps): JSX.Element {
     const { message } = useAlertContext();
+    const [getRenderStatus, setRenderStatus] = useState(false);
+    const { setIsRenderApiAvailable } = useApplicationState();
+
+    async function getStatus() {
+        const getStatus = await RenderApiLibrary.getStatus();
+        if (getStatus.data) {
+            setRenderStatus(true);
+            setIsRenderApiAvailable(true);
+        } else {
+            setRenderStatus(false);
+            setIsRenderApiAvailable(false);
+        }
+      }
     
     function postSession() {
         EventLibrary.postSession(1, screen.width, screen.height);
@@ -23,6 +38,8 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
         } else {
             EventLibrary.postEventSessionNew(document.referrer, window.location.href);
         }
+
+        getStatus();
 
         document.addEventListener('click', (event: MouseEvent) => {
             event = event || window.event;
@@ -40,7 +57,7 @@ function App({ Component, pageProps }: AppProps): JSX.Element {
         }, false);
 
         setInterval(postSession, 1000);
-    })
+    }, [])
 
     return (
         <Layout>

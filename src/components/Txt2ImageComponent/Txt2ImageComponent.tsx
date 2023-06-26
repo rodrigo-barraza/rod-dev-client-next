@@ -16,6 +16,7 @@ import TextAreaComponent from '@/components//TextAreaComponent/TextAreaComponent
 import LikeComponent from '@/components//LikeComponent/LikeComponent'
 import { useAlertContext } from '@/contexts/AlertContext'
 import styles from './Txt2ImageComponent.module.scss'
+import { useApplicationState } from "@/stores/ZustandStore";
 
 export default function Txt2ImageComponent({render, setGuest}) {
     const router = useRouter();
@@ -39,6 +40,15 @@ export default function Txt2ImageComponent({render, setGuest}) {
     const [theRender, setTheRender] = useState(render)
     const formReference = useRef(null)
     const [aspectRatio, setAspectRatio] = useState(AspectRatioCollection[0].value)
+    const { isRenderApiAvailable } = useApplicationState();
+
+    const tester = {
+        hello: 'world'
+    }
+
+    const [test, setTest] = useState({
+        ...tester
+    })
 
     const { setMessage } = useAlertContext();
 
@@ -148,12 +158,13 @@ export default function Txt2ImageComponent({render, setGuest}) {
 
     return (
         <div className={`${styles.Txt2ImageComponent} ${render.aspectRatio == 'square' ? styles.square : render.aspectRatio == 'landscape' ? styles.landscape : styles.portrait}`}>
-            <div className="Card Interface">
+            <div className={`Card Interface ${!isRenderApiAvailable ? 'disabled': ''}`}>
                 <h1>Generate an image from text</h1>
                 <p>Try out Rodrigo Barraza&apos;s text-to-image realism-model, trained on more than 120,000 images, photographs and captions.</p>
                 
                 <form onSubmit={(event)=> submitForm(event)} ref={formReference}>
                     <TextAreaComponent
+                    // disabled="true"
                     label="Prompt"
                     value={newPrompt} 
                     onChange={setNewPrompt}
@@ -166,23 +177,27 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     onChange={setNewPrompt}
                     ></InputComponent> */}
                     <SelectComponent 
+                    // disabled="true"
                     label="Style"
                     value={newStyle} 
                     options={StyleCollection}
                     onChange={setNewStyle}
                     ></SelectComponent>
                     <SliderComponent 
+                    // disabled="true"
                     label="Strength"
                     value={cfg} 
                     onChange={setCfg}
                     ></SliderComponent>
                     <SelectComponent 
+                    // disabled="true"
                     label="Aesthetic"
                     value={sampler} 
                     options={SamplerCollection}
                     onChange={setSampler}
                     ></SelectComponent>
                     <SelectComponent 
+                    // disabled="true"
                     label="Aspect Ratio"
                     value={aspectRatio} 
                     options={AspectRatioCollection}
@@ -193,9 +208,9 @@ export default function Txt2ImageComponent({render, setGuest}) {
                     type="submit" 
                     className="filled blue"
                     disabled={!newPrompt || isImageLoading}
+                    // disabled="true"
                     ></ButtonComponent>
                 </form>
-                
             </div>
             <div className={`RenderCardComponent ${image && !isImageLoading ? '' : ' loading'}`}>
                 <h1 className="title">{render.id}</h1>

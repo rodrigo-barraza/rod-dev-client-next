@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import style from './SliderComponent.module.scss'
 
 export default function SliderComponent(props: any) {
-    const {label, value, onChange}: {label: string, value: number, onChange: any} = props
+    const {label, value, onChange, disabled}: {label: string, value: number, onChange: any, disabled: boolean} = props
 
     const inputReference: any = useRef({})
     
@@ -16,7 +16,14 @@ export default function SliderComponent(props: any) {
     return (
         <div className={style.SliderComponent}>
         <label>{label}</label>
-            <input ref={inputReference} type="range" min="5" max="9" value={value} onChange={event => onChange(event.target.value)}/>
+            <input 
+            ref={inputReference} 
+            type="range" 
+            min="5" 
+            max="9" 
+            value={value} 
+            onChange={event => onChange(event.target.value)}
+            disabled={disabled}/>
         </div>
     )
 }
