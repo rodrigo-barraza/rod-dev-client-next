@@ -156,6 +156,20 @@ p {
   }
 }
 
+dialog {
+  z-index: 4;
+}
+
+dialog::backdrop {
+  background-color: darkorange;
+}
+
+:modal {
+  // border: 5px solid red;
+  // background-color: yellow;
+  // box-shadow: 3px 3px 10px rgba(0 0 0 / 0.5);
+}
+
 @media (max-width: 1432px) {
   h1 {
     font-size: calc(3vw + 5px);

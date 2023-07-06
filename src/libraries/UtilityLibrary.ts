@@ -6,6 +6,28 @@ import StyleCollection from '@/collections/StyleCollection'
 const useS3: boolean = true;
 
 const UtilityLibrary = {
+    // Date Utilities
+    toHumanDateAndTime(date: string) {
+        if (date) {
+            // return moment(date).format('MMMM Do, YYYY @ h:mmA')
+            return moment(date).format('MMMM Do, YYYY')
+        }
+    },
+    toTime(date: string) {
+        if (date) {
+            return moment(date).format('h:mmA')
+        }
+    },
+    isToday(date: string) {
+        if (date) {
+            return moment().isSame(moment(date), 'day')
+        }
+    },
+    isSameDay(date1: string, date2: string) {
+        if (date1 && date2) {
+            return moment(date1).isSame(moment(date2), 'day')
+        }
+    },
     findSamplerLabel(sampler) {
         if (sampler) {
             const foundSampler = SamplerCollection.find((samplerOption) => samplerOption.value === sampler);
@@ -48,12 +70,6 @@ const UtilityLibrary = {
     capitalize(string: string) {
         if (string) {
             return string.charAt(0).toUpperCase() + string.slice(1)
-        }
-    },
-    toHumanDateAndTime(date: string) {
-        if (date) {
-            // return moment(date).format('MMMM Do, YYYY @ h:mmA')
-            return moment(date).format('MMMM Do, YYYY')
         }
     },
     renderAssetPath(assetPath: string, collectionPath: string | undefined): string {

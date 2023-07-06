@@ -1,10 +1,14 @@
 const PagesCollection = [
+    // {
+    //     path: '/gym',
+    //     name: 'Gym',
+    //     icon: 'Exercise'
+    //     // name: '✨Generate'
+    // },
     {
         path: '/generate',
         name: 'Text to Image',
-        emoji: '✨',
         icon: 'add_photo_alternate'
-        // name: '✨Generate'
     },
     {
         path: '/',

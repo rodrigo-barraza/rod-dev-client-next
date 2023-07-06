@@ -1,0 +1,101 @@
+.GymPage :global {
+    dialog[open] {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .container {
+        @media (max-width: 900px) {
+            padding: 0 4vw;
+        }
+    }
+    .CardComponent {
+        max-width: none;
+        grid-template: none;
+    }
+    .routines {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        > div {
+            flex: 1 1 auto;
+        }
+    }
+    .GymList {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 auto;
+        width: 100%;
+        font-size: 12px;
+        // border: 2px solid black;
+        .title {
+            font-size: 18px;
+        }
+        ul {
+            padding: 8px 4px;
+            border: 2px dashed rgb(20,20,20);
+            margin-bottom: 4px;
+        }
+        li {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border: 2px solid black;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            .header {
+                flex-wrap: wrap;
+                padding: 20px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                &:hover{
+                    background-color: rgba(0,0,0,0.1);
+                }
+                > div {
+                    flex: 1 1 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    > div {
+                        display: flex;
+                        justify-content: row;
+                    }
+                }
+            }
+            .body {
+                background-color: rgba(245,245,245);
+                display: flex;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                box-shadow: inset 0px 10px 10px -16px black;
+                > div > div {
+                    display: flex;
+                }
+                > div {
+                    padding: 6px 12px;
+                    display: flex;
+                    flex-direction: column;
+                    // &:nth-of-type(1) {
+                    //     color: rgba(0,0,0,0.35);
+                    // }
+                    &:nth-of-type(2n+2) {
+                        background: rgba(0,0,0,0.05);
+                    }
+                }
+            }
+            &.today {
+                // background: #49fd87;
+            }
+        }
+    }
+    @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
+        dialog {
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+            margin: 20px;
+            box-sizing: border-box;
+        }
+      }
+}

@@ -1,2 +1,7 @@
-.RendersPage :global {
+.GymPage :global {
+    .GymList {
+        li {
+            display: flex;
+        }
+    }
 }
