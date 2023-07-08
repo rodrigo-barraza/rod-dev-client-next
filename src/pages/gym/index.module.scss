@@ -97,5 +97,17 @@
             margin: 20px;
             box-sizing: border-box;
         }
+        .GymList li .body > div {
+            padding: 2px 3px;
+        }
+        .GymList li .header {
+            padding: 8px;
+        }
+        .CardComponent {
+            padding: 4px;
+        }
+        .container {
+            padding: 0;
+        }
       }
 }
