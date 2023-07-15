@@ -90,7 +90,9 @@ export default function Gym(props) {
         }
         exercises[objectKey].sets.unshift(exercise)
 
-        const dateKey = `${exercise.date.slice(0,10)}`;
+        const newDate = new Date(exercise.date);
+
+        const dateKey = newDate.toString().slice(0, 15);
         const exerciseKey = `${set.exercise}`;
 
         if (!superExercises[dateKey]) {
