@@ -12,6 +12,12 @@ const ExerciseCollection = [
       type: 'push'
     },
     {
+      name: 'chest press',
+      equipment: ['machine'],
+      positions: ['sitting'],
+      type: 'push'
+    },
+    {
       name: 'tricep pushdown',
       equipment: ['rope', 'straight bar'],
       positions: ['standing'],
@@ -20,6 +26,12 @@ const ExerciseCollection = [
     {
       name: 'overhead tricep extension',
       equipment: ['rope', 'dumbbell'],
+      positions: ['standing', 'seated'],
+      type: 'push'
+    },
+    {
+      name: 'dips',
+      equipment: ['parallel bar', 'straight bar'],
       positions: ['standing', 'seated'],
       type: 'push'
     },
@@ -84,6 +96,11 @@ const ExerciseCollection = [
       type: 'pull'
     },
     {
+      name: 'face pull',
+      positions: ['standing', 'sitting'],
+      type: 'pull'
+    },
+    {
       name: 'leg curls',
       equipment: ['leg machine'],
       positions: ['seated'],
@@ -123,6 +140,12 @@ const ExerciseCollection = [
       name: 'calf raise',
       equipment: ['dumbbell', 'barbell', 'smith machine'],
       positions: ['standing'],
+      type: 'legs'
+    },
+    {
+      name: 'lateral side leg raise',
+      equipment: ['cable', 'resistance band'],
+      positions: ['standing', 'lying'],
       type: 'legs'
     },
     {
