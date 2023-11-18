@@ -1,3 +1,14 @@
+.GymPage {
+    .logForm {
+        margin-bottom: 24px;
+        > div {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+    }
+}
+
 .GymPage :global {
     dialog[open] {
         display: flex;
@@ -27,7 +38,7 @@
         justify-content: center;
         margin: 0 auto;
         width: 100%;
-        font-size: 12px;
+        font-size: 11px;
         // border: 2px solid black;
         .title {
             font-size: 18px;

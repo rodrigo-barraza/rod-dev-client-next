@@ -111,8 +111,62 @@
             font-size: var(--FONT_SIZE_MEDIUM);
         }
     }
+    &.new {
+        button, a {
+            padding-right: clamp(4px, 1.4vw, 16px);
+            padding-left: clamp(4px, 1.4vw, 16px);
+            padding-top: clamp(2px, 0.7vw, 8px);
+            padding-bottom: clamp(2px, 0.7vw, 8px);
+            // padding: 1vw 2vw;
+            font-size: var(--FONT_SIZE_MEDIUM);
+        }
+    }
     &.blue {
         background: var(--COLOR_BLUE);
+        color: white;
+        &[disabled] {
+            border: 3px solid white;
+            background: rgba(235,235,235);
+            pointer-events: none;
+            box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
+            button, a {
+                color: rgba(210,210,210);
+                cursor: not-allowed;
+            }
+        }
+        &:hover {
+            background: var(--COLOR_BLUE_SHADOW);
+            color: white;
+        }
+        &:active {
+            background: var(--COLOR_BLUE_SHADOW);
+            color: white;
+        }
+    }
+    &.positive {
+        background: var(--COLOR_BLUE);
+        color: white;
+        &[disabled] {
+            border: 3px solid white;
+            background: rgba(235,235,235);
+            pointer-events: none;
+            box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
+            button, a {
+                color: rgba(210,210,210);
+                cursor: not-allowed;
+            }
+        }
+        &:hover {
+            background: var(--COLOR_BLUE_SHADOW);
+            color: white;
+        }
+        &:active {
+            background: var(--COLOR_BLUE_SHADOW);
+            color: white;
+        }
+    }
+    &.negative {
+        background: var(--COLOR_RED);
         color: white;
         &[disabled] {
             border: 3px solid white;

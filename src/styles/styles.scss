@@ -343,17 +343,64 @@ dialog::backdrop {
 // PSEUDO COMPONENTS
 
 .CardComponent {
-  justify-self: center;
-  max-width: 768px;
-  width: 100%;
-  flex: 1;
-  background: white;
-  padding: 32px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  box-sizing: border-box;
-  transition: opacity 0.3s;
+    justify-self: center;
+    max-width: 768px;
+    width: 100%;
+    flex: 1;
+    background: white;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    box-sizing: border-box;
+    transition: opacity 0.3s;
+}
+.NewCardComponent {
+    justify-self: center;
+    // max-width: 768px;
+    width: 100%;
+    flex: 1;
+    background: white;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    box-sizing: border-box;
+    transition: opacity 0.3s;
+    display: flex;
+    flex-direction: column;
+    .header {
+        display: flex;
+        h1 {
+            font-size: var(--FONT_SIZE_H3);
+            text-transform: capitalize;
+            color: black;
+            font-weight: 500;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 8px;
+        }
+    }
+    .body {
+        .clients {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 100px 100px 100px;
+            gap: 4px;
+            li {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                &:hover {
+                    background: rgba(0,0,0,0.01);
+                }
+            }
+        }
+    }
+    .footer {
+
+    }
 }
 
 .RenderCardComponent {

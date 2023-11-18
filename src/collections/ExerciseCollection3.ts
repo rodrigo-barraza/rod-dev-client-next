@@ -1,5 +1,11 @@
 const ExerciseCollection = [
     {
+      name: 'tricep kickback',
+      equipment: ['cable rope'],
+      positions: ['standing'],
+      type: 'push'
+    },
+    {
       name: 'overhead press',
       equipment: ['dumbbell'],
       positions: ['standing', 'seated'],
@@ -97,8 +103,15 @@ const ExerciseCollection = [
     },
     {
       name: 'face pull',
+      equipment: ['rope'],
       positions: ['standing', 'sitting'],
       type: 'pull'
+    },
+    {
+      name: 'captains chair leg raise',
+      equipment: ['captains chair'],
+      positions: ['hanging'],
+      type: 'legs'
     },
     {
       name: 'leg curls',
@@ -110,6 +123,12 @@ const ExerciseCollection = [
       name: 'leg extension',
       equipment: ['leg machine'],
       positions: ['seated'],
+      type: 'legs'
+    },
+    {
+      name: 'squat',
+      equipment: ['barbell', 'smith machine'],
+      positions: ['standing'],
       type: 'legs'
     },
     {
