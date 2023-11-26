@@ -54,6 +54,12 @@ const ExerciseCollection = [
       type: 'pull'
     },
     {
+      name: 'preacher curl',
+      equipment: ['dumbbell'],
+      positions: ['seated', 'standing'],
+      type: 'pull'
+    },
+    {
       name: 'inner bicep curl',
       equipment: ['dumbbell', 'rope'],
       positions: ['incline', 'seated', 'standing'],
