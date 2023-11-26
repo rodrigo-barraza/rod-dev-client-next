@@ -71,7 +71,8 @@
             li {
                 display: flex;
                 flex-direction: column;
-                background: white;
+                background-image: url(https://cdn.discordapp.com/attachments/634583290984136716/1178478811029962902/yellow-crumpled-lined-paper-background-2022-12-16-00-47-47-utc-scaled.png);
+                background-size: 100%;
                 border: 2px solid black;
                 margin-bottom: 4px;
                 border-radius: 4px;
@@ -98,16 +99,16 @@
                     }
                 }
                 .body {
-                    background-color: rgba(245,245,245);
-                    display: flex;
-                    justify-content: flex-start;
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
                     flex-wrap: wrap;
                     box-shadow: inset 0px 10px 10px -16px black;
                     > div > div {
-                        display: flex;
+                        text-align: center;
                     }
                     > div {
-                        padding: 6px 12px;
+                        padding: 6px 2px;
+                        box-shadow: inset -1px -1px 0px rgba(0,0,0,0.25);
                         display: flex;
                         flex-direction: column;
                         // &:nth-of-type(1) {
@@ -119,7 +120,6 @@
                     }
                 }
                 &.today {
-                    // background: #49fd87;
                 }
             }
         }
