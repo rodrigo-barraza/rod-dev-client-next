@@ -72,6 +72,11 @@ const UtilityLibrary = {
             return string.charAt(0).toUpperCase() + string.slice(1)
         }
     },
+    uppercase(string: string) {
+        if (string) {
+            return string.toUpperCase()
+        }
+    },
     renderAssetPath(assetPath: string, collectionPath: string | undefined): string {
         let path = `/`;
         if (assetPath && !collectionPath) {

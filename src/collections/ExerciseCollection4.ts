@@ -81,9 +81,10 @@ const ExerciseCollection = [
     },
     {
         name: 'lat pulldown',
-        style: ['wide grip', 'close grip', 'underhand', 'overhand', 'reverse'],
+        style: ['wide grip', 'close grip'],
+        form:  ['underhand', 'overhand'],
         stance: ['unilateral', 'bilateral'],
-        equipment: ['cable', 'machine'],
+        equipment: ['cable straight bar', 'machine'],
         position: ['seated', 'standing'],
         type: 'pull'
     },
@@ -105,8 +106,8 @@ const ExerciseCollection = [
     },
     {
         name: 'pull up',
-        style: ['wide grip', 'close grip'],
         form:  ['underhand', 'overhand'],
+        style: ['wide grip', 'close grip'],
         stance: ['unilateral', 'bilateral'],
         equipment: ['pull up bar'],
         position: ['hanging'],
@@ -187,7 +188,7 @@ const ExerciseCollection = [
     {
         name: 'running',
         style: [],
-        stance: ['bilateral'],
+        stance: [],
         equipment: ['elliptical', 'treadmill', 'track'],
         position: ['standing'],
         type: 'cardio'
@@ -195,7 +196,7 @@ const ExerciseCollection = [
     {
         name: 'walking',
         style: [],
-        stance: ['bilateral'],
+        stance: [],
         equipment: ['elliptical', 'treadmill', 'track'],
         position: ['standing'],
         type: 'cardio'
@@ -203,7 +204,7 @@ const ExerciseCollection = [
     {
         name: 'cycling',
         style: [],
-        stance: ['bilateral'],
+        stance: [],
         equipment: ['bicycle', 'exercise bike'],
         position: ['seated'],
         type: 'cardio'

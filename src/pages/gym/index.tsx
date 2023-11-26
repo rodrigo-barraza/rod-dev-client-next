@@ -14,8 +14,9 @@ import style from './index.module.scss'
 import PaginationComponent from '@/components/PaginationComponent/PaginationComponent'
 import GalleryComponent from '@/components/GalleryComponent/GalleryComponent'
 import FilterComponent from '@/components/FilterComponent/FilterComponent'
-import ExerciseCollection from '@/collections/ExerciseCollection3'
+import ExerciseCollection from '@/collections/ExerciseCollection4'
 import DialogComponent from '@/components/DialogComponent'
+import moment from 'moment'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
@@ -46,55 +47,35 @@ export default function Gym(props) {
     const [trackList, setTrackList] = useState([]);
     const [weight, setWeight] = useState('');
     const [reps, setReps] = useState('');
+
     const [selectedExercise, setSelectedExercise] = useState('');
     const [selectedType, setSelectedType] = useState('');
     const [selectedEquipment, setSelectedEquipment] = useState('');
     const [selectedPosition, setSelectedPosition] = useState('');
+    const [selectedStyle, setSelectedStyle] = useState('');
+    const [selectedStance, setSelectedStance] = useState('');
+    const [selectedForm, setSelectedForm] = useState('');
+
     const [journal, setJournal] = useState([{}]);
-    const dialogReference: any = useRef({})
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    useEffect(() => {
-        getJournal();
-    }, []);
-
-
-    useEffect(() => {
-        console.log(selectedExercise)
-        // ExerciseCollection.forEach((entry: any) => {
-        //   if (entry.name === selectedExercise) {
-        //     // console.log(entry)
-        //     setSelectedSuperExercise(entry)
-        //   }
-        // })
-    }, [selectedExercise]);
-
-    // const [activeRoutine, setActiveEntry] = useState({});
+    const [exerciseStep, setExerciseStep] = useState('exercises');
+    const [subtitle, setSubtitle] = useState('');
 
     async function getJournal() {
         const { data, error, response } = await GymApiLibrary.getJournal();
         if (data) {
-            const exercises = {};
             const superExercises = {};
-            // let dateCounter = 100;
-            // let pastDate;
-            // let isSameDay = true;
-            data.slice(0, 333).forEach((set, key) => {
-            const exercise = set;
-            const objectKey = `${exercise.date.slice(0,10)} ${set.exercise}`;
-            if (!exercises[objectKey]) {
-                exercises[objectKey] = {}
-                exercises[objectKey].sets = []
-                // exercises[objectKey].day = dateCounter
-                exercises[objectKey].date = set.date
-                exercises[objectKey].exercise = set.exercise
-                exercises[objectKey].part = 'x' // get part off another list
-            }
-            exercises[objectKey].sets.unshift(exercise)
+            data.slice(0, 1000).forEach((set, key) => {
+            // const setDate = new Date(set.date);
+            // const currentDate = new Date();
+            // const differenceInTime = currentDate - setDate;
+            // const differenceInDays = differenceInTime / (1000 * 3600 * 24);
 
-            const newDate = new Date(exercise.date);
-
-            const dateKey = newDate.toString().slice(0, 15);
+            const setDate = moment(set.date);
+            const currentDate = moment();
+            const differenceInDays = currentDate.diff(setDate, 'days');
+            
+            const dateKey = setDate.toString().slice(0, 15);
             const exerciseKey = `${set.exercise}`;
 
             if (!superExercises[dateKey]) {
@@ -102,18 +83,24 @@ export default function Gym(props) {
             } 
             if (superExercises[dateKey]) {
                 if (!superExercises[dateKey][exerciseKey]) {
-                superExercises[dateKey][exerciseKey] = {}
-                superExercises[dateKey][exerciseKey].sets = []
-                superExercises[dateKey][exerciseKey].date = set.date
-                superExercises[dateKey][exerciseKey].exercise = set.exercise
-                superExercises[dateKey][exerciseKey].part = 'x' // get part off another list
+                    superExercises[dateKey][exerciseKey] = {}
+                    superExercises[dateKey][exerciseKey].sets = []
+                    superExercises[dateKey][exerciseKey].date = set.date
+                    superExercises[dateKey][exerciseKey].exercise = set.exercise
+                    superExercises[dateKey][exerciseKey].part = 'x' // get part off another list
+                    superExercises[dateKey][exerciseKey].position = set.position
+                    superExercises[dateKey][exerciseKey].stance = set.stance
+                    superExercises[dateKey][exerciseKey].style = set.style
+                    superExercises[dateKey][exerciseKey].form = set.form
+                    superExercises[dateKey][exerciseKey].equipment = set.equipment
+                    // calculate days since last exercise to x amount of days
+                    superExercises[dateKey][exerciseKey].daysSinceLastExercise = differenceInDays 
                 }
-                superExercises[dateKey][exerciseKey].sets.unshift(exercise)
+                superExercises[dateKey][exerciseKey].sets.unshift(set)
             }
             });
             console.log('superExercises', superExercises)
             setJournal(superExercises);
-            // setJournal(exercises);
         }
     }
 
@@ -126,6 +113,7 @@ export default function Gym(props) {
     function calculateSetVolume(weight: string, volume: string) {
         return Number(weight) * Number(volume);
     }
+
     function calculateTotalVolume(sets: object[]) {
         if (sets && sets.length) {
             let totalVolume = 0;
@@ -174,21 +162,28 @@ export default function Gym(props) {
         setTrackList(trackList);
     }
 
-    function closeTrackModal() {
-        setTrackList([]);
+    function clearSelectedExercise() {
         setSelectedExercise('');
         setSelectedPosition('');
         setSelectedEquipment('');
+        setSelectedStyle('');
+        setSelectedStance('');
+        setSelectedForm('');
+    }
+
+    function closeTrackModal() {
+        setTrackList([]);
+        clearSelectedExercise();
         setIsModalOpen(false);
     }
 
     async function logSet() {
-        await GymApiLibrary.postJournal(selectedExercise.name, reps, weight, 'lbs');
+        await GymApiLibrary.postJournal(selectedExercise.name, reps, weight, 'lbs', selectedStyle, selectedStance, selectedEquipment, selectedPosition);
         await getJournal();
         setReps('');
     }
 
-    function figureExercisePart(exercise) {
+    function figureExercisePart(exercise: string) {
         let part = '';
         ExerciseCollection.forEach((entry: any) => {
             if (entry.name === exercise) {
@@ -197,7 +192,67 @@ export default function Gym(props) {
         })
         return part;
     }
-  
+
+    function individualSubtitle(entry: any) {
+        if (entry) {
+            let subtitle = '';
+            if (entry.form) {
+                subtitle = subtitle ? `${subtitle}, ${entry.form}` : `${entry.form}`
+            }
+            if (entry.style) {
+                subtitle = subtitle ? `${subtitle}, ${entry.style}` : `${entry.style}`
+            }
+            if (entry.stance) {
+                subtitle = subtitle ? `${subtitle}, ${entry.stance}` : `${entry.stance}`
+            }
+            if (entry.position) {
+                subtitle = subtitle ? `${subtitle}, ${entry.position}` : `${entry.position}`
+            }
+            if (entry.equipment) {
+                subtitle = subtitle ? `${subtitle}, ${entry.equipment}` : `${entry.equipment}`
+            }
+            return subtitle
+        }
+    }
+    function daySinceLastExercise(workout) {
+        let days = '(...)'
+        let lowestExercise = null
+        Object.values(journal).forEach((exercises) => {
+            Object.values(exercises).forEach((exercise) => {
+                if (exercise.exercise == workout.name) {
+                    if (lowestExercise === null || exercise.daysSinceLastExercise < lowestExercise.daysSinceLastExercise) {
+                      lowestExercise = exercise
+                      days = `(${exercise?.daysSinceLastExercise})`
+                    }
+                }
+            })
+        })
+        return days
+    }
+
+    useEffect(() => {
+        console.log(1111, selectedForm)
+        if (!selectedExercise) {
+            setExerciseStep('exercises');
+        } else if (selectedExercise && selectedExercise.form?.length && !selectedForm) {
+            setExerciseStep('forms');
+        } else if (selectedExercise && selectedExercise.style?.length && !selectedStyle) {
+            setExerciseStep('styles')
+        } else if (selectedExercise && selectedExercise.stance?.length && !selectedStance) {
+            setExerciseStep('stances');
+        } else if (selectedExercise && selectedExercise.position?.length && !selectedPosition) {
+            setExerciseStep('positions');
+        } else if (selectedExercise && selectedExercise.equipment.length && !selectedEquipment) {
+            setExerciseStep('equipment');
+        } else if (selectedExercise && selectedPosition && selectedEquipment) {
+            setExerciseStep('log');
+        }
+        setSubtitle(individualSubtitle(selectedExercise))
+    }, [selectedExercise, selectedPosition, selectedEquipment, selectedStyle, selectedStance, selectedForm]);
+
+    useEffect(() => {
+        getJournal();
+    }, []);
 
     return (
     <main className={style.GymPage}>
@@ -220,7 +275,7 @@ export default function Gym(props) {
         </Head>
         <div className="container">
         <DialogComponent show={isModalOpen}>
-        { !selectedExercise && (
+        { exerciseStep === 'exercises' && (
             <>
                 <header>
                     <h2>{selectedType}</h2>
@@ -230,7 +285,7 @@ export default function Gym(props) {
                     <ButtonComponent 
                     key={index}
                     className="new neutral"
-                    label={exercise.name}
+                    label={`${daySinceLastExercise(exercise)} ${exercise.name}`}
                     type="button" 
                     onClick={() => setSelectedExercise(exercise)}
                     ></ButtonComponent>
@@ -246,13 +301,115 @@ export default function Gym(props) {
                 </footer>
             </>
         )}
-        { selectedExercise && selectedExercise.positions.length && !selectedPosition && (
+        { exerciseStep === 'forms' && (
+            <>
+                <header>
+                    <h2>Form</h2>
+                </header>
+                <div>
+                { selectedExercise?.form?.map((form, index) => (
+                    <ButtonComponent 
+                        key={index}
+                        className="new neutral"
+                        label={form}
+                        type="button" 
+                        onClick={() => setSelectedForm(form)}
+                    ></ButtonComponent>
+                ))}
+                </div>
+                <footer>
+                    <ButtonComponent 
+                        className="mini"
+                        label="Back"
+                        type="button" 
+                        onClick={(() => {
+                            clearSelectedExercise()
+                        })}
+                    ></ButtonComponent>
+                    <ButtonComponent 
+                        className="mini negative"
+                        label="Cancel"
+                        type="button" 
+                        onClick={() => closeTrackModal()}
+                    ></ButtonComponent>
+                </footer>
+            </>
+        )}
+        { exerciseStep === 'styles' && (
+            <>
+                <header>
+                    <h2>Style</h2>
+                </header>
+                <div>
+                { selectedExercise?.style?.map((style, index) => (
+                    <ButtonComponent 
+                        key={index}
+                        className="new neutral"
+                        label={style}
+                        type="button" 
+                        onClick={() => setSelectedStyle(style)}
+                    ></ButtonComponent>
+                ))}
+                </div>
+                <footer>
+                    <ButtonComponent 
+                        className="mini"
+                        label="Back"
+                        type="button" 
+                        onClick={(() => {
+                            clearSelectedExercise()
+                        })}
+                    ></ButtonComponent>
+                    <ButtonComponent 
+                        className="mini negative"
+                        label="Cancel"
+                        type="button" 
+                        onClick={() => closeTrackModal()}
+                    ></ButtonComponent>
+                </footer>
+            </>
+        )}
+        { exerciseStep === 'stances' && (
+            <>
+                <header>
+                    <h2>Stance</h2>
+                </header>
+                <div>
+                { selectedExercise?.stance?.map((stance, index) => (
+                    <ButtonComponent 
+                        key={index}
+                        className="new neutral"
+                        label={stance}
+                        type="button" 
+                        onClick={() => setSelectedStance(stance)}
+                    ></ButtonComponent>
+                ))}
+                </div>
+                <footer>
+                    <ButtonComponent 
+                        className="mini"
+                        label="Back"
+                        type="button" 
+                        onClick={(() => {
+                            clearSelectedExercise()
+                        })}
+                    ></ButtonComponent>
+                    <ButtonComponent 
+                        className="mini negative"
+                        label="Cancel"
+                        type="button" 
+                        onClick={() => closeTrackModal()}
+                    ></ButtonComponent>
+                </footer>
+            </>
+        )}
+        { exerciseStep === 'positions' && (
             <>
                 <header>
                     <h2>Position</h2>
                 </header>
                 <div>
-                { selectedExercise.positions.map((position, index) => (
+                { selectedExercise?.position?.map((position, index) => (
                     <ButtonComponent 
                         key={index}
                         className="new neutral"
@@ -264,6 +421,14 @@ export default function Gym(props) {
                 </div>
                 <footer>
                     <ButtonComponent 
+                        className="mini"
+                        label="Back"
+                        type="button" 
+                        onClick={(() => {
+                            clearSelectedExercise()
+                        })}
+                    ></ButtonComponent>
+                    <ButtonComponent 
                         className="mini negative"
                         label="Cancel"
                         type="button" 
@@ -272,13 +437,13 @@ export default function Gym(props) {
                 </footer>
             </>
         )}
-        { selectedExercise && selectedExercise.equipment.length && selectedPosition && !selectedEquipment && (
+        { exerciseStep === 'equipment' && (
             <>
                 <header>
                     <h2>Equipment</h2>
                 </header>
                 <div>
-                { selectedExercise.equipment.map((gear, index) => (
+                { selectedExercise?.equipment?.map((gear, index) => (
                     <ButtonComponent 
                         key={index}
                         className="new neutral"
@@ -290,6 +455,14 @@ export default function Gym(props) {
                 </div>
                 <footer>
                     <ButtonComponent 
+                        className="mini"
+                        label="Back"
+                        type="button" 
+                        onClick={(() => {
+                            clearSelectedExercise()
+                        })}
+                    ></ButtonComponent>
+                    <ButtonComponent 
                         className="mini negative"
                         label="Cancel"
                         type="button" 
@@ -298,12 +471,13 @@ export default function Gym(props) {
                 </footer>
             </>
         )}
-        { selectedExercise && selectedPosition && selectedEquipment && (
+        { exerciseStep === 'log' && (
             <>
                 <form className={style.logForm}>
                     <header>
                         <h2>{selectedExercise.name}</h2>
                     </header>
+                    <div><p>{subtitle}</p></div>
                     <div>
                         <InputComponent 
                             label="Weight"
@@ -391,8 +565,8 @@ export default function Gym(props) {
                 { returnRoutines().map((type, routineIndex) => (
                     <ButtonComponent 
                     key={routineIndex}
-                    className="blue"
-                    label={type}
+                    className="mini blue"
+                    label={UtilityLibrary.uppercase(type)}
                     type="button" 
                     onClick={() => openTrackModal(type)}
                     ></ButtonComponent>
@@ -408,31 +582,31 @@ export default function Gym(props) {
                         <li key={entryIndex} className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
                             <div className="header" onClick={() => toggleIsVisible(entryIndex)}>
                                 <div>
-                                <div className="title">{journal[days][entry].exercise}</div>
-                                <div>{figureExercisePart(journal[days][entry].exercise)}</div>
+                                    <div className="title">{journal[days][entry].exercise}</div>
+                                    <div>{figureExercisePart(journal[days][entry].exercise)}</div>
                                 </div>
                                 <div>
-                                <div>{UtilityLibrary.toHumanDateAndTime(journal[days][entry].date)}</div>
+                                    <div>{individualSubtitle(journal[days][entry])}</div>
                                 </div>
                                 <div>
-                                <div>day {journal[days][entry].day}</div>
+                                    <div>{UtilityLibrary.toHumanDateAndTime(journal[days][entry].date)}</div>
                                 </div>
                                 <div>
-                                <div>total volume: {calculateTotalVolume(journal[days][entry].sets)} lbs</div>
-                                <div>average weight: {calculateAverageWeight(journal[days][entry].sets)} lbs</div>
+                                    <div>Total volume: {calculateTotalVolume(journal[days][entry].sets)} lbs</div>
+                                    <div>Average weight: {calculateAverageWeight(journal[days][entry].sets)} lbs</div>
                                 </div>
                             </div>
                             { !isHidden[entryIndex] && (
                                 <div className="body">
                                 {journal[days][entry].sets?.map((set, index) => (
                                     <div key={index}>
-                                    <div>Set: {index+1}</div>
-                                    <div>{UtilityLibrary.toTime(set.date)}</div>
-                                    <div>{set.reps} reps</div>
-                                    <div>{set.weight} {set.unit}</div>
-                                    <div>-------------</div>
-                                    <div>{calculateSetVolume(set.reps, set.weight)} lbs</div>
-                                    <div>{calculateSetVolumeRatio(set, journal[days][entry].sets)}%</div>
+                                        <div>Set {index+1}</div>
+                                        <div>{UtilityLibrary.toTime(set.date)}</div>
+                                        <div>{set.reps} reps</div>
+                                        <div>{set.weight} {set.unit}</div>
+                                        <div>-------------</div>
+                                        <div>{calculateSetVolume(set.reps, set.weight)} lbs</div>
+                                        <div>{calculateSetVolumeRatio(set, journal[days][entry].sets)}%</div>
                                     </div>
                                 ))}
                                 </div>
