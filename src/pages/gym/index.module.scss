@@ -6,6 +6,24 @@
             grid-template-columns: 1fr;
             gap: 24px;
         }
+        .blocks {
+            gap: 4px;
+            display: grid;
+            color: black;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            margin-bottom: 12px;
+            @media (max-width: 640px) {
+                grid-template-columns: 1fr 1fr;
+            }
+            > div {
+                background-color: #7ac668;
+                color: white;
+                padding: 8px;
+                text-transform: capitalize;
+                font-size: 12px;
+                border-radius: 2px;
+            }
+        }
     }
 }
 

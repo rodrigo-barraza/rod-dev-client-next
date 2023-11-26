@@ -1,19 +1,13 @@
 import React from 'react'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import { debounce, filter } from 'lodash'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import GymApiLibrary from '@/libraries/GymApiLibrary'
-import ButtonComponent from '@/components/ButtonComponent/ButtonComponent';
-import InputComponent from '@/components/InputComponent/InputComponent';
-import RenderApiLibrary from '@/libraries/RenderApiLibrary'
-import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
+import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
+import InputComponent from '@/components/InputComponent/InputComponent'
 import style from './index.module.scss'
-import PaginationComponent from '@/components/PaginationComponent/PaginationComponent'
-import GalleryComponent from '@/components/GalleryComponent/GalleryComponent'
-import FilterComponent from '@/components/FilterComponent/FilterComponent'
 import ExerciseCollection from '@/collections/ExerciseCollection4'
 import DialogComponent from '@/components/DialogComponent'
 import moment from 'moment'
@@ -37,46 +31,47 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   //     image: 'https://renders.rod.dev/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
   // }
 
-  return returnBody;
+  return returnBody
 }
 
 export default function Gym(props) {
-    const { meta, guest } = props;
-    const [gymExercises, setGymExercises] = useState(ExerciseCollection);
-    const [isHidden, setIsHidden] = useState({});
-    const [trackList, setTrackList] = useState([]);
-    const [weight, setWeight] = useState('');
-    const [reps, setReps] = useState('');
+    const router = useRouter()
+    const { meta, guest } = props
+    const [gymExercises, setGymExercises] = useState(ExerciseCollection)
+    const [isHidden, setIsHidden] = useState({})
+    const [trackList, setTrackList] = useState([])
+    const [weight, setWeight] = useState('')
+    const [reps, setReps] = useState('')
 
-    const [selectedExercise, setSelectedExercise] = useState('');
-    const [selectedType, setSelectedType] = useState('');
-    const [selectedEquipment, setSelectedEquipment] = useState('');
-    const [selectedPosition, setSelectedPosition] = useState('');
-    const [selectedStyle, setSelectedStyle] = useState('');
-    const [selectedStance, setSelectedStance] = useState('');
-    const [selectedForm, setSelectedForm] = useState('');
+    const [selectedExercise, setSelectedExercise] = useState('')
+    const [selectedType, setSelectedType] = useState('')
+    const [selectedEquipment, setSelectedEquipment] = useState('')
+    const [selectedPosition, setSelectedPosition] = useState('')
+    const [selectedStyle, setSelectedStyle] = useState('')
+    const [selectedStance, setSelectedStance] = useState('')
+    const [selectedForm, setSelectedForm] = useState('')
 
-    const [journal, setJournal] = useState([{}]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [exerciseStep, setExerciseStep] = useState('exercises');
-    const [subtitle, setSubtitle] = useState('');
+    const [journal, setJournal] = useState([{}])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [exerciseStep, setExerciseStep] = useState('exercises')
+    const [subtitle, setSubtitle] = useState('')
 
     async function getJournal() {
-        const { data, error, response } = await GymApiLibrary.getJournal();
+        const { data, error, response } = await GymApiLibrary.getJournal()
         if (data) {
-            const superExercises = {};
+            const superExercises = {}
             data.slice(0, 1000).forEach((set, key) => {
-            // const setDate = new Date(set.date);
-            // const currentDate = new Date();
-            // const differenceInTime = currentDate - setDate;
-            // const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+            // const setDate = new Date(set.date)
+            // const currentDate = new Date()
+            // const differenceInTime = currentDate - setDate
+            // const differenceInDays = differenceInTime / (1000 * 3600 * 24)
 
-            const setDate = moment(set.date);
-            const currentDate = moment();
-            const differenceInDays = currentDate.diff(setDate, 'days');
+            const setDate = moment(set.date)
+            const currentDate = moment()
+            const differenceInDays = currentDate.diff(setDate, 'days')
             
-            const dateKey = setDate.toString().slice(0, 15);
-            const exerciseKey = `${set.exercise}`;
+            const dateKey = setDate.toString().slice(0, 15)
+            const exerciseKey = `${set.exercise}`
 
             if (!superExercises[dateKey]) {
                 superExercises[dateKey] = {}
@@ -98,9 +93,8 @@ export default function Gym(props) {
                 }
                 superExercises[dateKey][exerciseKey].sets.unshift(set)
             }
-            });
-            console.log('superExercises', superExercises)
-            setJournal(superExercises);
+            })
+            setJournal(superExercises)
         }
     }
 
@@ -111,105 +105,105 @@ export default function Gym(props) {
     }
 
     function calculateSetVolume(weight: string, volume: string) {
-        return Number(weight) * Number(volume);
+        return Number(weight) * Number(volume)
     }
 
     function calculateTotalVolume(sets: object[]) {
         if (sets && sets.length) {
-            let totalVolume = 0;
+            let totalVolume = 0
             sets.forEach((set: any) => {
-            totalVolume += calculateSetVolume(set.weight, set.reps);
+            totalVolume += calculateSetVolume(set.weight, set.reps)
             })
-            return totalVolume;
+            return totalVolume
         }
     }
 
     function calculateAverageWeight(sets: object[]) {
         if (sets && sets.length) {
-            let totalWeight = 0;
+            let totalWeight = 0
             sets.forEach((set: any) => {
-            totalWeight += Number(set.weight);
+            totalWeight += Number(set.weight)
             })
-            return (totalWeight / sets.length).toFixed(1);
+            return (totalWeight / sets.length).toFixed(1)
         }
     }
 
     function calculateSetVolumeRatio(set, sets) {
-        let totalVolume = calculateTotalVolume(sets);
-        let setVolume = calculateSetVolume(set.weight, set.reps);
-        return ((setVolume / totalVolume)*100).toFixed(0);
+        let totalVolume = calculateTotalVolume(sets)
+        let setVolume = calculateSetVolume(set.weight, set.reps)
+        return ((setVolume / totalVolume)*100).toFixed(0)
     }
 
     function returnRoutines() {
-        let routines = [];
+        let routines = []
         gymExercises.forEach((entry: any) => {
             if (!routines.includes(entry.type)) {
-            routines.push(entry.type);
+            routines.push(entry.type)
             }
         })
-        return routines;
+        return routines
     }
 
     function openTrackModal(type) {
-        setIsModalOpen(true);
+        setIsModalOpen(true)
         setSelectedType(type)
-        let trackList = [];
+        let trackList = []
         gymExercises.forEach((entry: any) => {
             if (entry.type === type) {
-            trackList.push(entry);
+            trackList.push(entry)
             }
         })
-        setTrackList(trackList);
+        setTrackList(trackList)
     }
 
     function clearSelectedExercise() {
-        setSelectedExercise('');
-        setSelectedPosition('');
-        setSelectedEquipment('');
-        setSelectedStyle('');
-        setSelectedStance('');
-        setSelectedForm('');
+        setSelectedExercise('')
+        setSelectedPosition('')
+        setSelectedEquipment('')
+        setSelectedStyle('')
+        setSelectedStance('')
+        setSelectedForm('')
     }
 
     function closeTrackModal() {
-        setTrackList([]);
-        clearSelectedExercise();
-        setIsModalOpen(false);
+        setTrackList([])
+        clearSelectedExercise()
+        setIsModalOpen(false)
     }
 
     async function logSet() {
-        await GymApiLibrary.postJournal(selectedExercise.name, reps, weight, 'lbs', selectedStyle, selectedStance, selectedEquipment, selectedPosition);
-        await getJournal();
-        setReps('');
+        await GymApiLibrary.postJournal(selectedExercise.name, reps, weight, 'lbs', selectedStyle, selectedStance, selectedEquipment, selectedPosition)
+        await getJournal()
+        setReps('')
     }
 
     function figureExercisePart(exercise: string) {
-        let part = '';
+        let part = ''
         ExerciseCollection.forEach((entry: any) => {
             if (entry.name === exercise) {
-            part = entry.type;
+            part = entry.type
             }
         })
-        return part;
+        return part
     }
 
     function individualSubtitle(entry: any) {
         if (entry) {
-            let subtitle = '';
+            let subtitle = ''
             if (entry.form) {
-                subtitle = subtitle ? `${subtitle}, ${entry.form}` : `${entry.form}`
+                subtitle = subtitle ? `${subtitle}, ${entry.form}` : `${entry.form} `
             }
             if (entry.style) {
-                subtitle = subtitle ? `${subtitle}, ${entry.style}` : `${entry.style}`
+                subtitle = subtitle ? `${subtitle}, ${entry.style}` : `${entry.style} `
             }
             if (entry.stance) {
-                subtitle = subtitle ? `${subtitle}, ${entry.stance}` : `${entry.stance}`
+                subtitle = subtitle ? `${subtitle}, ${entry.stance}` : `${entry.stance} `
             }
             if (entry.position) {
-                subtitle = subtitle ? `${subtitle}, ${entry.position}` : `${entry.position}`
+                subtitle = subtitle ? `${subtitle}, ${entry.position}` : `${entry.position} `
             }
             if (entry.equipment) {
-                subtitle = subtitle ? `${subtitle}, ${entry.equipment}` : `${entry.equipment}`
+                subtitle = subtitle ? `${subtitle}, ${entry.equipment}` : `${entry.equipment} `
             }
             return subtitle
         }
@@ -231,28 +225,84 @@ export default function Gym(props) {
     }
 
     useEffect(() => {
-        console.log(1111, selectedForm)
         if (!selectedExercise) {
-            setExerciseStep('exercises');
+            setExerciseStep('exercises')
         } else if (selectedExercise && selectedExercise.form?.length && !selectedForm) {
-            setExerciseStep('forms');
+            setExerciseStep('forms')
         } else if (selectedExercise && selectedExercise.style?.length && !selectedStyle) {
             setExerciseStep('styles')
         } else if (selectedExercise && selectedExercise.stance?.length && !selectedStance) {
-            setExerciseStep('stances');
+            setExerciseStep('stances')
         } else if (selectedExercise && selectedExercise.position?.length && !selectedPosition) {
-            setExerciseStep('positions');
+            setExerciseStep('positions')
         } else if (selectedExercise && selectedExercise.equipment.length && !selectedEquipment) {
-            setExerciseStep('equipment');
+            setExerciseStep('equipment')
         } else if (selectedExercise && selectedPosition && selectedEquipment) {
-            setExerciseStep('log');
+            setExerciseStep('log')
         }
+
         setSubtitle(individualSubtitle(selectedExercise))
-    }, [selectedExercise, selectedPosition, selectedEquipment, selectedStyle, selectedStance, selectedForm]);
+
+        const newQuery = { ...router.query }
+        // set query parameters
+        if (selectedExercise) {
+            newQuery.exercise = selectedExercise.name
+        }
+        if (selectedStance) {
+            newQuery.stance = selectedStance
+        }
+        if (selectedStyle) {
+            newQuery.style = selectedStyle
+        }
+        if (selectedPosition) {
+            newQuery.position = selectedPosition
+        }
+        if (selectedEquipment) {
+            newQuery.equipment = selectedEquipment
+        }
+        if (selectedForm) {
+            newQuery.form = selectedForm
+        }
+        
+        const queryString = new URLSearchParams(newQuery).toString()
+        window.history.replaceState(
+            { url: `${router.pathname}?${queryString}`, as: `${router.asPath}?${queryString}`, options: { shallow: true } },
+            '',
+            `${router.pathname}?${queryString}`
+        )
+        if (!selectedEquipment && !selectedPosition && !selectedStance && !selectedStyle && !selectedForm && !selectedExercise) {
+            window.history.replaceState({}, '', router.pathname)
+        }
+    }, [selectedExercise, selectedPosition, selectedEquipment, selectedStyle, selectedStance, selectedForm])
 
     useEffect(() => {
-        getJournal();
-    }, []);
+        getJournal()
+    }, [])
+
+    useEffect(() => {
+        if (router.query.exercise) {
+            const selectedExercise = gymExercises.find((exercise) => exercise.name === router.query.exercise)
+            if (selectedExercise) {
+                setIsModalOpen(selectedExercise.type)
+                setSelectedExercise(selectedExercise)
+                if (router.query.stance) {
+                    setSelectedStance(router.query.stance)
+                }
+                if (router.query.style) {
+                    setSelectedStyle(router.query.style)
+                }
+                if (router.query.position) {
+                    setSelectedPosition(router.query.position)
+                }
+                if (router.query.equipment) {
+                    setSelectedEquipment(router.query.equipment)
+                }
+                if (router.query.form) {
+                    setSelectedForm(router.query.form)
+                }
+            }
+        }
+    }, [])
 
     return (
     <main className={style.GymPage}>
@@ -278,7 +328,7 @@ export default function Gym(props) {
         { exerciseStep === 'exercises' && (
             <>
                 <header>
-                    <h2>{selectedType}</h2>
+                    <h2>{UtilityLibrary.capitalize(selectedType)} Exercises</h2>
                 </header>
                 <div>
                 { trackList?.map((exercise, index) => (
@@ -304,7 +354,7 @@ export default function Gym(props) {
         { exerciseStep === 'forms' && (
             <>
                 <header>
-                    <h2>Form</h2>
+                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Form</h2>
                 </header>
                 <div>
                 { selectedExercise?.form?.map((form, index) => (
@@ -338,7 +388,7 @@ export default function Gym(props) {
         { exerciseStep === 'styles' && (
             <>
                 <header>
-                    <h2>Style</h2>
+                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Style</h2>
                 </header>
                 <div>
                 { selectedExercise?.style?.map((style, index) => (
@@ -372,7 +422,7 @@ export default function Gym(props) {
         { exerciseStep === 'stances' && (
             <>
                 <header>
-                    <h2>Stance</h2>
+                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Stance</h2>
                 </header>
                 <div>
                 { selectedExercise?.stance?.map((stance, index) => (
@@ -406,7 +456,7 @@ export default function Gym(props) {
         { exerciseStep === 'positions' && (
             <>
                 <header>
-                    <h2>Position</h2>
+                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Position</h2>
                 </header>
                 <div>
                 { selectedExercise?.position?.map((position, index) => (
@@ -440,7 +490,7 @@ export default function Gym(props) {
         { exerciseStep === 'equipment' && (
             <>
                 <header>
-                    <h2>Equipment</h2>
+                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Equipment</h2>
                 </header>
                 <div>
                 { selectedExercise?.equipment?.map((gear, index) => (
@@ -475,9 +525,15 @@ export default function Gym(props) {
             <>
                 <form className={style.logForm}>
                     <header>
-                        <h2>{selectedExercise.name}</h2>
+                        <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Entry</h2>
                     </header>
-                    <div><p>{subtitle}</p></div>
+                    <div className={style.blocks}>
+                        { selectedForm && ( <div>{selectedForm}</div> ) }
+                        { selectedStyle && ( <div>{selectedStyle}</div> ) }
+                        { selectedStance && ( <div>{selectedStance}</div> ) }
+                        { selectedPosition && ( <div>{selectedPosition}</div> ) }
+                        { selectedEquipment && ( <div>{selectedEquipment}</div> ) }
+                    </div>
                     <div>
                         <InputComponent 
                             label="Weight"
@@ -583,7 +639,7 @@ export default function Gym(props) {
                             <div className="header" onClick={() => toggleIsVisible(entryIndex)}>
                                 <div>
                                     <div className="title">{journal[days][entry].exercise}</div>
-                                    <div>{figureExercisePart(journal[days][entry].exercise)}</div>
+                                    <div>{UtilityLibrary.uppercase(figureExercisePart(journal[days][entry].exercise))}</div>
                                 </div>
                                 <div>
                                     <div>{individualSubtitle(journal[days][entry])}</div>
@@ -592,8 +648,8 @@ export default function Gym(props) {
                                     <div>{UtilityLibrary.toHumanDateAndTime(journal[days][entry].date)}</div>
                                 </div>
                                 <div>
-                                    <div>Total volume: {calculateTotalVolume(journal[days][entry].sets)} lbs</div>
-                                    <div>Average weight: {calculateAverageWeight(journal[days][entry].sets)} lbs</div>
+                                    <div>Total: {calculateTotalVolume(journal[days][entry].sets)} lbs</div>
+                                    <div>Average: {calculateAverageWeight(journal[days][entry].sets)} lbs</div>
                                 </div>
                             </div>
                             { !isHidden[entryIndex] && (
