@@ -52,47 +52,65 @@ export default function Gym(props) {
     const [selectedStance, setSelectedStance] = useState('')
     const [selectedForm, setSelectedForm] = useState('')
 
+    const [originalJournal, setOriginalJournal] = useState([{}])
     const [journal, setJournal] = useState([{}])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [exerciseStep, setExerciseStep] = useState('exercises')
     const [subtitle, setSubtitle] = useState('')
 
+    const [today, setToday] = useState(moment().format('YYYY-MM-DD'))
+
     async function getJournal() {
         const { data, error, response } = await GymApiLibrary.getJournal()
         if (data) {
+            setOriginalJournal(data)
             const superExercises = {}
             data.slice(0, 1000).forEach((set, key) => {
+                const setDate = moment(set.date)
+                const currentDate = moment()
+                const differenceInDays = currentDate.diff(setDate, 'days')
+                const date = moment(set.date).format('YYYY-MM-DD')
+                const exerciseKey = `${set.exercise}`
 
-            const setDate = moment(set.date)
-            const currentDate = moment()
-            const differenceInDays = currentDate.diff(setDate, 'days')
-            
-            const dateKey = setDate.toString().slice(0, 15)
-            const exerciseKey = `${set.exercise}`
-
-            if (!superExercises[dateKey]) {
-                superExercises[dateKey] = {}
-            } 
-            if (superExercises[dateKey]) {
-                if (!superExercises[dateKey][exerciseKey]) {
-                    superExercises[dateKey][exerciseKey] = {}
-                    superExercises[dateKey][exerciseKey].sets = []
-                    superExercises[dateKey][exerciseKey].date = set.date
-                    superExercises[dateKey][exerciseKey].exercise = set.exercise
-                    superExercises[dateKey][exerciseKey].part = 'x' // get part off another list
-                    superExercises[dateKey][exerciseKey].position = set.position
-                    superExercises[dateKey][exerciseKey].stance = set.stance
-                    superExercises[dateKey][exerciseKey].style = set.style
-                    superExercises[dateKey][exerciseKey].form = set.form
-                    superExercises[dateKey][exerciseKey].equipment = set.equipment
-                    // calculate days since last exercise to x amount of days
-                    superExercises[dateKey][exerciseKey].daysSinceLastExercise = differenceInDays 
+                if (!superExercises[date]) {
+                    superExercises[date] = {}
+                } 
+                if (superExercises[date]) {
+                    if (!superExercises[date][exerciseKey]) {
+                        superExercises[date][exerciseKey] = {}
+                        superExercises[date][exerciseKey].id = set.id
+                        superExercises[date][exerciseKey].sets = []
+                        superExercises[date][exerciseKey].date = set.date
+                        superExercises[date][exerciseKey].exercise = set.exercise
+                        superExercises[date][exerciseKey].part = 'x' // get part off another list
+                        superExercises[date][exerciseKey].position = set.position
+                        superExercises[date][exerciseKey].stance = set.stance
+                        superExercises[date][exerciseKey].style = set.style
+                        superExercises[date][exerciseKey].form = set.form
+                        superExercises[date][exerciseKey].equipment = set.equipment
+                        // calculate days since last exercise to x amount of days
+                        superExercises[date][exerciseKey].daysSinceLastExercise = differenceInDays 
+                    }
+                    superExercises[date][exerciseKey].sets.unshift(set)
                 }
-                superExercises[dateKey][exerciseKey].sets.unshift(set)
-            }
             })
             setJournal(superExercises)
         }
+    }
+
+    function findLastExerciseEntry(exerciseName, exerciseDate) {
+        let lastEntry = null
+        console.log(1)
+        Object.values(journal).forEach((day) => {
+            Object.values(day).forEach((dayExercise) => {
+                if (dayExercise.exercise == exerciseName && moment(dayExercise.date).format('YYYY-MM-DD') !== exerciseDate) {
+                    if (lastEntry === null || dayExercise.date > lastEntry.date) {
+                      lastEntry = dayExercise
+                    }
+                }
+            })
+        })
+        return lastEntry
     }
 
     function returnRoutines() {
@@ -533,7 +551,17 @@ export default function Gym(props) {
                     </footer>
                 </form>
                 <div className="GymList">
-                    {Object.keys(journal)?.map((days, daysIndex) => (
+                    <ul>
+                        <li>
+                            { journal && journal[today] && journal[today][selectedExercise.name] && (
+                                <ExerciseComponent entry={journal[today][selectedExercise.name]}></ExerciseComponent>
+                            )}
+                        </li>
+                        <li>
+                            <ExerciseComponent entry={findLastExerciseEntry(selectedExercise.name, today)} ghost={true}></ExerciseComponent>
+                        </li>
+                    </ul>
+                    {/* {Object.keys(journal)?.map((days, daysIndex) => (
                         <div key={daysIndex}>
                         { !daysIndex && (
                         <>
@@ -542,19 +570,21 @@ export default function Gym(props) {
                                 <div key={entryIndex}>
                                     <li className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
                                         { !entryIndex && journal[days][entry].exercise == selectedExercise.name && (
-                                            <ExerciseComponent journal={journal} days={days} entry={entry}></ExerciseComponent>
+                                            <ExerciseComponent entry={journal[days][entry]}></ExerciseComponent>
                                         )}
                                     </li>
-                                    {/* <li>
-                                        <ExerciseComponent journal={journal} days={days} entry={lastExerciseEntry(selectedExercise)}></ExerciseComponent>
-                                    </li> */}
+                                    <li>
+                                        { !entryIndex && journal[days][entry].exercise == selectedExercise.name && (
+                                            <ExerciseComponent journal={journal} days={days} entry={findLastExerciseEntry(journal[days][entry])}></ExerciseComponent>
+                                        )}
+                                    </li>
                                 </div>
                             ))}
                         </ul>
                         </>
                         )}
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             </>
         )}
@@ -580,7 +610,7 @@ export default function Gym(props) {
                     <ul>
                         {Object.keys(journal[days])?.map((entry, entryIndex) => (
                             <li key={entryIndex} className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
-                                <ExerciseComponent journal={journal} days={days} entry={entry}></ExerciseComponent>
+                                <ExerciseComponent entry={journal[days][entry]}></ExerciseComponent>
                             </li>
                         ))}
                     </ul>

@@ -3,7 +3,7 @@ import UtilityLibrary from '@/libraries/UtilityLibrary'
 import ExerciseCollection from '@/collections/ExerciseCollection'
 
 export default function ExerciseComponent(props: any) {
-    const { journal, days, entry } = props
+    const { entry, ghost } = props
 
     function individualSubtitle(entry: any) {
         if (entry) {
@@ -89,30 +89,30 @@ export default function ExerciseComponent(props: any) {
 
     return (
         <div>
-            { journal && days && entry &&
-                <>
+            { entry &&
+                <div className={`ExerciseComponent ${ghost ? 'ghost' : ''}`}>
                     <div className="header">
                         <div>
-                            <div className="title">{journal[days][entry].exercise}</div>
-                            <div>{UtilityLibrary.uppercase(figureExercisePart(journal[days][entry].exercise))}</div>
+                            <div className="title">{entry.exercise}</div>
+                            <div>{UtilityLibrary.uppercase(figureExercisePart(entry.exercise))}</div>
                         </div>
                         <div>
-                            <div>{individualSubtitle(journal[days][entry])}</div>
+                            <div>{individualSubtitle(entry)}</div>
                         </div>
                         <div>
-                            <div>{UtilityLibrary.toHumanDateAndTime(journal[days][entry].date)}</div>
+                            <div>{UtilityLibrary.toHumanDateAndTime(entry.date)}</div>
                         </div>
                         <div>
-                            <div>Total Volume: {calculateTotalVolume(journal[days][entry].sets)} lbs</div>
-                            <div>Average Weight: {calculateAverageWeight(journal[days][entry].sets)} lbs</div>
+                            <div>Total Volume: {calculateTotalVolume(entry.sets)} lbs</div>
+                            <div>Average Weight: {calculateAverageWeight(entry.sets)} lbs</div>
                         </div>
                         <div>
-                            <div>Total Reps: {calculateTotalReps(journal[days][entry].sets)}</div>
-                            <div>Average Rep: {calculateAverageReps(journal[days][entry].sets)}</div>
+                            <div>Total Reps: {calculateTotalReps(entry.sets)}</div>
+                            <div>Average Rep: {calculateAverageReps(entry.sets)}</div>
                         </div>
                     </div>
                     <div className="body">
-                    {journal[days][entry].sets?.map((set: any, index: any) => (
+                    {entry.sets?.map((set: any, index: any) => (
                         <div key={index}>
                             <div>Set {index+1}</div>
                             <div>{UtilityLibrary.toTime(set.date)}</div>
@@ -120,11 +120,11 @@ export default function ExerciseComponent(props: any) {
                             <div>{set.weight} {set.unit}</div>
                             <div>---</div>
                             <div>{calculateSetVolume(set.reps, set.weight)} lbs</div>
-                            <div>{calculateSetVolumeRatio(set, journal[days][entry].sets)}%</div>
+                            <div>{calculateSetVolumeRatio(set, entry.sets)}%</div>
                         </div>
                     ))}
                     </div>
-                </>
+                </div>
             }
         </div>
     )

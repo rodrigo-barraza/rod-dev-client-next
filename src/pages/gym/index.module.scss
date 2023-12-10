@@ -97,6 +97,9 @@
                             justify-content: row;
                         }
                     }
+                    &.ghost {
+                        background: rgba(100,100,100,0.5);
+                    }
                 }
                 .body {
                     display: grid;
@@ -120,6 +123,14 @@
                     }
                 }
                 &.today {
+                }
+            }
+        }
+        .ExerciseComponent {
+            &.ghost {
+                opacity: 0.75;
+                .header {
+                    background: red;
                 }
             }
         }
