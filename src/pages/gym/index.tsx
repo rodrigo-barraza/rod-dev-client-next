@@ -11,6 +11,7 @@ import style from './index.module.scss'
 import ExerciseCollection from '@/collections/ExerciseCollection4'
 import DialogComponent from '@/components/DialogComponent'
 import moment from 'moment'
+import ExerciseComponent from '@/components/ExerciseComponent/ExerciseComponent'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, query, res, resolvedUrl } = context
@@ -61,10 +62,6 @@ export default function Gym(props) {
         if (data) {
             const superExercises = {}
             data.slice(0, 1000).forEach((set, key) => {
-            // const setDate = new Date(set.date)
-            // const currentDate = new Date()
-            // const differenceInTime = currentDate - setDate
-            // const differenceInDays = differenceInTime / (1000 * 3600 * 24)
 
             const setDate = moment(set.date)
             const currentDate = moment()
@@ -96,42 +93,6 @@ export default function Gym(props) {
             })
             setJournal(superExercises)
         }
-    }
-
-    function toggleIsVisible(key: number) {
-        let newIsVisible = {...isHidden}
-        newIsVisible[key] = !newIsVisible[key]
-        setIsHidden(newIsVisible)
-    }
-
-    function calculateSetVolume(weight: string, volume: string) {
-        return Number(weight) * Number(volume)
-    }
-
-    function calculateTotalVolume(sets: object[]) {
-        if (sets && sets.length) {
-            let totalVolume = 0
-            sets.forEach((set: any) => {
-            totalVolume += calculateSetVolume(set.weight, set.reps)
-            })
-            return totalVolume
-        }
-    }
-
-    function calculateAverageWeight(sets: object[]) {
-        if (sets && sets.length) {
-            let totalWeight = 0
-            sets.forEach((set: any) => {
-            totalWeight += Number(set.weight)
-            })
-            return (totalWeight / sets.length).toFixed(1)
-        }
-    }
-
-    function calculateSetVolumeRatio(set, sets) {
-        let totalVolume = calculateTotalVolume(sets)
-        let setVolume = calculateSetVolume(set.weight, set.reps)
-        return ((setVolume / totalVolume)*100).toFixed(0)
     }
 
     function returnRoutines() {
@@ -171,20 +132,28 @@ export default function Gym(props) {
         setIsModalOpen(false)
     }
 
+    function lastExerciseEntry(exercise: any) {
+        console.log(exercise.name)
+        let lastEntry = null
+        Object.values(journal).forEach((exercises) => {
+            // console.log(exercises)
+            Object.values(exercises).forEach((entry) => {
+                console.log(entry.exercise === exercise.name)
+                if (entry.exercise == exercise.name) {
+                    if (lastEntry === null || entry.date > lastEntry.date) {
+                      lastEntry = entry
+                    }
+                }
+            })
+        })
+        console.log(lastEntry)
+        return lastEntry
+    }
+
     async function logSet() {
         await GymApiLibrary.postJournal(selectedExercise.name, reps, weight, 'lbs', selectedStyle, selectedStance, selectedEquipment, selectedPosition)
         await getJournal()
         setReps('')
-    }
-
-    function figureExercisePart(exercise: string) {
-        let part = ''
-        ExerciseCollection.forEach((entry: any) => {
-            if (entry.name === exercise) {
-            part = entry.type
-            }
-        })
-        return part
     }
 
     function individualSubtitle(entry: any) {
@@ -567,47 +536,22 @@ export default function Gym(props) {
                     {Object.keys(journal)?.map((days, daysIndex) => (
                         <div key={daysIndex}>
                         { !daysIndex && (
+                        <>
                         <ul>
                             {Object.keys(journal[days])?.map((entry, entryIndex) => (
-                                <li key={entryIndex} className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
-                                    { !entryIndex && journal[days][entry].exercise == selectedExercise.name && (
-                                        <>
-                                        <div className="header" onClick={() => toggleIsVisible(entryIndex)}>
-                                            <div>
-                                            <div className="title">{journal[days][entry].exercise}</div>
-                                            <div>{figureExercisePart(journal[days][entry].exercise)}</div>
-                                            </div>
-                                            <div>
-                                            <div>{UtilityLibrary.toHumanDateAndTime(journal[days][entry].date)}</div>
-                                            </div>
-                                            <div>
-                                            <div>day {journal[days][entry].day}</div>
-                                            </div>
-                                            <div>
-                                            <div>total volume: {calculateTotalVolume(journal[days][entry].sets)} lbs</div>
-                                            <div>average weight: {calculateAverageWeight(journal[days][entry].sets)} lbs</div>
-                                            </div>
-                                        </div>
-                                        { !isHidden[entryIndex] && (
-                                            <div className="body">
-                                            {journal[days][entry].sets?.map((set, index) => (
-                                                <div key={index}>
-                                                <div>Set: {index+1}</div>
-                                                <div>{UtilityLibrary.toTime(set.date)}</div>
-                                                <div>{set.reps} reps</div>
-                                                <div>{set.weight} {set.unit}</div>
-                                                <div>---</div>
-                                                <div>{calculateSetVolume(set.reps, set.weight)} lbs</div>
-                                                <div>{calculateSetVolumeRatio(set, journal[days][entry].sets)}%</div>
-                                                </div>
-                                            ))}
-                                            </div>
+                                <div key={entryIndex}>
+                                    <li className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
+                                        { !entryIndex && journal[days][entry].exercise == selectedExercise.name && (
+                                            <ExerciseComponent journal={journal} days={days} entry={entry}></ExerciseComponent>
                                         )}
-                                        </>
-                                    )}
-                                </li>
+                                    </li>
+                                    {/* <li>
+                                        <ExerciseComponent journal={journal} days={days} entry={lastExerciseEntry(selectedExercise)}></ExerciseComponent>
+                                    </li> */}
+                                </div>
                             ))}
                         </ul>
+                        </>
                         )}
                         </div>
                     ))}
@@ -636,37 +580,7 @@ export default function Gym(props) {
                     <ul>
                         {Object.keys(journal[days])?.map((entry, entryIndex) => (
                             <li key={entryIndex} className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
-                                <div className="header" onClick={() => toggleIsVisible(entryIndex)}>
-                                    <div>
-                                        <div className="title">{journal[days][entry].exercise}</div>
-                                        <div>{UtilityLibrary.uppercase(figureExercisePart(journal[days][entry].exercise))}</div>
-                                    </div>
-                                    <div>
-                                        <div>{individualSubtitle(journal[days][entry])}</div>
-                                    </div>
-                                    <div>
-                                        <div>{UtilityLibrary.toHumanDateAndTime(journal[days][entry].date)}</div>
-                                    </div>
-                                    <div>
-                                        <div>Total: {calculateTotalVolume(journal[days][entry].sets)} lbs</div>
-                                        <div>Average: {calculateAverageWeight(journal[days][entry].sets)} lbs</div>
-                                    </div>
-                                </div>
-                                { !isHidden[entryIndex] && (
-                                    <div className="body">
-                                    {journal[days][entry].sets?.map((set, index) => (
-                                        <div key={index}>
-                                            <div>Set {index+1}</div>
-                                            <div>{UtilityLibrary.toTime(set.date)}</div>
-                                            <div>{set.reps} reps</div>
-                                            <div>{set.weight} {set.unit}</div>
-                                            <div>---</div>
-                                            <div>{calculateSetVolume(set.reps, set.weight)} lbs</div>
-                                            <div>{calculateSetVolumeRatio(set, journal[days][entry].sets)}%</div>
-                                        </div>
-                                    ))}
-                                    </div>
-                                )}
+                                <ExerciseComponent journal={journal} days={days} entry={entry}></ExerciseComponent>
                             </li>
                         ))}
                     </ul>
