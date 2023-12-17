@@ -57,6 +57,7 @@ export default function Gym(props) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [exerciseStep, setExerciseStep] = useState('exercises')
     const [subtitle, setSubtitle] = useState('')
+    const [averageTotalVolume, setAverageTotalVolume] = useState(0)
 
     const [today, setToday] = useState(moment().format('YYYY-MM-DD'))
 
@@ -95,6 +96,7 @@ export default function Gym(props) {
                 }
             })
             setJournal(superExercises)
+            setAverageTotalVolume(calculateAverageTotalDailyVolume(superExercises))
         }
     }
 
@@ -211,6 +213,82 @@ export default function Gym(props) {
         return days
     }
 
+    function calculateSetVolume(weight: string, volume: string) {
+        return Number(weight) * Number(volume)
+    }
+
+    function calculateTotalVolume(sets: object[]) {
+        if (sets && sets.length) {
+            let totalVolume = 0
+            sets.forEach((set: any) => {
+            totalVolume += calculateSetVolume(set.weight, set.reps)
+            })
+            return totalVolume
+        }
+    }
+    
+    function calculateTotalDayVolume(date) {
+        let totalVolume = 0
+        Object.values(journal[date]).forEach((exercise) => {
+            totalVolume += calculateTotalVolume(exercise.sets)
+        })
+        return totalVolume
+    }
+
+    function calculateAverageTotalVolume(currentJournal) {
+        let totalVolume = 0
+        let totalExercises = 0
+        Object.values(currentJournal).forEach((day) => {
+            Object.values(day).forEach((exercise) => {
+                console.log(1111, calculateTotalVolume(exercise.sets))
+                totalVolume += calculateTotalVolume(exercise.sets)
+                totalExercises++
+            })
+        })
+        console.log(totalExercises)
+        return (totalVolume / totalExercises).toFixed(1)
+    }
+
+    function calculateAverageTotalDailyVolume(currentJournal) {
+        let totalAverageVolume = 0
+        Object.keys(currentJournal).forEach((date) => {
+            let dayVolume = 0
+            Object.keys(currentJournal[date]).forEach((day) => {
+                dayVolume += calculateTotalVolume(currentJournal[date][day].sets)
+            })
+            totalAverageVolume += dayVolume
+        })
+        return (totalAverageVolume / Object.keys(currentJournal).length).toFixed(1)
+    }
+
+    function calculateMedianTotalDailyVolume(currentJournal) {
+        let totalVolume = []
+        Object.keys(currentJournal).forEach((date) => {
+            let dayVolume = 0
+            Object.keys(currentJournal[date]).forEach((day) => {
+                dayVolume += calculateTotalVolume(currentJournal[date][day].sets)
+            })
+            totalVolume.push(dayVolume)
+        })
+        totalVolume.sort((a, b) => a - b)
+        if (totalVolume.length % 2 === 0) {
+            return totalVolume[totalVolume.length / 2].toFixed(1)
+        } else {
+            return totalVolume[(totalVolume.length - 1) / 2].toFixed(1) // fix to properly calculate median
+        }
+    }
+
+    function calculateMedianTotalVolume(currentJournal) {
+        let totalVolume = []
+        Object.values(currentJournal).forEach((day) => {
+            Object.values(day).forEach((exercise) => {
+                totalVolume.push(calculateTotalVolume(exercise.sets))
+            })
+        })
+        totalVolume.sort((a, b) => a - b)
+        return totalVolume[totalVolume.length / 2]
+    }
+
     useEffect(() => {
         if (!selectedExercise) {
             setExerciseStep('exercises')
@@ -311,313 +389,294 @@ export default function Gym(props) {
             <link rel="icon" href="/images/favicon.ico" />
         </Head>
         <div className="container">
-        <DialogComponent show={isModalOpen}>
-        { exerciseStep === 'exercises' && (
-            <>
-                <header>
-                    <h2>{UtilityLibrary.capitalize(selectedType)} Exercises</h2>
-                </header>
-                <div>
-                { trackList?.map((exercise, index) => (
-                    <ButtonComponent 
-                    key={index}
-                    className="new neutral"
-                    label={`${daySinceLastExercise(exercise)} ${exercise.name}`}
-                    type="button" 
-                    onClick={() => setSelectedExercise(exercise)}
-                    ></ButtonComponent>
-                ))}
-                </div>
-                <footer>
-                    <ButtonComponent 
-                    className="mini negative"
-                    label="Cancel"
-                    type="button" 
-                    onClick={() => closeTrackModal()}
-                    ></ButtonComponent>
-                </footer>
-            </>
-        )}
-        { exerciseStep === 'forms' && (
-            <>
-                <header>
-                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Form</h2>
-                </header>
-                <div>
-                { selectedExercise?.form?.map((form, index) => (
-                    <ButtonComponent 
-                        key={index}
-                        className="new neutral"
-                        label={form}
+            <div className="CardComponent">
+                <h1>Track:</h1>
+                    <div className="routines">
+                    { returnRoutines().map((type, routineIndex) => (
+                        <ButtonComponent 
+                        key={routineIndex}
+                        className="mini blue"
+                        label={UtilityLibrary.uppercase(type)}
                         type="button" 
-                        onClick={() => setSelectedForm(form)}
-                    ></ButtonComponent>
-                ))}
-                </div>
-                <footer>
-                    <ButtonComponent 
-                        className="mini"
-                        label="Back"
-                        type="button" 
-                        onClick={(() => {
-                            clearSelectedExercise()
-                        })}
-                    ></ButtonComponent>
-                    <ButtonComponent 
-                        className="mini negative"
-                        label="Cancel"
-                        type="button" 
-                        onClick={() => closeTrackModal()}
-                    ></ButtonComponent>
-                </footer>
-            </>
-        )}
-        { exerciseStep === 'styles' && (
-            <>
-                <header>
-                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Style</h2>
-                </header>
-                <div>
-                { selectedExercise?.style?.map((style, index) => (
-                    <ButtonComponent 
-                        key={index}
-                        className="new neutral"
-                        label={style}
-                        type="button" 
-                        onClick={() => setSelectedStyle(style)}
-                    ></ButtonComponent>
-                ))}
-                </div>
-                <footer>
-                    <ButtonComponent 
-                        className="mini"
-                        label="Back"
-                        type="button" 
-                        onClick={(() => {
-                            clearSelectedExercise()
-                        })}
-                    ></ButtonComponent>
-                    <ButtonComponent 
-                        className="mini negative"
-                        label="Cancel"
-                        type="button" 
-                        onClick={() => closeTrackModal()}
-                    ></ButtonComponent>
-                </footer>
-            </>
-        )}
-        { exerciseStep === 'stances' && (
-            <>
-                <header>
-                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Stance</h2>
-                </header>
-                <div>
-                { selectedExercise?.stance?.map((stance, index) => (
-                    <ButtonComponent 
-                        key={index}
-                        className="new neutral"
-                        label={stance}
-                        type="button" 
-                        onClick={() => setSelectedStance(stance)}
-                    ></ButtonComponent>
-                ))}
-                </div>
-                <footer>
-                    <ButtonComponent 
-                        className="mini"
-                        label="Back"
-                        type="button" 
-                        onClick={(() => {
-                            clearSelectedExercise()
-                        })}
-                    ></ButtonComponent>
-                    <ButtonComponent 
-                        className="mini negative"
-                        label="Cancel"
-                        type="button" 
-                        onClick={() => closeTrackModal()}
-                    ></ButtonComponent>
-                </footer>
-            </>
-        )}
-        { exerciseStep === 'positions' && (
-            <>
-                <header>
-                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Position</h2>
-                </header>
-                <div>
-                { selectedExercise?.position?.map((position, index) => (
-                    <ButtonComponent 
-                        key={index}
-                        className="new neutral"
-                        label={position}
-                        type="button" 
-                        onClick={() => setSelectedPosition(position)}
-                    ></ButtonComponent>
-                ))}
-                </div>
-                <footer>
-                    <ButtonComponent 
-                        className="mini"
-                        label="Back"
-                        type="button" 
-                        onClick={(() => {
-                            clearSelectedExercise()
-                        })}
-                    ></ButtonComponent>
-                    <ButtonComponent 
-                        className="mini negative"
-                        label="Cancel"
-                        type="button" 
-                        onClick={() => closeTrackModal()}
-                    ></ButtonComponent>
-                </footer>
-            </>
-        )}
-        { exerciseStep === 'equipment' && (
-            <>
-                <header>
-                    <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Equipment</h2>
-                </header>
-                <div>
-                { selectedExercise?.equipment?.map((gear, index) => (
-                    <ButtonComponent 
-                        key={index}
-                        className="new neutral"
-                        label={gear}
-                        type="button" 
-                        onClick={() => setSelectedEquipment(gear)}
-                    ></ButtonComponent>
-                ))}
-                </div>
-                <footer>
-                    <ButtonComponent 
-                        className="mini"
-                        label="Back"
-                        type="button" 
-                        onClick={(() => {
-                            clearSelectedExercise()
-                        })}
-                    ></ButtonComponent>
-                    <ButtonComponent 
-                        className="mini negative"
-                        label="Cancel"
-                        type="button" 
-                        onClick={() => closeTrackModal()}
-                    ></ButtonComponent>
-                </footer>
-            </>
-        )}
-        { exerciseStep === 'log' && (
-            <>
-                <form className={style.logForm}>
-                    <header>
-                        <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Entry</h2>
-                    </header>
-                    <div className={style.blocks}>
-                        { selectedForm && ( <div>{selectedForm}</div> ) }
-                        { selectedStyle && ( <div>{selectedStyle}</div> ) }
-                        { selectedStance && ( <div>{selectedStance}</div> ) }
-                        { selectedPosition && ( <div>{selectedPosition}</div> ) }
-                        { selectedEquipment && ( <div>{selectedEquipment}</div> ) }
+                        onClick={() => openTrackModal(type)}
+                        ></ButtonComponent>
+                    ))}
                     </div>
+                <h1>Log:</h1>
+                {/* <p>{averageTotalVolume}</p> */}
+                <div className="GymList">
+                    {Object.keys(journal)?.map((date, daysIndex) => (
+                        <div key={daysIndex}>
+                        <h2>{date}</h2>
+                        <p>Daily Volume: {UtilityLibrary.decimalSeparator(UtilityLibrary.calculateTotalDayVolume(journal, date))} lbs</p>
+                        <div className="experience-bar">
+                            <div className="experience-bar-fill" style={{ width: `${UtilityLibrary.calculateTotalDayVolume(journal, date) / 300}%` }}></div>
+                        </div>
+                        <ul>
+                            {Object.keys(journal[date])?.map((entry, entryIndex) => (
+                                <li key={entryIndex} className={`${UtilityLibrary.isToday(journal[date][entry].date) ? "today" : ""}`}>
+                                    <ExerciseComponent entry={journal[date][entry]}></ExerciseComponent>
+                                </li>
+                            ))}
+                        </ul>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <DialogComponent show={isModalOpen}>
+            { exerciseStep === 'exercises' && (
+                <>
+                    <header>
+                        <h2>{UtilityLibrary.capitalize(selectedType)} Exercises</h2>
+                    </header>
                     <div>
-                        <InputComponent 
-                            label="Weight"
-                            type="text"
-                            value={weight} 
-                            onChange={setWeight}
-                        ></InputComponent>
-                        <InputComponent 
-                            label="Reps"
-                            type="text"
-                            value={reps} 
-                            onChange={setReps}
-                        ></InputComponent>
+                    { trackList?.map((exercise, index) => (
+                        <ButtonComponent 
+                        key={index}
+                        className="new neutral"
+                        label={`${daySinceLastExercise(exercise)} ${exercise.name}`}
+                        type="button" 
+                        onClick={() => setSelectedExercise(exercise)}
+                        ></ButtonComponent>
+                    ))}
                     </div>
                     <footer>
                         <ButtonComponent 
+                        className="mini negative"
+                        label="Cancel"
+                        type="button" 
+                        onClick={() => closeTrackModal()}
+                        ></ButtonComponent>
+                    </footer>
+                </>
+            )}
+            { exerciseStep === 'forms' && (
+                <>
+                    <header>
+                        <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Form</h2>
+                    </header>
+                    <div>
+                    { selectedExercise?.form?.map((form, index) => (
+                        <ButtonComponent 
+                            key={index}
+                            className="new neutral"
+                            label={form}
+                            type="button" 
+                            onClick={() => setSelectedForm(form)}
+                        ></ButtonComponent>
+                    ))}
+                    </div>
+                    <footer>
+                        <ButtonComponent 
+                            className="mini"
+                            label="Back"
+                            type="button" 
+                            onClick={(() => {
+                                clearSelectedExercise()
+                            })}
+                        ></ButtonComponent>
+                        <ButtonComponent 
                             className="mini negative"
-                            label="Finish Sets"
+                            label="Cancel"
                             type="button" 
                             onClick={() => closeTrackModal()}
                         ></ButtonComponent>
+                    </footer>
+                </>
+            )}
+            { exerciseStep === 'styles' && (
+                <>
+                    <header>
+                        <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Style</h2>
+                    </header>
+                    <div>
+                    { selectedExercise?.style?.map((style, index) => (
                         <ButtonComponent 
-                            className="mini positive"
-                            label="Log Set"
+                            key={index}
+                            className="new neutral"
+                            label={style}
                             type="button" 
-                            onClick={() => logSet()}
+                            onClick={() => setSelectedStyle(style)}
+                        ></ButtonComponent>
+                    ))}
+                    </div>
+                    <footer>
+                        <ButtonComponent 
+                            className="mini"
+                            label="Back"
+                            type="button" 
+                            onClick={(() => {
+                                clearSelectedExercise()
+                            })}
+                        ></ButtonComponent>
+                        <ButtonComponent 
+                            className="mini negative"
+                            label="Cancel"
+                            type="button" 
+                            onClick={() => closeTrackModal()}
                         ></ButtonComponent>
                     </footer>
-                </form>
-                <div className="GymList">
-                    <ul>
-                        <li>
-                            { journal && journal[today] && journal[today][selectedExercise.name] && (
-                                <ExerciseComponent entry={journal[today][selectedExercise.name]}></ExerciseComponent>
-                            )}
-                        </li>
-                        <li>
-                            <ExerciseComponent entry={findLastExerciseEntry(selectedExercise.name, today)} ghost={true}></ExerciseComponent>
-                        </li>
-                    </ul>
-                    {/* {Object.keys(journal)?.map((days, daysIndex) => (
-                        <div key={daysIndex}>
-                        { !daysIndex && (
-                        <>
-                        <ul>
-                            {Object.keys(journal[days])?.map((entry, entryIndex) => (
-                                <div key={entryIndex}>
-                                    <li className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
-                                        { !entryIndex && journal[days][entry].exercise == selectedExercise.name && (
-                                            <ExerciseComponent entry={journal[days][entry]}></ExerciseComponent>
-                                        )}
-                                    </li>
-                                    <li>
-                                        { !entryIndex && journal[days][entry].exercise == selectedExercise.name && (
-                                            <ExerciseComponent journal={journal} days={days} entry={findLastExerciseEntry(journal[days][entry])}></ExerciseComponent>
-                                        )}
-                                    </li>
-                                </div>
-                            ))}
-                        </ul>
-                        </>
-                        )}
-                        </div>
-                    ))} */}
-                </div>
-            </>
-        )}
-        </DialogComponent>
-        <div className="CardComponent">
-            <h1>Track:</h1>
-                <div className="routines">
-                { returnRoutines().map((type, routineIndex) => (
-                    <ButtonComponent 
-                    key={routineIndex}
-                    className="mini blue"
-                    label={UtilityLibrary.uppercase(type)}
-                    type="button" 
-                    onClick={() => openTrackModal(type)}
-                    ></ButtonComponent>
-                ))}
-                </div>
-            <h1>Log:</h1>
-            <div className="GymList">
-                {Object.keys(journal)?.map((days, daysIndex) => (
-                    <div key={daysIndex}>
-                    <h2>{days}</h2>
-                    <ul>
-                        {Object.keys(journal[days])?.map((entry, entryIndex) => (
-                            <li key={entryIndex} className={`${UtilityLibrary.isToday(journal[days][entry].date) ? "today" : ""}`}>
-                                <ExerciseComponent entry={journal[days][entry]}></ExerciseComponent>
-                            </li>
-                        ))}
-                    </ul>
+                </>
+            )}
+            { exerciseStep === 'stances' && (
+                <>
+                    <header>
+                        <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Stance</h2>
+                    </header>
+                    <div>
+                    { selectedExercise?.stance?.map((stance, index) => (
+                        <ButtonComponent 
+                            key={index}
+                            className="new neutral"
+                            label={stance}
+                            type="button" 
+                            onClick={() => setSelectedStance(stance)}
+                        ></ButtonComponent>
+                    ))}
                     </div>
-                ))}
-            </div>
-        </div>
+                    <footer>
+                        <ButtonComponent 
+                            className="mini"
+                            label="Back"
+                            type="button" 
+                            onClick={(() => {
+                                clearSelectedExercise()
+                            })}
+                        ></ButtonComponent>
+                        <ButtonComponent 
+                            className="mini negative"
+                            label="Cancel"
+                            type="button" 
+                            onClick={() => closeTrackModal()}
+                        ></ButtonComponent>
+                    </footer>
+                </>
+            )}
+            { exerciseStep === 'positions' && (
+                <>
+                    <header>
+                        <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Position</h2>
+                    </header>
+                    <div>
+                    { selectedExercise?.position?.map((position, index) => (
+                        <ButtonComponent 
+                            key={index}
+                            className="new neutral"
+                            label={position}
+                            type="button" 
+                            onClick={() => setSelectedPosition(position)}
+                        ></ButtonComponent>
+                    ))}
+                    </div>
+                    <footer>
+                        <ButtonComponent 
+                            className="mini"
+                            label="Back"
+                            type="button" 
+                            onClick={(() => {
+                                clearSelectedExercise()
+                            })}
+                        ></ButtonComponent>
+                        <ButtonComponent 
+                            className="mini negative"
+                            label="Cancel"
+                            type="button" 
+                            onClick={() => closeTrackModal()}
+                        ></ButtonComponent>
+                    </footer>
+                </>
+            )}
+            { exerciseStep === 'equipment' && (
+                <>
+                    <header>
+                        <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Equipment</h2>
+                    </header>
+                    <div>
+                    { selectedExercise?.equipment?.map((gear, index) => (
+                        <ButtonComponent 
+                            key={index}
+                            className="new neutral"
+                            label={gear}
+                            type="button" 
+                            onClick={() => setSelectedEquipment(gear)}
+                        ></ButtonComponent>
+                    ))}
+                    </div>
+                    <footer>
+                        <ButtonComponent 
+                            className="mini"
+                            label="Back"
+                            type="button" 
+                            onClick={(() => {
+                                clearSelectedExercise()
+                            })}
+                        ></ButtonComponent>
+                        <ButtonComponent 
+                            className="mini negative"
+                            label="Cancel"
+                            type="button" 
+                            onClick={() => closeTrackModal()}
+                        ></ButtonComponent>
+                    </footer>
+                </>
+            )}
+            { exerciseStep === 'log' && (
+                <>
+                    <form className={style.logForm}>
+                        <header>
+                            <h2>{UtilityLibrary.capitalize(selectedExercise.name)}: Entry</h2>
+                        </header>
+                        <div className={style.blocks}>
+                            { selectedForm && ( <div>{selectedForm}</div> ) }
+                            { selectedStyle && ( <div>{selectedStyle}</div> ) }
+                            { selectedStance && ( <div>{selectedStance}</div> ) }
+                            { selectedPosition && ( <div>{selectedPosition}</div> ) }
+                            { selectedEquipment && ( <div>{selectedEquipment}</div> ) }
+                        </div>
+                        <div>
+                            <InputComponent 
+                                label="Weight"
+                                type="text"
+                                value={weight} 
+                                onChange={setWeight}
+                            ></InputComponent>
+                            <InputComponent 
+                                label="Reps"
+                                type="text"
+                                value={reps} 
+                                onChange={setReps}
+                            ></InputComponent>
+                        </div>
+                        <footer>
+                            <ButtonComponent 
+                                className="mini negative"
+                                label="Finish Sets"
+                                type="button" 
+                                onClick={() => closeTrackModal()}
+                            ></ButtonComponent>
+                            <ButtonComponent 
+                                className="mini positive"
+                                label="Log Set"
+                                type="button" 
+                                onClick={() => logSet()}
+                            ></ButtonComponent>
+                        </footer>
+                    </form>
+                    <div className="GymList">
+                        <ul>
+                            <li>
+                                { journal && journal[today] && journal[today][selectedExercise.name] && (
+                                    <ExerciseComponent entry={journal[today][selectedExercise.name]}></ExerciseComponent>
+                                )}
+                            </li>
+                            <li>
+                                <ExerciseComponent entry={findLastExerciseEntry(selectedExercise.name, today)} ghost={true}></ExerciseComponent>
+                            </li>
+                        </ul>
+                    </div>
+                </>
+            )}
+            </DialogComponent>
         </div>
     </main>
     )

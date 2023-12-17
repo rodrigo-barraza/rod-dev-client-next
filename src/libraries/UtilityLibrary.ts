@@ -28,6 +28,35 @@ const UtilityLibrary = {
             return moment(date1).isSame(moment(date2), 'day')
         }
     },
+    // Number Utilities
+    decimalSeparator(number: number) {
+        if (number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    },
+    // Exercise Utilities
+    calculateSetVolume(weight: string, volume: string) {
+        return Number(weight) * Number(volume)
+    },
+    calculateTotalVolume(sets: object[]) {
+        if (sets && sets.length) {
+            let totalVolume = 0
+            sets.forEach((set: any) => {
+            totalVolume += this.calculateSetVolume(set.weight, set.reps)
+            })
+            return totalVolume
+        }
+    },
+    calculateTotalDayVolume(journal, date) {
+        let totalVolume = 0
+        if (journal[date]) {
+            Object.values(journal[date]).forEach((exercise) => {
+                totalVolume += this.calculateTotalVolume(exercise.sets)
+            })
+        }
+        return totalVolume
+    },
+    // 
     findSamplerLabel(sampler) {
         if (sampler) {
             const foundSampler = SamplerCollection.find((samplerOption) => samplerOption.value === sampler);
