@@ -37,13 +37,13 @@ export default function Index(props) {
     useEffect(() => {
         async function getRender() {
             const collection = lodash.shuffle(ArtCollectionsCollection);
-            const getRender1 = await RenderApiLibrary.getRender('IlH3M_bswMz')
-            const getRender2 = await RenderApiLibrary.getRender('4C5IlvWklYQ')
-            const getRender3 = await RenderApiLibrary.getRender('_Nwlq6_7hvx')
+            // const getRender1 = await RenderApiLibrary.getRender('IlH3M_bswMz')
+            // const getRender2 = await RenderApiLibrary.getRender('4C5IlvWklYQ')
+            // const getRender3 = await RenderApiLibrary.getRender('_Nwlq6_7hvx')
 
-            if (getRender1.data && getRender2.data && getRender3.data) {
-                collection.unshift(getRender1.data, getRender2.data, getRender3.data)
-            }
+            // if (getRender1.data && getRender2.data && getRender3.data) {
+            //     collection.unshift(getRender1.data, getRender2.data, getRender3.data)
+            // }
             
             setShuffledArtCollection(collection)
         }
