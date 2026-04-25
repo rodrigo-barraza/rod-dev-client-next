@@ -162,7 +162,12 @@ if $HAS_SSH; then
     ssh "$NAS_HOST" "cd '${NAS_COMPOSE_DIR}' && sudo ${DOCKER_BIN} compose up -d --force-recreate"
     ok "Container restarted"
 
-    # Prune old images
+    # Clean up old SHA-tagged images (keeps only :latest)
+    info "Pruning old images..."
+    ssh "$NAS_HOST" "sudo ${DOCKER_BIN} images '${IMAGE_NAME}' --format '{{.Tag}} {{.ID}}' \
+      | grep -v 'latest' \
+      | awk '{print \$2}' \
+      | xargs -r sudo ${DOCKER_BIN} rmi 2>/dev/null || true"
     ssh "$NAS_HOST" "sudo ${DOCKER_BIN} image prune -f" 2>/dev/null | sed 's/^/  /'
   fi
 
