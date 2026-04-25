@@ -15,6 +15,12 @@ RUN npm ci
 # --- Build ---
 FROM base AS builder
 WORKDIR /app
+
+# NEXT_PUBLIC_* vars are inlined at build time by Next.js,
+# so we accept them as build args and expose them to the build.
+ARG NEXT_PUBLIC_RODRIGO_SERVICE=http://localhost:6666
+ENV NEXT_PUBLIC_RODRIGO_SERVICE=$NEXT_PUBLIC_RODRIGO_SERVICE
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

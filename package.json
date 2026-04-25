@@ -11,7 +11,9 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "deploy": "bash deploy.sh"
+    "deploy": "bash deploy.sh",
+    "deploy:dry": "bash deploy.sh --dry-run",
+    "setup-ssh": "bash setup-ssh.sh"
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",

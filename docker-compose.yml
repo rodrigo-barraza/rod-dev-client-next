@@ -5,5 +5,20 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_RODRIGO_SERVICE=${NEXT_PUBLIC_RODRIGO_SERVICE:-http://localhost:6666}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
