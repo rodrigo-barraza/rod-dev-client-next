@@ -1,29 +1,21 @@
 import FetchWrapper from '@/wrappers/FetchWrapper';
+import ApiConstants from '@/constants/ApiConstants';
+
+const S = ApiConstants.LIKE_SERVICE;
 
 const LikeApiLibrary = {
-    RODRIGO_SERVICE: process.env.NEXT_PUBLIC_RODRIGO_SERVICE,
-    FAVORITE_SERVICE: 'like-service',
-
-    async postLike(renderId?: string, like: boolean = true) {
-        const method = 'POST';
-        let url = `${this.RODRIGO_SERVICE}${this.FAVORITE_SERVICE}/like`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (renderId) { Object.assign(body, { renderId: renderId }) }
-        if (like) { Object.assign(body, { like: 'true' }) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+    async postLike(renderId?: string) {
+        const body: Record<string, any> = {};
+        if (renderId) body.renderId = renderId;
+        body.like = 'true';
+        return FetchWrapper.post(S, 'like', body);
     },
 
-    async deleteLike(renderId?: string, like: boolean = true) {
-        const method = 'POST';
-        let url = `${this.RODRIGO_SERVICE}${this.FAVORITE_SERVICE}/like`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (renderId) { Object.assign(body, { renderId: renderId }) }
-        if (like) { Object.assign(body, { like: 'false' }) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+    async deleteLike(renderId?: string) {
+        const body: Record<string, any> = {};
+        if (renderId) body.renderId = renderId;
+        body.like = 'false';
+        return FetchWrapper.post(S, 'like', body);
     },
 };
 

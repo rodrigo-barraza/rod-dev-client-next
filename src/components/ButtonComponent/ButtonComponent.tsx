@@ -1,6 +1,7 @@
 import React from 'react'
 import style from './ButtonComponent.module.scss'
 import ActiveLink from '@/components/ActiveLink'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
 import { useState, useEffect } from 'react'
 
 export default function ButtonComponent(props: any) {
@@ -15,7 +16,7 @@ export default function ButtonComponent(props: any) {
     }
 
     useEffect(() => {
-        setLogo(`https://assets.rod.dev/icons/${logo}.png`)
+        setLogo(UtilityLibrary.getIconUrl(logo))
     }, [logo])
 
     return (

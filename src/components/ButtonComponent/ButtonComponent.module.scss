@@ -265,14 +265,10 @@
             color: rgb(100, 100, 100);
             pointer-events: none;
         }
-        :global {
-            a.active {
-                color: rgb(255, 255, 255);
-                :local {
-                    .label {
-                        text-decoration: underline;
-                    }
-                }
+        :global(a.active) {
+            color: rgb(255, 255, 255);
+            .label {
+                text-decoration: underline;
             }
         }
     }

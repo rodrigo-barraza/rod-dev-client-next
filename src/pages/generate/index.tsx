@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Txt2ImageComponent from '@/components/Txt2ImageComponent/Txt2ImageComponent'
 import style from './index.module.scss'
@@ -9,10 +8,12 @@ import GuestApiLibrary from '@/libraries/GuestApiLibrary'
 import GenerateHeaderComponent from '@/components/GenerateHeaderComponent/GenerateHeaderComponent'
 import GalleryComponent from '@/components/GalleryComponent/GalleryComponent'
 import PaginationComponent from '@/components/PaginationComponent/PaginationComponent'
-import Link from 'next/link'
+import SeoHead from '@/components/SeoHead/SeoHead'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
+import useGuest from '@/hooks/useGuest'
 
 export const getServerSideProps = async (context) => {
-  const { req, query, res, resolvedUrl } = context
+  const { req, query, resolvedUrl } = context
 
   let returnBody = {
     props: {
@@ -24,15 +25,15 @@ export const getServerSideProps = async (context) => {
   }
   
   const getRenders = await RenderApiLibrary.getRenders('240')
-  const randomRenders = getRenders.data.images
+  const randomRenders = getRenders?.data?.images ?? []
   returnBody.props.randomRenders = randomRenders;
   if (query?.id) {
     const getRender = await RenderApiLibrary.getRender(query.id)
-    if (getRender.data) {
+    if (getRender?.data) {
       returnBody.props.render = getRender.data;
     } else {
       const getRandom = await RenderApiLibrary.getRender()
-      returnBody.props.render = getRandom.data
+      returnBody.props.render = getRandom?.data ?? {}
       returnBody = {
         redirect: {
           permanent: false,
@@ -42,20 +43,16 @@ export const getServerSideProps = async (context) => {
     }
   } else {
     const getRender = await RenderApiLibrary.getRender()
-    returnBody.props.render = getRender.data;
+    returnBody.props.render = getRender?.data ?? {};
   }
-  returnBody.props.meta = {
-    url: `https://rod.dev${resolvedUrl}`,
+  returnBody.props.meta = UtilityLibrary.buildPageMeta(resolvedUrl, {
     title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
     description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
     keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
-    type: 'website',
     image: returnBody.props.render?.image ? returnBody.props.render.image : 'https://renders.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg',
-    url: `https://rod.dev${resolvedUrl}`,
-  }
+  });
 
-  const forwarded = req.headers["x-forwarded-for"]
-  const ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
+  const ip = UtilityLibrary.getClientIp(req);
   const getGuest = await GuestApiLibrary.getGuest(ip)
   if (getGuest.data) {
     returnBody.props.guest = getGuest.data;
@@ -70,9 +67,9 @@ export default function Playground(props) {
   const [exploreRenders, setExploreRenders] = useState(randomRenders)
   const [renders, setRenders] = useState([])
   const [renderCount, setRenderCount] = useState(0)
-  const [guestData, setGuestData] = useState(guest)
+  const { guestData, setGuestData, refreshGuest } = useGuest(guest);
   const [currentPage, setCurrentPage] = useState(1)
-  const [postsPerPage, setPostsPerPage] = useState(12)
+  const postsPerPage = 12
 
   async function getCount() {
     const count = await RenderApiLibrary.getCount()
@@ -89,15 +86,8 @@ export default function Playground(props) {
     setExploreRenders(getRandomRenders.data.images);
   }
 
-  async function getGuest() {
-    const getGuest = await GuestApiLibrary.getGuest()
-    if (getGuest.data) {
-      setGuestData(getGuest.data)
-    }
-  }
-
   useEffect(() => {
-    getGuest()
+    refreshGuest()
     getCount()
     getRenders()
   }, [render])
@@ -110,29 +100,10 @@ export default function Playground(props) {
 
   return (
     <main className={style.GeneratePage}>
-        <Head>
-            <title>{meta.title}</title>
-            <meta name="description" content={meta.description}/>
-            <meta name="keywords" content={meta.keywords}/>
-            <meta property="og:url" content={meta.url}/>
-            <meta property="og:type" content={meta.type}/>
-            <meta property="og:site_name" content="Rodrigo Barraza"/>
-            <meta property="og:description" content={meta.description}/>
-            <meta property="og:title" content={meta.title}/>
-            <meta property="og:image" content={meta.image} />
-            {render?.image && (
-                <meta property='article:published_time' content={render.createdAt}/>
-            )}
-            <meta name="twitter:card" content="summary_large_image"/>
-            <meta name="twitter:title" content={meta.title}/>
-            <meta name="twitter:site" content="@rawdreygo"/>
-            <meta name="twitter:url" content={meta.url}/>
-            <meta name="twitter:image" content={meta.image}/>
-            <link rel="icon" href="/images/favicon.ico" />
-        </Head>
+        <SeoHead meta={meta} />
         
         <GenerateHeaderComponent guest={guestData} renders={renders} />
-        <Txt2ImageComponent render={render} setGuestData={setGuestData}/>
+        <Txt2ImageComponent render={render} setGuest={setGuestData}/>
         <div className="gallery">
           <div className="sectionTitle">
             <div>Explore {renderCount} Renders</div>

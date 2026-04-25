@@ -25,24 +25,21 @@
             }
         }
     }
-}
-
-.GymPage :global {
-    dialog[open] {
+    :global(dialog[open]) {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
-    .container {
+    :global(.container) {
         @media (max-width: 900px) {
             padding: 0 4vw;
         }
     }
-    .CardComponent {
+    :global(.CardComponent) {
         max-width: none;
         grid-template: none;
     }
-    .routines {
+    :global(.routines) {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
@@ -50,17 +47,17 @@
             flex: 1 1 auto;
         }
     }
-    .experience-bar {
+    :global(.experience-bar) {
         height: 10px;
         background: rgb(234, 234, 234);
         margin: 4px 0; 
         overflow: hidden;
-        .experience-bar-fill {
+        :global(.experience-bar-fill) {
             height: 100%;
             background: rgb(122 91 255);
         }
     }
-    .GymList {
+    :global(.GymList) {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -68,7 +65,7 @@
         width: 100%;
         font-size: 11px;
         // border: 2px solid black;
-        .title {
+        :global(.title) {
             font-size: 18px;
         }
         ul {
@@ -87,7 +84,7 @@
                 margin-bottom: 4px;
                 border-radius: 4px;
                 color: black;
-                .header {
+                :global(.header) {
                     flex-wrap: wrap;
                     padding: 20px;
                     cursor: pointer;
@@ -107,11 +104,11 @@
                             justify-content: row;
                         }
                     }
-                    &.ghost {
+                    &:global(.ghost) {
                         background: rgba(100,100,100,0.5);
                     }
                 }
-                .body {
+                :global(.body) {
                     display: grid;
                     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
                     flex-wrap: wrap;
@@ -132,38 +129,38 @@
                         }
                     }
                 }
-                &.today {
+                &:global(.today) {
                 }
             }
         }
-        .ExerciseComponent {
-            &.ghost {
+        :global(.ExerciseComponent) {
+            &:global(.ghost) {
                 opacity: 0.75;
-                .header {
+                :global(.header) {
                     background: red;
                 }
             }
         }
     }
     @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
-        dialog {
+        :global(dialog) {
             height: 100%;
             width: 100%;
             padding: 20px;
             margin: 20px;
             box-sizing: border-box;
         }
-        .GymList li .body > div {
+        :global(.GymList) li :global(.body) > div {
             padding: 2px 3px;
         }
-        .GymList li .header {
+        :global(.GymList) li :global(.header) {
             padding: 8px;
         }
-        .CardComponent {
+        :global(.CardComponent) {
             padding: 4px;
         }
-        .container {
+        :global(.container) {
             padding: 0;
         }
-      }
+    }
 }

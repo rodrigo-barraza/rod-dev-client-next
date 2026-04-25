@@ -1,79 +1,195 @@
-import moment from 'moment'
-import EventLibrary from './EventLibrary';
-import SamplerCollection from '@/collections/SamplerCollection'
-import StyleCollection from '@/collections/StyleCollection'
+import SamplerCollection from '@/collections/SamplerCollection';
+import StyleCollection from '@/collections/StyleCollection';
 
-const useS3: boolean = true;
+// Use native Temporal if available, otherwise polyfill (Safari)
+import { Temporal as TemporalPolyfill } from '@js-temporal/polyfill';
+const Temporal: typeof TemporalPolyfill = (globalThis as any).Temporal ?? TemporalPolyfill;
+
+const ASSETS_BASE_URL = 'https://assets.rod.dev';
 
 const UtilityLibrary = {
-    // Date Utilities
+    // ─── Date Utilities (Temporal API) ──────────────────────────
+
+    /**
+     * Formats a date string to a human-readable date.
+     * Uses Temporal.Instant → ZonedDateTime for locale-aware formatting.
+     */
     toHumanDateAndTime(date: string) {
         if (date) {
-            // return moment(date).format('MMMM Do, YYYY @ h:mmA')
-            return moment(date).format('MMMM Do, YYYY')
+            const instant = Temporal.Instant.from(new Date(date).toISOString());
+            const zdt = instant.toZonedDateTimeISO(Temporal.Now.timeZoneId());
+            return zdt.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         }
     },
+
+    /**
+     * Formats a date string to a human-readable time.
+     */
     toTime(date: string) {
         if (date) {
-            return moment(date).format('h:mmA')
+            const instant = Temporal.Instant.from(new Date(date).toISOString());
+            const zdt = instant.toZonedDateTimeISO(Temporal.Now.timeZoneId());
+            return zdt.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
         }
     },
+
+    /**
+     * Checks if the given date is today using Temporal.PlainDate comparison.
+     */
     isToday(date: string) {
         if (date) {
-            return moment().isSame(moment(date), 'day')
+            const d = Temporal.PlainDate.from(this.toISODateString(date));
+            const today = Temporal.Now.plainDateISO();
+            return Temporal.PlainDate.compare(d, today) === 0;
         }
     },
+
+    /**
+     * Checks if two dates fall on the same calendar day.
+     */
     isSameDay(date1: string, date2: string) {
         if (date1 && date2) {
-            return moment(date1).isSame(moment(date2), 'day')
+            const d1 = Temporal.PlainDate.from(this.toISODateString(date1));
+            const d2 = Temporal.PlainDate.from(this.toISODateString(date2));
+            return Temporal.PlainDate.compare(d1, d2) === 0;
         }
     },
-    // Number Utilities
+
+    /**
+     * Formats a Date or ISO string to 'YYYY-MM-DD' using Temporal.PlainDate.
+     */
+    toISODateString(date: string | Date): string {
+        // Parse through native Date to handle any date string format,
+        // then extract as PlainDate
+        const d = new Date(date);
+        const plain = Temporal.PlainDate.from({
+            year: d.getFullYear(),
+            month: d.getMonth() + 1,
+            day: d.getDate(),
+        });
+        return plain.toString(); // 'YYYY-MM-DD'
+    },
+
+    /**
+     * Returns today's date as 'YYYY-MM-DD' using Temporal.Now.
+     */
+    todayISOString(): string {
+        return Temporal.Now.plainDateISO().toString();
+    },
+
+    /**
+     * Returns the number of full days between now and the given date.
+     * Uses Temporal.PlainDate.until() for precise calendar arithmetic.
+     */
+    daysSince(date: string | Date): number {
+        const target = Temporal.PlainDate.from(this.toISODateString(date));
+        const today = Temporal.Now.plainDateISO();
+        const duration = target.until(today, { largestUnit: 'day' });
+        return duration.days;
+    },
+
+    // ─── Number Utilities ───────────────────────────────────────
+
     decimalSeparator(number: number) {
         if (number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
     },
-    // Exercise Utilities
+
+    // ─── Exercise Utilities ─────────────────────────────────────
+
     calculateSetVolume(weight: string, volume: string) {
-        return Number(weight) * Number(volume)
+        return Number(weight) * Number(volume);
     },
+
     calculateTotalVolume(sets: object[]) {
         if (sets && sets.length) {
-            let totalVolume = 0
+            let totalVolume = 0;
             sets.forEach((set: any) => {
-            totalVolume += this.calculateSetVolume(set.weight, set.reps)
-            })
-            return totalVolume
+                totalVolume += this.calculateSetVolume(set.weight, set.reps);
+            });
+            return totalVolume;
         }
     },
-    calculateTotalDayVolume(journal, date) {
-        let totalVolume = 0
+
+    calculateTotalDayVolume(journal: any, date: string) {
+        let totalVolume = 0;
         if (journal[date]) {
-            Object.values(journal[date]).forEach((exercise) => {
-                totalVolume += this.calculateTotalVolume(exercise.sets)
-            })
+            Object.values(journal[date]).forEach((exercise: any) => {
+                totalVolume += this.calculateTotalVolume(exercise.sets);
+            });
         }
-        return totalVolume
+        return totalVolume;
     },
-    // 
-    findSamplerLabel(sampler) {
+
+    calculateAverageWeight(sets: object[]) {
+        if (sets && sets.length) {
+            let totalWeight = 0;
+            sets.forEach((set: any) => {
+                totalWeight += Number(set.weight);
+            });
+            return (totalWeight / sets.length).toFixed(1);
+        }
+    },
+
+    calculateAverageReps(sets: object[]) {
+        if (sets && sets.length) {
+            let totalReps = 0;
+            sets.forEach((set: any) => {
+                totalReps += Number(set.reps);
+            });
+            return (totalReps / sets.length).toFixed(1);
+        }
+    },
+
+    calculateTotalReps(sets: object[]) {
+        if (sets && sets.length) {
+            let totalReps = 0;
+            sets.forEach((set: any) => {
+                totalReps += Number(set.reps);
+            });
+            return totalReps;
+        }
+    },
+
+    calculateSetVolumeRatio(set: any, sets: any[]) {
+        const totalVolume = this.calculateTotalVolume(sets);
+        const setVolume = this.calculateSetVolume(set.weight, set.reps);
+        return ((setVolume / totalVolume) * 100).toFixed(0);
+    },
+
+    buildExerciseSubtitle(entry: any): string {
+        if (!entry) return '';
+        const parts: string[] = [];
+        if (entry.form) parts.push(entry.form);
+        if (entry.style) parts.push(entry.style);
+        if (entry.stance) parts.push(entry.stance);
+        if (entry.position) parts.push(entry.position);
+        if (entry.equipment) parts.push(entry.equipment);
+        return parts.join(', ');
+    },
+
+    // ─── Render / Style Utilities ───────────────────────────────
+
+    findSamplerLabel(sampler: string) {
         if (sampler) {
             const foundSampler = SamplerCollection.find((samplerOption) => samplerOption.value === sampler);
             if (foundSampler && foundSampler.label) {
-                return `🖌️ ${foundSampler.label}`
+                return `🖌️ ${foundSampler.label}`;
             }
         }
     },
-    findStyleLabel(style) {
+
+    findStyleLabel(style: string) {
         if (style) {
             const foundStyle = StyleCollection.find((styleOption) => styleOption.value === style);
             if (foundStyle && foundStyle.label != 'None') {
-                return `🎨 ${foundStyle.label}`
+                return `🎨 ${foundStyle.label}`;
             }
         }
     },
-    findStyle(style) {
+
+    findStyle(style: string) {
         if (style) {
             const foundStyle = StyleCollection.find((styleOption) => styleOption.value === style);
             return foundStyle;
@@ -81,328 +197,151 @@ const UtilityLibrary = {
             return '';
         }
     },
+
+    // ─── Media Utilities ────────────────────────────────────────
+
     downloadImage(imagePath: string, imageId: string) {
-        var a = document.createElement("a");
-        a.href = imagePath
+        const a = document.createElement('a');
+        a.href = imagePath;
         a.download = `rod.dev ${imageId}.png`;
-        a.target = "_blank";
+        a.target = '_blank';
         a.click();
     },
-    isObjectEmpty(object: object) {
-        for (var i in object){
-            if (object.hasOwnProperty(i)) {
-                return false;
-            }
-        }
-        return true;
+
+    /**
+     * Copy a shareable link to the clipboard for a given generation ID.
+     */
+    shareLink(id: string, basePath = '/generate'): string {
+        const shareLink = `${window.location.origin}${basePath}?id=${id}`;
+        navigator.clipboard.writeText(shareLink);
+        return shareLink;
     },
-    capitalize(string: string) {
-        if (string) {
-            return string.charAt(0).toUpperCase() + string.slice(1)
-        }
-    },
-    uppercase(string: string) {
-        if (string) {
-            return string.toUpperCase()
-        }
-    },
+
     renderAssetPath(assetPath: string, collectionPath: string | undefined): string {
         let path = `/`;
         if (assetPath && !collectionPath) {
-            path =`/${assetPath}`;
+            path = `/${assetPath}`;
         } else if (!assetPath && collectionPath) {
             path = `/collections/${collectionPath}`;
         } else if (assetPath && collectionPath) {
             path = `/collections/${collectionPath}/${assetPath}`;
         }
-        let fullPath: string = '';
-        if (useS3) {
-            fullPath = `https://assets.rod.dev${path}`
-        }
-        return fullPath;
+        return `${ASSETS_BASE_URL}${path}`;
     },
-    imageFullScreen(event: Event & {target: Element}, collectionPath: object, workImagePath: object) {
+
+    /**
+     * Construct the CDN icon URL for a given icon name.
+     * Used by ButtonComponent and FooterComponent.
+     */
+    getIconUrl(icon: string): string {
+        return `${ASSETS_BASE_URL}/icons/${icon}.png`;
+    },
+
+    imageFullScreen(event: Event & { target: Element }, collectionPath: string, workImagePath: string) {
         event.target.requestFullscreen();
-        EventLibrary.postEventImageFullscreen(`/${collectionPath}/${workImagePath}`);
     },
+
+    // ─── String Utilities ───────────────────────────────────────
+
+    capitalize(string: string) {
+        if (string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    },
+
+    uppercase(string: string) {
+        if (string) {
+            return string.toUpperCase();
+        }
+    },
+
+    // ─── Duration Utilities ─────────────────────────────────────
+
     humanDuration(durationInSeconds: number | undefined): string {
-        var minutes = moment.duration(durationInSeconds, 'seconds').minutes();
-        var seconds = moment.duration(durationInSeconds, 'seconds').seconds();
-        var humanDurationString = '';
+        if (!durationInSeconds) return '';
+        const minutes = Math.floor(durationInSeconds / 60);
+        const seconds = Math.floor(durationInSeconds % 60);
+        let humanDurationString = '';
         if (seconds && !minutes) {
             humanDurationString = `${seconds} ${seconds === 1 ? 'second' : 'seconds'}`;
         } else if (minutes && !seconds) {
-            humanDurationString = `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`
+            humanDurationString = `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`;
         } else if (minutes && seconds) {
-            humanDurationString = `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ${seconds} ${seconds === 1 ? 'second' : 'seconds'}`
+            humanDurationString = `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ${seconds} ${seconds === 1 ? 'second' : 'seconds'}`;
         }
         return humanDurationString;
     },
+
+    // ─── Video Utilities ────────────────────────────────────────
+
     playVideoOnMouseOver(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
         const target = event.target as HTMLElement;
-        const video = target.querySelector('video')
+        const video = target.querySelector('video');
         if (video) {
             video.play();
         }
     },
+
     stopVideoOnMouseOver(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
         const target = event.target as HTMLElement;
-        const video = target.querySelector('video')
+        const video = target.querySelector('video');
         if (video) {
             video.load();
         }
-    }
-    // generateCollectionsSchema() {
-    //     console.log('home schema');
-    // },
-    // generateAboutSchema() {
-    //     const imageObject = {
-    //         "@context": "https://schema.org/",
-    //         "@type": "ImageObject",
-    //         "contentUrl": UtilityLibrary.renderAssetPath('images/rodrigo-barraza-black-and-white-portrait.jpg'),
-    //         "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
-    //         // "acquireLicensePage": "https://example.com/how-to-use-my-images"
-    //     }
-    //     const postalAddressObject = {
-    //         "@context": "https://schema.org/",
-    //         "@type": "PostalAddress",
-    //         "addressLocality": "Vancouver",
-    //         "addressRegion": "British Columbia",
-    //         "addressCountry": "Canada"
-    //     }
-    //     const personObject = {
-    //         "@context": "https://schema.org",
-    //         "@id": `https://rod.dev/about-rodrigo`,
-    //         "@type": "Person",
-    //         "image": imageObject,
-    //         "givenName": "Rodrigo",
-    //         "familyName": "Barraza",
-    //         "description": "Photographer, software engineer and artist based out of Vancouver, British Columbia, Canada.",
-    //         "jobTitle": "photographer, software engineer, artist",
-    //         "address:": postalAddressObject,
-    //     }
+    },
 
-    //     AboutCollection.forEach((about) => {
-    //         if (about.name === 'institutions') {
-    //             const collageOrUniversityObject = {
-    //                 "@context": "https://schema.org",
-    //                 "@type": "CollegeOrUniversity",
-    //                 "name": "Emily Carr University of Art + Design",
-    //             }
-    //             personObject.alumniOf = collageOrUniversityObject;
-    //         }
-    //     })
-        
-    //     const script = document.createElement('script');
-    //     script.setAttribute('type', 'application/ld+json');
-    //     script.textContent = JSON.stringify(personObject);
-    //     document.head.appendChild(script);
-    // },
-    // generateCollectionSchema(collection) {
-    //     const works = collection.works;
-    //     const schemaArray = [];
+    // ─── Navigation Utilities ───────────────────────────────────
 
-    //     const collectionObject = {
-    //         "@context": "https://schema.org",
-    //         "@id": `https://rod.dev/collections/${collection.path}`,
-    //         "@type": "Collection",
-    //         "name": collection.title,
-    //         "creator": "Rodrigo Barraza",
-    //         "hasPart": []
-    //     }
+    navigateToGeneration(router: any, id?: string) {
+        if (id) {
+            router.push({
+                pathname: '/generate',
+                query: { id },
+            });
+        } else {
+            router.push({
+                pathname: '/generate',
+            });
+        }
+    },
 
-    //     works.forEach((work) => {
-    //         if (work.imagePath) {
-    //             const imageObject = {
-    //                 "@context": "https://schema.org/",
-    //                 "@type": "ImageObject",
-    //                 "contentUrl": UtilityLibrary.renderAssetPath(work.imagePath, collection.path),
-    //                 "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
-    //                 // "acquireLicensePage": "https://example.com/how-to-use-my-images"
-    //             }
-    //             const creativeWorkObject = {
-    //                 "@context": "https://schema.org/",
-    //                 "@type": "CreativeWork",
-    //                 "name": work.title,
-    //                 "author": "Rodrigo Barraza",
-    //                 "image": imageObject,
-    //                 // "@id": "http://www.worldcat.org/oclc/17105155",
-    //                 // "isPartOf": {
-    //                 //     "@id": "http://example.org/colls/68"
-    //                 // },
-    //             }
-    //             schemaArray.push(creativeWorkObject);
-    //         } else if (work.videoPath) {
-    //             const videoObject = {
-    //                 "@context": "https://schema.org",
-    //                 "@type": "VideoObject",
-    //                 "name": work.title,
-    //                 "description": work.description,
-    //                 "thumbnailUrl": UtilityLibrary.renderAssetPath(work.poster, collection.path),
-    //                 "uploadDate": work.uploadDate,
-    //                 "duration": moment.duration(work.duration, 'seconds').toISOString(),
-    //                 "contentUrl": UtilityLibrary.renderAssetPath(work.videoPath, collection.path),
-    //                 // "embedUrl": "https://www.example.com/embed/123",
-    //                 // "interactionStatistic": {
-    //                 //     "@type": "InteractionCounter",
-    //                 //     "interactionType": { "@type": "WatchAction" },
-    //                 //     "userInteractionCount": 5647018
-    //                 // }
-    //             }
-    //             const creativeWorkObject = {
-    //                 "@context": "https://schema.org/",
-    //                 "@type": "CreativeWork",
-    //                 "name": work.title,
-    //                 "author": "Rodrigo Barraza",
-    //                 "video": videoObject,
-    //                 // "@id": "http://www.worldcat.org/oclc/17105155",
-    //                 // "isPartOf": {
-    //                 //     "@id": "http://example.org/colls/68"
-    //                 // },
-    //                 dateCreated: work.uploadDate,
-    //                 abstract: work.description,
-    //             }
-    //             schemaArray.push(creativeWorkObject);
-    //         }
-    //     });
-    //     collectionObject.hasPart = schemaArray;
-    //     const script = document.createElement('script');
-    //     script.setAttribute('type', 'application/ld+json');
-    //     script.textContent = JSON.stringify(collectionObject);
-    //     document.head.appendChild(script);
-    // },
-    // generateSitemap() {
-    //     const routes = ViewsCollection;
-    //     const collections = ArtCollectionsCollection;
-    //     const doc = document.implementation.createDocument('', '', null);
-        
-    //     const urlsetElement = doc.createElement("urlset");
-    //     urlsetElement.setAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
-    //     urlsetElement.setAttribute("xmlns:image", "http://www.google.com/schemas/sitemap-image/1.1");
-    //     urlsetElement.setAttribute("xmlns:video", "http://www.google.com/schemas/sitemap-video/1.1");
+    // ─── SSR Utilities ──────────────────────────────────────────
 
-    //     routes.forEach((route) => {
-    //         const urlElement = doc.createElement("url");
-    //         const locElement = doc.createElement('loc');
-    //         const lastmodElement = doc.createElement('lastmod');
-    //         const changefreqElement = doc.createElement('changefreq');
+    buildPageMeta(resolvedUrl: string, overrides: {
+        title: string;
+        description: string;
+        keywords: string;
+        image?: string;
+        type?: string;
+        date?: string;
+    }) {
+        return {
+            url: `https://rod.dev${resolvedUrl}`,
+            type: 'website',
+            ...overrides,
+        };
+    },
 
-    //         locElement.innerHTML =  `https://rod.dev${route.path}`;
-    //         lastmodElement.innerHTML = '2022-10-07';
-    //         changefreqElement.innerHTML = 'daily';
+    /**
+     * Convenience wrapper for simple pages that only need meta props from getServerSideProps.
+     */
+    buildServerSideMetaProps(context: any, overrides: {
+        title: string;
+        description: string;
+        keywords: string;
+        image?: string;
+    }) {
+        return {
+            props: {
+                meta: this.buildPageMeta(context.resolvedUrl, overrides),
+            },
+        };
+    },
 
-    //         urlElement.appendChild(locElement);
-    //         urlElement.appendChild(lastmodElement);
-    //         urlElement.appendChild(changefreqElement);
-
-    //         if (route.images?.length) {
-    //             route.images.forEach((image) => {
-    //                 const imageImageElement = doc.createElement('image:image');
-    //                 const imageLocElement = doc.createElement("image:loc"); 
-    //                 const imageTitleElement = doc.createElement("image:title");
-    //                 const imageCaptionElement = doc.createElement("image:caption");
-    //                 const imageGeoLocationElement = doc.createElement("image:geo_location");
-    //                 const imageLicenseElement = doc.createElement("image:license");
-
-    //                 imageLocElement.innerHTML = this.renderAssetPath(`images/${image.path}`);
-    //                 imageTitleElement.innerHTML = image.title;
-    //                 imageCaptionElement.innerHTML = image.caption;
-    //                 imageGeoLocationElement.innerHTML = image.geoLocation || 'Vancouver, Canada';
-    //                 imageLicenseElement.innerHTML = 'https://creativecommons.org/licenses/by-nc-nd/4.0/';
-
-    //                 urlElement.appendChild(imageImageElement);
-    //                 imageImageElement.appendChild(imageLocElement); 
-    //                 imageImageElement.appendChild(imageTitleElement);
-    //                 imageImageElement.appendChild(imageCaptionElement);
-    //                 imageImageElement.appendChild(imageGeoLocationElement);
-    //                 imageImageElement.appendChild(imageLicenseElement);
-    //             })
-    //         }
-
-    //         urlsetElement.appendChild(urlElement);
-
-    //     })
-        
-    //     collections.forEach((collection) => {
-    //         const urlElement = doc.createElement("url");
-    //         const locElement = doc.createElement('loc');
-    //         const lastmodElement = doc.createElement('lastmod');
-    //         const changefreqElement = doc.createElement('changefreq');
-
-    //         locElement.innerHTML =  `https://rod.dev/collections/${collection.path}`;
-    //         lastmodElement.innerHTML = '2022-10-05';
-    //         changefreqElement.innerHTML = 'daily';
-
-    //         urlElement.appendChild(locElement);
-    //         urlElement.appendChild(lastmodElement);
-    //         urlElement.appendChild(changefreqElement);
-
-    //         collection.works.forEach((work) => {
-    //             if (work.imagePath) {
-    //                 const imageImageElement = doc.createElement('image:image');
-    //                 const imageLocElement = doc.createElement("image:loc"); 
-    //                 const imageTitleElement = doc.createElement("image:title");
-    //                 const imageCaptionElement = doc.createElement("image:caption");
-    //                 const imageGeoLocationElement = doc.createElement("image:geo_location");
-    //                 const imageLicenseElement = doc.createElement("image:license");
-
-    //                 imageLocElement.innerHTML = this.renderAssetPath(work.imagePath, collection.path);
-    //                 imageTitleElement.innerHTML = work.title;
-    //                 imageCaptionElement.innerHTML = work.caption;
-    //                 imageGeoLocationElement.innerHTML = work.location || 'Vancouver, Canada';
-    //                 imageLicenseElement.innerHTML = 'https://creativecommons.org/licenses/by-nc-nd/4.0/';
-
-    //                 urlElement.appendChild(imageImageElement);
-    //                 imageImageElement.appendChild(imageLocElement); 
-    //                 imageImageElement.appendChild(imageTitleElement);
-    //                 imageImageElement.appendChild(imageCaptionElement);
-    //                 imageImageElement.appendChild(imageGeoLocationElement);
-    //                 imageImageElement.appendChild(imageLicenseElement);
-    //             } else if (work.videoPath) {
-    //                 const videoVideoElement = doc.createElement('video:video');
-    //                 const videoContentLocElement = doc.createElement("video:content_loc"); 
-    //                 const videoThumbnailLocElement = doc.createElement("video:thumbnail_loc"); 
-    //                 const videoGalleryLocElement = doc.createElement("video:gallery_loc"); 
-    //                 const videoTitleElement = doc.createElement("video:title");
-    //                 const videoDescriptionElement = doc.createElement("video:description");
-    //                 const videoDurationElement = doc.createElement("video:duration");
-    //                 const videoPublicationDateElement = doc.createElement("video:publication_date");
-    //                 const videoCategoryElement = doc.createElement("video:category");
-    //                 const videoFamilyFriendlyElement = doc.createElement("video:family_friendly");
-
-    //                 videoContentLocElement.innerHTML = this.renderAssetPath(work.videoPath, collection.path);
-    //                 videoThumbnailLocElement.innerHTML = this.renderAssetPath(work.poster, collection.path);
-    //                 videoGalleryLocElement.innerHTML = `https://rod.dev/collections/${collection.path}`;
-    //                 videoTitleElement.innerHTML = work.title;
-    //                 videoDescriptionElement.innerHTML = work.description;
-    //                 videoDurationElement.innerHTML = work.duration;
-    //                 videoPublicationDateElement.innerHTML = work.uploadDate;
-    //                 videoCategoryElement.innerHTML = collection.type;
-    //                 videoFamilyFriendlyElement.innerHTML = 'Yes';
-
-    //                 urlElement.appendChild(videoVideoElement);
-    //                 videoVideoElement.appendChild(videoContentLocElement);
-    //                 videoVideoElement.appendChild(videoThumbnailLocElement);
-    //                 videoVideoElement.appendChild(videoGalleryLocElement);
-    //                 videoVideoElement.appendChild(videoTitleElement);
-    //                 videoVideoElement.appendChild(videoDescriptionElement);
-    //                 videoVideoElement.appendChild(videoDurationElement);
-    //                 videoVideoElement.appendChild(videoPublicationDateElement);
-    //                 videoVideoElement.appendChild(videoCategoryElement);
-    //                 videoVideoElement.appendChild(videoFamilyFriendlyElement);
-    //             }
-    //         })
-            
-    //         urlsetElement.appendChild(urlElement);
-    //     })
-        
-    //     doc.appendChild(urlsetElement);
-    //     console.log(doc);
-
-    //     const oSerializer = new XMLSerializer();
-    //     const xmltext = oSerializer.serializeToString(doc);
-    //     console.log(xmltext);
-    // },
+    getClientIp(req: any) {
+        const forwarded = req.headers['x-forwarded-for'];
+        return forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress;
+    },
 };
 
 export default UtilityLibrary;

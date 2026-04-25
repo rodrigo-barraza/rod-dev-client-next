@@ -1,10 +1,9 @@
 import React from 'react'
 import style from './style.module.scss'
-import { useState, useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 export default function DialogComponent(props: any) {
     const {className, children, show}: {className: string, children: any, show: boolean} = props
-    const [getLogo, setLogo] = useState('')
     const dialogReference: any = useRef({})
     let combinedClassNames;
     if (className) {

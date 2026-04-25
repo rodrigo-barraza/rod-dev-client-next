@@ -1,31 +1,24 @@
 import FetchWrapper from '@/wrappers/FetchWrapper';
+import ApiConstants from '@/constants/ApiConstants';
+
+const S = ApiConstants.GYM_SERVICE;
 
 const GymApiLibrary = {
-    RODRIGO_SERVICE: process.env.NEXT_PUBLIC_RODRIGO_SERVICE,
-    GYM_SERVICE: 'gym-service',
     async getJournal() {
-        const method = 'GET';
-        let url = `${this.RODRIGO_SERVICE}${this.GYM_SERVICE}/journal`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        return FetchWrapper.get(S, 'journal');
     },
+
     async postJournal(exercise: string, reps: string, weight: string, unit: string, style: string, stance: string, equipment: string, position: string) {
-        const method = 'POST';
-        let url = `${this.RODRIGO_SERVICE}${this.GYM_SERVICE}/journal`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (exercise) { Object.assign(body, { exercise: exercise }) }
-        if (reps) { Object.assign(body, { reps: reps }) }
-        if (weight) { Object.assign(body, { weight: weight }) }
-        if (unit) { Object.assign(body, { unit: unit }) }
-        if (style) { Object.assign(body, { style: style }) }
-        if (stance) { Object.assign(body, { stance: stance }) }
-        if (equipment) { Object.assign(body, { equipment: equipment }) }
-        if (position) { Object.assign(body, { position: position }) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        const body: Record<string, any> = {};
+        if (exercise) body.exercise = exercise;
+        if (reps) body.reps = reps;
+        if (weight) body.weight = weight;
+        if (unit) body.unit = unit;
+        if (style) body.style = style;
+        if (stance) body.stance = stance;
+        if (equipment) body.equipment = equipment;
+        if (position) body.position = position;
+        return FetchWrapper.post(S, 'journal', body);
     },
 };
 

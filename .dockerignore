@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.gitignore
+.env.local
+*.md
+.vscode
+.prettierrc
+.prettierignore
+eslint.config.js
+tsconfig.tsbuildinfo

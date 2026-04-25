@@ -1,35 +1,19 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import style from './GalleryComponent.module.scss'
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import LikeApiLibrary from '@/libraries/LikeApiLibrary';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import BadgeComponent from '../BadgeComponent/BadgeComponent';
 import RenderApiLibrary from '@/libraries/RenderApiLibrary';
 import UtilityLibrary from '@/libraries/UtilityLibrary';
-import FavoriteApiLibrary from '@/libraries/FavoriteApiLibrary';
 import LikeComponent from '../LikeComponent/LikeComponent';
+import { useAlertContext } from '@/contexts/AlertContext';
 
 export default function GalleryComponent(props) {
     const router = useRouter()
     const { renders, getRenders, getGuest, mode } = props;
     const [isDeleting, setIsDeleting] = useState({})
-    const [isSharing, setIsSharing] = useState(false)
-
-    async function likeRender(id, like) {
-        if (!like) {
-            const postLike = await LikeApiLibrary.postLike(id)
-            if (postLike.data) {
-                  getRenders()
-            }
-        } else {
-            const postDelete = await LikeApiLibrary.deleteLike(id)
-            if (postDelete.data) {
-                  getRenders()
-            }
-        }
-        getGuest()
-    }
+    const { setMessage } = useAlertContext();
 
     async function deleteRender(id) {
       const deleteRender = await RenderApiLibrary.deleteRender(id);
@@ -50,53 +34,28 @@ export default function GalleryComponent(props) {
       setIsDeleting(deleteObject);
     }
 
-    function goToGeneration(id) {
-      router.push({
-        pathname: '/generate',
-        query: { id: id },
-      })
-    }
-
     function downloadGeneration(generation) {
       UtilityLibrary.downloadImage(generation.image, generation.id);
     }
   
     function shareGeneration(generation) {
-        const dialog = document.getElementById("dialog");
-        dialog.show();
-        setIsSharing(true)
-        const shareLink = `${window.location.origin}/generate?id=${generation.id}`
-        navigator.clipboard.writeText(shareLink);
+        setMessage('Copied Link!')
+        UtilityLibrary.shareLink(generation.id);
         
         const timeoutTimer = setTimeout(function () {
-            setIsSharing(false)
+            setMessage('')
             clearTimeout(timeoutTimer)
         }, 1000);
     }
 
-    async function postFavorite(render) {
-      if (!render.favorite) {
-        const postFavorite = await FavoriteApiLibrary.postFavorite(render.id)
-        if (postFavorite.data) {
-          getRenders()
-        }
-      } else {
-        const deleteFavorite = await FavoriteApiLibrary.deleteFavorite(render.id)
-        if (deleteFavorite.data) {
-          getRenders()
-        }
-      }
-    }
-
     return (
         <div className={`${style.GalleryComponent} ${style[mode]}`}>
-            <dialog id="dialog"></dialog>
             { renders?.map((render, index) => (
                 <div key={index} className="item">
                     <div className="container">
                     <picture className="RenderPictureComponent image">
                         { mode == 'grid' && (
-                            <img className="thumbnail" onClick={() => goToGeneration(render.id)} src={render.thumbnail || render.image}></img>
+                            <img className="thumbnail" onClick={() => UtilityLibrary.navigateToGeneration(router, render.id)} src={render.thumbnail || render.image}></img>
                         )}
                         { mode == 'list' && (
                             <img className="image" src={render.image}></img>
@@ -137,7 +96,7 @@ export default function GalleryComponent(props) {
                               className="mini"
                               label="Load"
                               type="button" 
-                              onClick={() => goToGeneration(render.id)}
+                              onClick={() => UtilityLibrary.navigateToGeneration(router, render.id)}
                               ></ButtonComponent>
                               { render.isCreator && (
                                 <ButtonComponent 

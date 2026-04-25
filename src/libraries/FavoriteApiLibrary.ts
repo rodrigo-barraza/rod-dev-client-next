@@ -1,26 +1,19 @@
 import FetchWrapper from '@/wrappers/FetchWrapper';
+import ApiConstants from '@/constants/ApiConstants';
+
+const S = ApiConstants.FAVORITE_SERVICE;
 
 const FavoriteApiLibrary = {
-    RODRIGO_SERVICE: process.env.NEXT_PUBLIC_RODRIGO_SERVICE,
-    FAVORITE_SERVICE: 'favorite-service',
-
     async postFavorite(renderId?: string) {
-        const method = 'POST';
-        let url = `${this.RODRIGO_SERVICE}${this.FAVORITE_SERVICE}/favorite`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (renderId) { Object.assign(body, { renderId: renderId }) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        const body: Record<string, any> = {};
+        if (renderId) body.renderId = renderId;
+        return FetchWrapper.post(S, 'favorite', body);
     },
+
     async deleteFavorite(renderId?: string) {
-        const method = 'DELETE';
-        let url = `${this.RODRIGO_SERVICE}${this.FAVORITE_SERVICE}/favorite`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (renderId) { Object.assign(body, { renderId: renderId }) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        const body: Record<string, any> = {};
+        if (renderId) body.renderId = renderId;
+        return FetchWrapper.del(S, 'favorite', body);
     },
 };
 

@@ -2,13 +2,11 @@ import Link from 'next/link'
 import styles from './FooterComponent.module.scss'
 import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
 import SocialsCollection from '@/collections/SocialsCollection'
+import UtilityLibrary from '@/libraries/UtilityLibrary'
 
 
 // const FooterComponent: React.FC<{ userId: string }> = () => {
 const FooterComponent: React.FC = () => {
-    function getLogo(logo) {
-        return `https://assets.rod.dev/icons/${logo}.png`
-    }
 
     return (
         <footer className={styles.FooterComponent}>
@@ -100,7 +98,7 @@ const FooterComponent: React.FC = () => {
                                     <li className={`social ${social.type}`} key={socialIndex}>
                                         <Link target="_blank" href={social.url}>
                                             {/* <div className="logo"></div> */}
-                                            <img className="logo" src={getLogo(social.type)} alt={social.type}></img>
+                                            <img className="logo" src={UtilityLibrary.getIconUrl(social.type)} alt={social.type}></img>
                                             <span>{social.name}</span>
                                         </Link>
                                     </li>

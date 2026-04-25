@@ -1,33 +1,21 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import lodash from 'lodash'
 import styles from './index.module.scss'
 import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
+import SeoHead from '@/components/SeoHead/SeoHead'
 
-export const getServerSideProps = async (context: any) => {
-    const { req, query, res, resolvedUrl } = context
-
-    let returnBody = {
-        props: {
-            meta: {},
-        }
-    }
-
-    returnBody.props.meta = {
-        url: `https://rod.dev${resolvedUrl}`,
+export const getServerSideProps = async (context: any) =>
+    UtilityLibrary.buildServerSideMetaProps(context, {
         title: 'Rodrigo Barraza: Photographer, Software Engineer, Artist',
         description: 'Visual portfolio of Rodrigo Barraza, a Vancouver-based photographer, software engineer and artist.',
         keywords: 'rodrigo barraza',
-        type: 'website',
         image: 'https://assets.rod.dev/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
-    }
+    });
 
-    return returnBody;
-}
     
 
 export default function Index(props) {
@@ -37,14 +25,6 @@ export default function Index(props) {
     useEffect(() => {
         async function getRender() {
             const collection = lodash.shuffle(ArtCollectionsCollection);
-            // const getRender1 = await RenderApiLibrary.getRender('IlH3M_bswMz')
-            // const getRender2 = await RenderApiLibrary.getRender('4C5IlvWklYQ')
-            // const getRender3 = await RenderApiLibrary.getRender('_Nwlq6_7hvx')
-
-            // if (getRender1.data && getRender2.data && getRender3.data) {
-            //     collection.unshift(getRender1.data, getRender2.data, getRender3.data)
-            // }
-            
             setShuffledArtCollection(collection)
         }
         getRender()
@@ -52,26 +32,7 @@ export default function Index(props) {
 
     return (
     <main className={styles.home}>
-        <Head>
-            <title>{meta.title}</title>
-            <meta name="description" content={meta.description}/>
-            <meta name="keywords" content={meta.keywords}/>
-                <meta property="og:url" content={meta.url}/>
-            <meta property="og:type" content={meta.type}/>
-            <meta property="og:site_name" content="Rodrigo Barraza"/>
-            <meta property="og:description" content={meta.description}/>
-            <meta property="og:title" content={meta.title}/>
-            <meta property="og:image" content={meta.image} />
-            {meta.date && (
-                <meta property='article:published_time' content={meta.date}/>
-            )}
-            <meta name="twitter:card" content="summary_large_image"/>
-            <meta name="twitter:title" content={meta.title}/>
-            <meta name="twitter:site" content="@rawdreygo"/>
-            <meta name="twitter:url" content={meta.url}/>
-            <meta name="twitter:image" content={meta.image}/>
-            <link rel="icon" href="/images/favicon.ico" />
-        </Head>
+        <SeoHead meta={meta} />
         <div className="container" itemProp="creator" itemScope itemType="http://schema.org/Person">
             <h1>
                 <span className="full-name"><span itemProp="givenName">Rodrigo</span> <span itemProp="familyName">Barraza</span></span>: <span itemProp="jobTitle">photographer</span>, <span itemProp="jobTitle">software engineer</span>, <span itemProp="jobTitle">artist</span>.

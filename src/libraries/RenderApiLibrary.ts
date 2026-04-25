@@ -1,131 +1,65 @@
 import FetchWrapper from '@/wrappers/FetchWrapper';
+import ApiConstants from '@/constants/ApiConstants';
 
-const EventApiLibrary = {
-    RODRIGO_SERVICE: process.env.NEXT_PUBLIC_RODRIGO_SERVICE,
-    SESSION_SERVICE: 'session-service',
-    RENDER_SERVICE: 'render-service',
-    
-    async postRender(prompt: string, sampling: string, cfg: number, style: string, negativePrompt: string): Promise<Response> {
-        const method = 'POST';
-        const form = {
-            prompt: prompt,
-            negativePrompt: negativePrompt,
-            sampler: sampling,
-            cfg: cfg,
-            style: style,
-        };
-        const url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
+const S = ApiConstants.RENDER_SERVICE;
+
+const RenderApiLibrary = {
+    async postRender(prompt: string, sampler: string, cfg: number, style: string, negativePrompt: string, aspectRatio?: string): Promise<Response | undefined> {
+        const url = `${ApiConstants.RODRIGO_SERVICE}${S}/render`;
         try {
-            if (typeof window !== 'undefined') {
-            }
             const headers = new Headers({
                 'Content-Type': 'application/json',
-                'Session': sessionStorage.id,
-                'Local': localStorage.id,
-            })
+            });
+            if (typeof window !== 'undefined') {
+                headers.set('Session', sessionStorage.id);
+                headers.set('Local', localStorage.id);
+            }
             const response = await fetch(url, {
-                method: method,
-                headers: headers,
-                body: JSON.stringify(form),
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ prompt, negativePrompt, sampler, cfg, style, aspectRatio }),
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response;
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     },
-    async getRenderNew(id?: string) {
-        let data, error, response;
-        const method = 'GET';
-        let searchParams;
-        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
-        try {
-            const headers = new Headers({
-                'Content-Type': 'application/json',
-            })
 
-            if (typeof window !== 'undefined') {
-                headers['Session'] = sessionStorage.id
-                headers['Local'] = localStorage.id
-            }
-
-            if (id) {
-                searchParams = new URLSearchParams({
-                    id: id
-                })
-                url = `${url}?${searchParams.toString()}`
-            }
-
-            response = await fetch(url, {
-                method: method,
-                headers: headers,
-            });
-            if (response.ok) {
-                data = response
-            } else {
-                error = response
-            }
-                
-        } catch (err) {
-            error = err
-        }
-        return { data, error, response }
-    },
     async getRenders(limit?: string, mode?: string) {
-        const method = 'GET';
-        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/renders`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (limit) { searchParams.append('limit', limit) }
-        if (mode) { searchParams.append('mode', mode) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        const params: Record<string, string> = {};
+        if (limit) params.limit = limit;
+        if (mode) params.mode = mode;
+        return FetchWrapper.get(S, 'renders', params);
     },
+
     async getLikedRenders(limit?: string) {
-        const method = 'GET';
-        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/likes`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (limit) { searchParams.append('limit', limit) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        const params: Record<string, string> = {};
+        if (limit) params.limit = limit;
+        return FetchWrapper.get(S, 'likes', params);
     },
+
     async getRender(id?: string) {
-        const method = 'GET';
-        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (id) { searchParams.append('id', id) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        const params: Record<string, string> = {};
+        if (id) params.id = id;
+        return FetchWrapper.get(S, 'render', params);
     },
+
     async deleteRender(id?: string) {
-        const method = 'DELETE';
-        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/render`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        if (id) { Object.assign(body, { id: id }) }
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        const body: Record<string, any> = {};
+        if (id) body.id = id;
+        return FetchWrapper.del(S, 'render', body);
     },
+
     async getCount() {
-        const method = 'GET'
-        const url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/count`
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        return FetchWrapper.get(S, 'count');
     },
+
     async getStatus() {
-        const method = 'GET';
-        let url = `${this.RODRIGO_SERVICE}${this.RENDER_SERVICE}/status`;
-        const headers = new Headers({})
-        const body = {}
-        const searchParams = new URLSearchParams({})
-        return await FetchWrapper.fetch(method, url, headers, body, searchParams)
+        return FetchWrapper.get(S, 'status');
     },
 };
 
-export default EventApiLibrary;
+export default RenderApiLibrary;

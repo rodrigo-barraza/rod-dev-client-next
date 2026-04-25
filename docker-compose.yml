@@ -1,0 +1,9 @@
+services:
+  rod-dev-client:
+    build: .
+    container_name: rod-dev-client
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_RODRIGO_SERVICE=${NEXT_PUBLIC_RODRIGO_SERVICE:-http://localhost:6666}

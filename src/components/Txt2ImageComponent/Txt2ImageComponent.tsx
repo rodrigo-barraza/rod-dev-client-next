@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import StyleCollection from '@/collections/StyleCollection'
 import SamplerCollection from '@/collections/SamplerCollection'
 import AspectRatioCollection from '@/collections/AspectRatioCollection'
-import EventApiLibrary from '@/libraries/EventApiLibrary'
+
 import RenderApiLibrary from '@/libraries/RenderApiLibrary'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import SelectComponent from '@/components//SelectComponent/SelectComponent'
@@ -42,19 +42,13 @@ export default function Txt2ImageComponent({render, setGuest}) {
     const [aspectRatio, setAspectRatio] = useState(AspectRatioCollection[0].value)
     const { isRenderApiAvailable } = useApplicationState();
 
-    const tester = {
-        hello: 'world'
-    }
 
-    const [test, setTest] = useState({
-        ...tester
-    })
 
     const { setMessage } = useAlertContext();
 
     const renderImage = useCallback(() => {
         setIsImageLoading(true)
-        EventApiLibrary.postRender(newPrompt, sampler, cfg, newStyle, '', aspectRatio)
+        RenderApiLibrary.postRender(newPrompt, sampler, cfg, newStyle, '', aspectRatio)
         .then(response => response.text())
         .then(result => {
             const parsedResult = JSON.parse(result)
@@ -146,14 +140,12 @@ export default function Txt2ImageComponent({render, setGuest}) {
 
     function shareGeneration() {
         setMessage('Copied Link!')
-        const shareLink = `${window.location.origin}${currentPage}?id=${generatedImageId}`
-        navigator.clipboard.writeText(shareLink);
+        UtilityLibrary.shareLink(generatedImageId);
         
         const timeoutTimer = setTimeout(function () {
             setMessage('')
             clearTimeout(timeoutTimer)
         }, 1000);
-
     }
 
     return (

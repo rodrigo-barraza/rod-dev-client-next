@@ -2,7 +2,6 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import GymApiLibrary from '@/libraries/GymApiLibrary'
 import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
@@ -10,30 +9,19 @@ import InputComponent from '@/components/InputComponent/InputComponent'
 import style from './index.module.scss'
 import ExerciseCollection from '@/collections/ExerciseCollection4'
 import DialogComponent from '@/components/DialogComponent'
-import moment from 'moment'
+
 import ExerciseComponent from '@/components/ExerciseComponent/ExerciseComponent'
+import SeoHead from '@/components/SeoHead/SeoHead'
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const { req, query, res, resolvedUrl } = context
-
-  let returnBody = {
-      props: {
-          meta: {},
-          guest: {}
-      }
-  }
-
-  // returnBody.props.meta = {
-  //     url: `https://rod.dev${resolvedUrl}`,
-  //     title: 'Text to Image - Your Likes',
-  //     description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
-  //     keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
-  //     type: 'website',
-  //     image: 'https://renders.rod.dev/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
-  // }
-
-  return returnBody
+  const metaProps = UtilityLibrary.buildServerSideMetaProps(context, {
+      title: 'Gym Tracker',
+      description: 'Gym exercise tracking and journal.',
+      keywords: 'gym, exercise, tracking, journal',
+  });
+  return { props: { ...metaProps.props, guest: {} } };
 }
+
 
 export default function Gym(props) {
     const router = useRouter()
@@ -59,7 +47,7 @@ export default function Gym(props) {
     const [subtitle, setSubtitle] = useState('')
     const [averageTotalVolume, setAverageTotalVolume] = useState(0)
 
-    const [today, setToday] = useState(moment().format('YYYY-MM-DD'))
+    const [today, setToday] = useState(UtilityLibrary.todayISOString())
 
     async function getJournal() {
         const { data, error, response } = await GymApiLibrary.getJournal()
@@ -67,10 +55,8 @@ export default function Gym(props) {
             setOriginalJournal(data)
             const superExercises = {}
             data.slice(0, 1000).forEach((set, key) => {
-                const setDate = moment(set.date)
-                const currentDate = moment()
-                const differenceInDays = currentDate.diff(setDate, 'days')
-                const date = moment(set.date).format('YYYY-MM-DD')
+                const differenceInDays = UtilityLibrary.daysSince(set.date)
+                const date = UtilityLibrary.toISODateString(set.date)
                 const exerciseKey = `${set.exercise}`
 
                 if (!superExercises[date]) {
@@ -102,10 +88,9 @@ export default function Gym(props) {
 
     function findLastExerciseEntry(exerciseName, exerciseDate) {
         let lastEntry = null
-        console.log(1)
         Object.values(journal).forEach((day) => {
             Object.values(day).forEach((dayExercise) => {
-                if (dayExercise.exercise == exerciseName && moment(dayExercise.date).format('YYYY-MM-DD') !== exerciseDate) {
+                if (dayExercise.exercise == exerciseName && UtilityLibrary.toISODateString(dayExercise.date) !== exerciseDate) {
                     if (lastEntry === null || dayExercise.date > lastEntry.date) {
                       lastEntry = dayExercise
                     }
@@ -153,12 +138,9 @@ export default function Gym(props) {
     }
 
     function lastExerciseEntry(exercise: any) {
-        console.log(exercise.name)
         let lastEntry = null
         Object.values(journal).forEach((exercises) => {
-            // console.log(exercises)
             Object.values(exercises).forEach((entry) => {
-                console.log(entry.exercise === exercise.name)
                 if (entry.exercise == exercise.name) {
                     if (lastEntry === null || entry.date > lastEntry.date) {
                       lastEntry = entry
@@ -166,7 +148,6 @@ export default function Gym(props) {
                 }
             })
         })
-        console.log(lastEntry)
         return lastEntry
     }
 
@@ -176,27 +157,6 @@ export default function Gym(props) {
         setReps('')
     }
 
-    function individualSubtitle(entry: any) {
-        if (entry) {
-            let subtitle = ''
-            if (entry.form) {
-                subtitle = subtitle ? `${subtitle}, ${entry.form}` : `${entry.form} `
-            }
-            if (entry.style) {
-                subtitle = subtitle ? `${subtitle}, ${entry.style}` : `${entry.style} `
-            }
-            if (entry.stance) {
-                subtitle = subtitle ? `${subtitle}, ${entry.stance}` : `${entry.stance} `
-            }
-            if (entry.position) {
-                subtitle = subtitle ? `${subtitle}, ${entry.position}` : `${entry.position} `
-            }
-            if (entry.equipment) {
-                subtitle = subtitle ? `${subtitle}, ${entry.equipment}` : `${entry.equipment} `
-            }
-            return subtitle
-        }
-    }
     function daySinceLastExercise(workout) {
         let days = '(...)'
         let lowestExercise = null
@@ -213,39 +173,15 @@ export default function Gym(props) {
         return days
     }
 
-    function calculateSetVolume(weight: string, volume: string) {
-        return Number(weight) * Number(volume)
-    }
-
-    function calculateTotalVolume(sets: object[]) {
-        if (sets && sets.length) {
-            let totalVolume = 0
-            sets.forEach((set: any) => {
-            totalVolume += calculateSetVolume(set.weight, set.reps)
-            })
-            return totalVolume
-        }
-    }
-    
-    function calculateTotalDayVolume(date) {
-        let totalVolume = 0
-        Object.values(journal[date]).forEach((exercise) => {
-            totalVolume += calculateTotalVolume(exercise.sets)
-        })
-        return totalVolume
-    }
-
     function calculateAverageTotalVolume(currentJournal) {
         let totalVolume = 0
         let totalExercises = 0
         Object.values(currentJournal).forEach((day) => {
             Object.values(day).forEach((exercise) => {
-                console.log(1111, calculateTotalVolume(exercise.sets))
-                totalVolume += calculateTotalVolume(exercise.sets)
+                totalVolume += UtilityLibrary.calculateTotalVolume(exercise.sets)
                 totalExercises++
             })
         })
-        console.log(totalExercises)
         return (totalVolume / totalExercises).toFixed(1)
     }
 
@@ -254,7 +190,7 @@ export default function Gym(props) {
         Object.keys(currentJournal).forEach((date) => {
             let dayVolume = 0
             Object.keys(currentJournal[date]).forEach((day) => {
-                dayVolume += calculateTotalVolume(currentJournal[date][day].sets)
+                dayVolume += UtilityLibrary.calculateTotalVolume(currentJournal[date][day].sets)
             })
             totalAverageVolume += dayVolume
         })
@@ -266,7 +202,7 @@ export default function Gym(props) {
         Object.keys(currentJournal).forEach((date) => {
             let dayVolume = 0
             Object.keys(currentJournal[date]).forEach((day) => {
-                dayVolume += calculateTotalVolume(currentJournal[date][day].sets)
+                dayVolume += UtilityLibrary.calculateTotalVolume(currentJournal[date][day].sets)
             })
             totalVolume.push(dayVolume)
         })
@@ -282,7 +218,7 @@ export default function Gym(props) {
         let totalVolume = []
         Object.values(currentJournal).forEach((day) => {
             Object.values(day).forEach((exercise) => {
-                totalVolume.push(calculateTotalVolume(exercise.sets))
+                totalVolume.push(UtilityLibrary.calculateTotalVolume(exercise.sets))
             })
         })
         totalVolume.sort((a, b) => a - b)
@@ -306,7 +242,7 @@ export default function Gym(props) {
             setExerciseStep('log')
         }
 
-        setSubtitle(individualSubtitle(selectedExercise))
+        setSubtitle(UtilityLibrary.buildExerciseSubtitle(selectedExercise))
 
         const newQuery = { ...router.query }
         // set query parameters
@@ -371,23 +307,7 @@ export default function Gym(props) {
 
     return (
     <main className={style.GymPage}>
-        <Head>
-            <title>{meta.title}</title>
-            <meta name="description" content={meta.description}/>
-            <meta name="keywords" content={meta.keywords}/>
-            <meta property="og:url" content={meta.url}/>
-            <meta property="og:type" content={meta.type}/>
-            <meta property="og:site_name" content="Rodrigo Barraza"/>
-            <meta property="og:description" content={meta.description}/>
-            <meta property="og:title" content={meta.title}/>
-            <meta property="og:image" content={meta.image} />
-            <meta name="twitter:card" content="summary_large_image"/>
-            <meta name="twitter:title" content={meta.title}/>
-            <meta name="twitter:site" content="@rawdreygo"/>
-            <meta name="twitter:url" content={meta.url}/>
-            <meta name="twitter:image" content={meta.image}/>
-            <link rel="icon" href="/images/favicon.ico" />
-        </Head>
+        <SeoHead meta={meta} />
         <div className="container">
             <div className="CardComponent">
                 <h1>Track:</h1>

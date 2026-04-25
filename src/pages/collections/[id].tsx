@@ -2,25 +2,17 @@ import lodash from 'lodash'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Head from 'next/head'
 import styles from './[id].module.scss'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
+import SeoHead from '@/components/SeoHead/SeoHead'
 
 export const getServerSideProps = async (context: any) => {
-    const { req, query, res, resolvedUrl } = context
+    const { query, resolvedUrl } = context
     
     const currentCollectionPath = query.id
     const currentCollection = ArtCollectionsCollection.find(collection => collection.path === currentCollectionPath)
     const currentCollectionWorks = currentCollection?.works as Array<any>
-
-    let returnBody = {
-        props: {
-            meta: {},
-            currentCollectionWorks: currentCollectionWorks,
-            currentCollection: currentCollection,
-        }
-    }
 
     let image = null;
     if (currentCollection.thumbnail) {
@@ -31,15 +23,18 @@ export const getServerSideProps = async (context: any) => {
         image = UtilityLibrary.renderAssetPath(currentCollection.poster, currentCollection.path)
     }
 
-    returnBody.props.meta = {
-        url: `https://rod.dev${resolvedUrl}`,
-        title: `${currentCollection?.documentTitle}`,
-        description: `${currentCollection?.documentDescription}`,
-        keywords: `${currentCollection?.documentKeywords}`,
-        type: 'website',
-        image: image
-    }
-    return returnBody;
+    return {
+        props: {
+            meta: UtilityLibrary.buildPageMeta(resolvedUrl, {
+                title: `${currentCollection?.documentTitle}`,
+                description: `${currentCollection?.documentDescription}`,
+                keywords: `${currentCollection?.documentKeywords}`,
+                image: image,
+            }),
+            currentCollectionWorks: currentCollectionWorks,
+            currentCollection: currentCollection,
+        }
+    };
 }
 
 export default function Collection(props) {
@@ -53,28 +48,7 @@ export default function Collection(props) {
 
     return (
         <main className={styles.CollectionView}>
-            <Head>
-                <title>{meta.title}</title>
-                <meta name="description" content={meta.description}/>
-                <meta name="keywords" content={meta.keywords}/>
-                <meta property="og:url" content={meta.url}/>
-                <meta property="og:type" content={meta.type}/>
-                <meta property="og:site_name" content="Rodrigo Barraza"/>
-                <meta property="og:description" content={meta.description}/>
-                <meta property="og:title" content={meta.title}/>
-                { meta.image && (
-                    <meta property="og:image" content={meta.image} />
-                )}
-                { meta.createdAt && (
-                    <meta property='article:published_time' content={meta.createdAt}/>
-                )}
-                <meta name="twitter:card" content="summary_large_image"/>
-                <meta name="twitter:title" content={meta.title}/>
-                <meta name="twitter:site" content="@rawdreygo"/>
-                <meta name="twitter:url" content={meta.url}/>
-                <meta name="twitter:image" content={meta.image}/>
-                <link rel="icon" href="/images/favicon.ico" />
-            </Head>
+            <SeoHead meta={meta} />
             <div className="collection">
                 <div className="collection-details">
                     <div className="container">
