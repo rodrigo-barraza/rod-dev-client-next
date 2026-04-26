@@ -16,7 +16,7 @@ set -euo pipefail
 
 # ── Config ────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-IMAGE_NAME="rod-dev-client"
+IMAGE_NAME="rod-dev"
 NAS_HOST="nas"                            # SSH config alias (see setup-ssh.sh)
 NAS_COMPOSE_DIR="/volume1/docker/rod-dev" # Synology path where compose lives
 NAS_SMB_DIR="/mnt/k/rod-dev"              # Fallback: Windows SMB mount
