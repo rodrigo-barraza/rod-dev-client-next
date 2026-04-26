@@ -3,7 +3,7 @@ const ProjectsCollection = [
         title: "Text-to-Image Generator",
         year: "May 2023",
         link: "https://rod.dev/generate",
-        github: "https://github.com/rodrigo-barraza/rod-dev-client-next",
+        github: "https://github.com/rodrigo-barraza/rod.dev",
         description: 'A deep learning, text-to-image model and user-interface released in 2023. It was created to generated detailed images conditioned on text descriptions, although it can be applied to other tasks such as inpainting, outpainting, and generating image-to-image translations guided by a text prompt.',
         languages: ["TypeScript", "React", "Next.js"],
     },

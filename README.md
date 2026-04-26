@@ -1,4 +1,4 @@
-# Rod Dev Client — Portfolio & Gym Tracker
+# rod.dev — Portfolio & Gym Tracker
 
 A Next.js portfolio site for [rod.dev](https://rod.dev) featuring an AI art gallery, project showcase, and gym tracking application. Built with the Pages Router, TypeScript, SCSS Modules, and the Temporal API.
 
@@ -29,7 +29,7 @@ A Next.js portfolio site for [rod.dev](https://rod.dev) featuring an AI art gall
 ## 📂 Directory Structure
 
 ```
-rod-dev-client-next/
+rod.dev/
 ├── public/                              # Static assets
 └── src/
     ├── pages/                           # Next.js Pages Router
@@ -139,6 +139,6 @@ npm run format        # Format all files with Prettier
 npm run format:check  # Check formatting without writing
 ```
 
-## ☀️ Part of [Sun](https://github.com/rodrigo-barraza)
+## ☀️ Part of [Sun](https://github.com/rodrigo-barraza/rod.dev)
 
-Rod Dev Client is one frontend in the Sun ecosystem — a collection of composable backend services and frontends designed to be mixed and matched.
+rod.dev is one frontend in the Sun ecosystem — a collection of composable backend services and frontends designed to be mixed and matched.

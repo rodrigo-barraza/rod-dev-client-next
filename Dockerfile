@@ -1,5 +1,5 @@
 # ============================================================
-# Rod Dev Client Next — Multi-stage Docker Build
+# rod.dev — Multi-stage Docker Build
 # Uses Next.js standalone output for minimal image size
 # ============================================================
 

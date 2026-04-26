@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# Rod Dev Client — Build & Deploy to Synology NAS
+# rod.dev — Build & Deploy to Synology NAS
 #
 # Builds the Docker image locally, pipes it over SSH to the
 # NAS, and restarts the container — zero manual UI steps.
@@ -56,7 +56,7 @@ DEPLOY_START=$SECONDS
 # ── Header ────────────────────────────────────────────────────
 echo ""
 echo -e "${CYAN}${BOLD}══════════════════════════════════════════════════════${RESET}"
-echo -e "${CYAN}${BOLD}  🚀 Rod Dev Client — Deploy to Synology${RESET}"
+echo -e "${CYAN}${BOLD}  🚀 rod.dev — Deploy to Synology${RESET}"
 if $DRY_RUN; then
   echo -e "${YELLOW}${BOLD}  ⚠  DRY RUN — no changes will be made${RESET}"
 fi
