@@ -1,6 +1,6 @@
 services:
-  rod-dev:
-    image: rod-dev:latest
+  rod-dev-client:
+    image: rod-dev-client:latest
     container_name: rod-dev
     restart: unless-stopped
     ports:

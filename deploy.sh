@@ -14,7 +14,7 @@
 # ============================================================
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-IMAGE_NAME="rod-dev"
+IMAGE_NAME="rod-dev-client"
 DISPLAY_NAME="🚀 rod.dev"
 SKIP_ENV_DEPLOY="true"   # .env.deploy is optional for rod-dev
 
