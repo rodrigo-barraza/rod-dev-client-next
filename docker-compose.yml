@@ -1,7 +1,7 @@
 services:
   rod-dev-client:
     image: rod-dev-client:latest
-    container_name: rod-dev
+    container_name: rod-dev-client
     restart: unless-stopped
     ports:
       - "3000:3000"

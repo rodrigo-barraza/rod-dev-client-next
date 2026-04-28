@@ -15,7 +15,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 IMAGE_NAME="rod-dev-client"
-DISPLAY_NAME="🚀 rod.dev"
+DISPLAY_NAME="🚀 Rod Dev Client"
 SKIP_ENV_DEPLOY="true"   # .env.deploy is optional for rod-dev
 
 # ── Inject NEXT_PUBLIC_* as Docker build arg ──────────────────
