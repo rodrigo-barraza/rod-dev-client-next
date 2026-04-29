@@ -2,7 +2,7 @@
 # ============================================================
 # rod.dev — Build & Deploy to Synology NAS
 #
-# Thin wrapper — all logic lives in ../deploy/lib.sh
+# Thin wrapper — all logic lives in ../deploy-kit/lib.sh
 # Hook: injects NEXT_PUBLIC_RODRIGO_SERVICE as build arg.
 # Note: .env.deploy is optional for this service.
 #
@@ -38,4 +38,4 @@ EXTRA_SSH_SYNC() {
   fi
 }
 
-source "${SCRIPT_DIR}/../deploy/lib.sh"
+source "${SCRIPT_DIR}/../deploy-kit/lib.sh"
