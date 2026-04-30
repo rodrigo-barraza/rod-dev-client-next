@@ -11,7 +11,7 @@ export const getServerSideProps = async (context: any) =>
         title: 'The Software Engineer, Photographer, Artist: Rodrigo Barraza',
         description: 'About Rodrigo Barraza, a Vancouver software engineer, photographer and artist.',
         keywords: 'rodrigo, barraza, rodrigo barraza, vancouver, photographer, software engineer, artist, ai artist, animator, emily carr university',
-        image: 'https://assets.rod.dev/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
+        image: 'https://assets.rod.dev/rod-dev-assets/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
     });
 
     
@@ -26,7 +26,7 @@ export default function AboutView(props) {
                 <div className="layout">
                     <div className="sidebar">
                         <Image
-                            src="https://assets.rod.dev/images/rodrigo-barraza-black-and-white-portrait.jpg"
+                            src="https://assets.rod.dev/rod-dev-assets/images/rodrigo-barraza-black-and-white-portrait.jpg"
                             alt="A black and white photograph of Rodrigo Barraza"
                             width={ 250 }
                             height={ 250 }>

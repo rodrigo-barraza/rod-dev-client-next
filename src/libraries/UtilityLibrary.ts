@@ -5,7 +5,8 @@ import StyleCollection from '@/collections/StyleCollection';
 import { Temporal as TemporalPolyfill } from '@js-temporal/polyfill';
 const Temporal: typeof TemporalPolyfill = (globalThis as any).Temporal ?? TemporalPolyfill;
 
-const ASSETS_BASE_URL = 'https://assets.rod.dev';
+const ASSETS_BASE_URL = 'https://assets.rod.dev/rod-dev-assets';
+const GENERATIONS_BASE_URL = 'https://assets.rod.dev/rod-dev-generations';
 
 const UtilityLibrary = {
     // ─── Date Utilities (Temporal API) ──────────────────────────
@@ -235,6 +236,13 @@ const UtilityLibrary = {
      */
     getIconUrl(icon: string): string {
         return `${ASSETS_BASE_URL}/icons/${icon}.png`;
+    },
+
+    /**
+     * Construct the CDN URL for a generation image.
+     */
+    getGenerationUrl(id: string, extension = 'jpg'): string {
+        return `${GENERATIONS_BASE_URL}/${id}.${extension}`;
     },
 
     imageFullScreen(event: Event & { target: Element }, collectionPath: string, workImagePath: string) {

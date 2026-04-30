@@ -13,7 +13,7 @@ export const getServerSideProps = async (context: any) =>
         title: 'Rodrigo Barraza: Photographer, Software Engineer, Artist',
         description: 'Visual portfolio of Rodrigo Barraza, a Vancouver-based photographer, software engineer and artist.',
         keywords: 'rodrigo barraza',
-        image: 'https://assets.rod.dev/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
+        image: 'https://assets.rod.dev/rod-dev-assets/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
     });
 
     

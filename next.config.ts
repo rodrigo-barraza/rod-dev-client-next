@@ -16,10 +16,6 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "assets.rod.dev",
       },
-      {
-        protocol: "https",
-        hostname: "renders.rod.dev",
-      },
     ],
   },
 };

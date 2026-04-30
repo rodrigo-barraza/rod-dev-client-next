@@ -49,7 +49,7 @@ export const getServerSideProps = async (context) => {
     title: 'Rodrigo Barraza - Text to Image: AI Image Generation',
     description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
     keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
-    image: returnBody.props.render?.image ? returnBody.props.render.image : 'https://renders.rod.dev/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg',
+    image: returnBody.props.render?.image ? returnBody.props.render.image : 'https://assets.rod.dev/rod-dev-generations/2f996be4-b935-42db-9d1e-01effabbc5c6.jpg',
   });
 
   const ip = UtilityLibrary.getClientIp(req);
