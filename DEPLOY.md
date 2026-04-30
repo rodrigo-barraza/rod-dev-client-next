@@ -45,7 +45,7 @@ If SSH isn't configured, the script falls back to exporting a tarball to `K:\rod
 
 ```bash
 # .env.deploy
-NEXT_PUBLIC_RODRIGO_SERVICE=http://192.168.86.2:6666
+NEXT_PUBLIC_RODRIGO_SERVICE=http://<host>:6666
 ```
 
 ---
@@ -76,7 +76,7 @@ local build → docker push nas:5000/service → docker compose pull → up
 **Steps:**
 1. Deploy `registry:2` on Synology via Container Manager
 2. Configure WSL Docker daemon to trust the insecure registry (`/etc/docker/daemon.json`)
-3. Tag images as `192.168.86.2:5000/<service>:<tag>`
+3. Tag images as `<host>:5000/<service>:<tag>`
 4. Update deploy scripts: `docker push` + remote `docker compose pull && up`
 5. Tag convention: `:latest` + `:<git-sha-short>` for instant rollback
 
