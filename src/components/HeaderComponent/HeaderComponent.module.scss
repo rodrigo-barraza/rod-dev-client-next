@@ -19,6 +19,18 @@
         background: black;
         overflow: hidden;
         transition: all 1s ease-in-out;
+
+        /* ── Glitch layer ─────────────────────────────── */
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            will-change: clip-path, transform;
+            animation: stripeGlitch 12s step-end infinite;
+            pointer-events: none;
+        }
+
         :global(.video) {
             width: 100%;
         }
@@ -253,4 +265,40 @@
             }
         }
     }
+}
+
+/* ── Stripe glitch keyframes ──────────────────────────────────
+   12 s cycle · idle most of the time · bursts with clip-path
+   scanline tears + subtle horizontal jitter.
+   Uses step-end timing for that harsh digital-artifact look.
+   GPU-composited via clip-path + translate3d.
+   ──────────────────────────────────────────────────────────── */
+
+@keyframes stripeGlitch {
+    /* idle — no visual change */
+    0%    { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
+
+    /* first burst ≈ 87 % mark */
+    87%   { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
+    87.3% { clip-path: inset(15% 0 60% 0);                                           transform: translate3d(-4px, 0, 0); }
+    87.6% { clip-path: inset(55% 0 10% 0);                                           transform: translate3d(3px, 0, 0); }
+    87.9% { clip-path: inset(30% 0 40% 0);                                           transform: translate3d(-2px, 0, 0); }
+    88.2% { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
+
+    /* second burst */
+    89%   { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
+    89.2% { clip-path: inset(70% 0 5% 0);                                            transform: translate3d(5px, 0, 0); }
+    89.5% { clip-path: inset(8% 0 75% 0);                                            transform: translate3d(-3px, 0, 0); }
+    89.7% { clip-path: inset(40% 0 30% 0);                                           transform: translate3d(2px, 0, 0); }
+    89.9% { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
+
+    /* third burst — fastest flicker */
+    92%   { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
+    92.1% { clip-path: inset(20% 0 55% 0);                                           transform: translate3d(-6px, 0, 0); }
+    92.2% { clip-path: inset(65% 0 10% 0);                                           transform: translate3d(4px, 0, 0); }
+    92.3% { clip-path: inset(5% 0 80% 0);                                            transform: translate3d(-2px, 0, 0); }
+    92.4% { clip-path: inset(45% 0 25% 0);                                           transform: translate3d(3px, 0, 0); }
+    92.5% { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
+
+    100%  { clip-path: none;                                                          transform: translate3d(0, 0, 0); }
 }
