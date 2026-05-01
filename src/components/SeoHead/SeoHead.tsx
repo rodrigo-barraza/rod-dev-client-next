@@ -9,6 +9,7 @@ interface SeoMeta {
     image?: string;
     date?: string;
     createdAt?: string;
+    jsonLd?: Record<string, unknown>;
 }
 
 interface SeoHeadProps {
@@ -21,6 +22,10 @@ export default function SeoHead({ meta }: SeoHeadProps) {
             <title>{meta.title}</title>
             <meta name="description" content={meta.description} />
             <meta name="keywords" content={meta.keywords} />
+            <meta name="author" content="Rodrigo Barraza" />
+            {meta.url && (
+                <link rel="canonical" href={meta.url} />
+            )}
             <meta property="og:url" content={meta.url} />
             <meta property="og:type" content={meta.type} />
             <meta property="og:site_name" content="Rodrigo Barraza" />
@@ -34,10 +39,17 @@ export default function SeoHead({ meta }: SeoHeadProps) {
             )}
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" content={meta.title} />
+            <meta name="twitter:description" content={meta.description} />
             <meta name="twitter:site" content="@rawdreygo" />
             <meta name="twitter:url" content={meta.url} />
             <meta name="twitter:image" content={meta.image} />
             <link rel="icon" href="/images/favicon.ico" />
+            {meta.jsonLd && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(meta.jsonLd) }}
+                />
+            )}
         </Head>
     );
 }

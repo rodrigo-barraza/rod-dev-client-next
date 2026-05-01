@@ -59,7 +59,7 @@ export default function AboutView(props) {
                             <div className="extra-info">
                                 {AboutCollection.map((about, aboutIndex) => (
                                     <div className="collection" key={aboutIndex}>
-                                        <h1 className="title">{about.name}</h1>
+                                        <h2 className="title">{about.name}</h2>
                                         { about.collections.map((object, objectIndex) => (
                                             <div className="object" key={objectIndex}>
                                                 {object.url ? (

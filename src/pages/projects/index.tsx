@@ -26,11 +26,11 @@ export default function Projects(props) {
                         <div key={projectIndex} className="about">
                             <div className="text">
                                 <div className="about-info">
-                                    <h1 className="title">{project.title} <span>{project.year}</span></h1>
+                                    <h2 className="title">{project.title} <span>{project.year}</span></h2>
                                     <p className="source">
-                                        {project.link && (<a href={project.link} target="_blank">Preview</a>)}
-                                        {project.github && (<a href={project.github} target="_blank">Github</a>)}
-                                        {project.googleColab && (<a href={project.googleColab} target="_blank">Google Colab</a>)}
+                                        {project.link && (<a href={project.link} target="_blank" rel="noopener noreferrer">Preview</a>)}
+                                        {project.github && (<a href={project.github} target="_blank" rel="noopener noreferrer">Github</a>)}
+                                        {project.googleColab && (<a href={project.googleColab} target="_blank" rel="noopener noreferrer">Google Colab</a>)}
                                     </p>
                                     <p dangerouslySetInnerHTML={{ __html: project.description}}></p>
                                     <div className="languages">

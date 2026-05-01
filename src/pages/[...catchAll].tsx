@@ -1,14 +1,9 @@
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+export const getServerSideProps = async () => {
+    return { notFound: true };
+};
 
 const CatchAll = () => {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/');
-  }, [router]);
-
-  return null;
+    return null;
 };
 
 export default CatchAll;

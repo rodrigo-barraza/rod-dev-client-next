@@ -14,6 +14,47 @@ export const getServerSideProps = async (context: any) =>
         description: 'Visual portfolio of Rodrigo Barraza, a Vancouver-based photographer, software engineer and artist.',
         keywords: 'rodrigo barraza',
         image: 'https://assets.rod.dev/rod-dev-assets/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
+        jsonLd: {
+            '@context': 'https://schema.org',
+            '@graph': [
+                {
+                    '@type': 'WebSite',
+                    '@id': 'https://rod.dev/#website',
+                    url: 'https://rod.dev/',
+                    name: 'Rodrigo Barraza',
+                    description: 'Visual portfolio of Rodrigo Barraza, a Vancouver-based photographer, software engineer and artist.',
+                },
+                {
+                    '@type': 'Person',
+                    '@id': 'https://rod.dev/#person',
+                    name: 'Rodrigo Barraza',
+                    givenName: 'Rodrigo',
+                    familyName: 'Barraza',
+                    url: 'https://rod.dev/',
+                    image: 'https://assets.rod.dev/rod-dev-assets/images/rodrigo-barraza-black-and-white-portrait.jpg',
+                    jobTitle: ['Photographer', 'Software Engineer', 'Artist'],
+                    alumniOf: {
+                        '@type': 'CollegeOrUniversity',
+                        name: 'Emily Carr University of Art + Design',
+                    },
+                    address: {
+                        '@type': 'PostalAddress',
+                        addressLocality: 'Vancouver',
+                        addressRegion: 'BC',
+                        addressCountry: 'CA',
+                    },
+                    sameAs: [
+                        'https://github.com/rodrigo-barraza',
+                        'https://www.instagram.com/rawdreygo',
+                        'https://www.linkedin.com/in/rodrigobarraza',
+                        'https://www.deviantart.com/bioviral',
+                        'https://www.facebook.com/barraza.rodrigo',
+                        'https://flickr.com/photos/rodrigobarraza',
+                        'https://www.behance.net/rodrigobarraza',
+                    ],
+                },
+            ],
+        },
     });
 
     
@@ -46,11 +87,12 @@ export default function Index(props) {
                         className="image" 
                         href={`/generate?id=${artCollection.id}`}>
                             <div className="the-image">
-                                <img 
+                                <Image 
                                     src={artCollection.image}
                                     alt={artCollection.prompt}
-                                    fill={true}>
-                                </img>
+                                    fill={true}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
                                 <div className="inside-description">
                                     <div className="name" itemProp="name">Generate</div>
                                     <div className="year" itemProp="dateCreated">2023</div>

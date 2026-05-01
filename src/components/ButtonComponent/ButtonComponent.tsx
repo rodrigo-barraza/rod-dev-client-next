@@ -28,7 +28,7 @@ export default function ButtonComponent(props: any) {
                 </button>
             )}
             { href && !routeHref && (
-                <a href={href} target="_blank">
+                <a href={href} target="_blank" rel="noopener noreferrer">
                     { logo && ( <img src={getLogo} className={style.logo} alt={icon}></img> )}
                     { icon && ( <span className={style.icon}>{icon}</span> )}
                     { label && ( <span className={style.label}>{label}</span> )}

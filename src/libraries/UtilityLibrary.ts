@@ -322,6 +322,7 @@ const UtilityLibrary = {
         image?: string;
         type?: string;
         date?: string;
+        jsonLd?: Record<string, unknown>;
     }) {
         return {
             url: `https://rod.dev${resolvedUrl}`,
@@ -338,6 +339,7 @@ const UtilityLibrary = {
         description: string;
         keywords: string;
         image?: string;
+        jsonLd?: Record<string, unknown>;
     }) {
         return {
             props: {

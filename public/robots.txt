@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /gym
+Disallow: /renders
+Disallow: /likes
+
+Sitemap: https://rod.dev/sitemap.xml

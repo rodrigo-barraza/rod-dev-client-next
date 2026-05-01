@@ -17,8 +17,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { req, resolvedUrl } = context
 
   const meta = UtilityLibrary.buildPageMeta(resolvedUrl, {
-    title: 'Text to Image - Your Renders',
-    description: "Try out Rodrigo Barraza's text-to-image AI image generation realism-model, trained on more than 120,000 images, photographs and captions.",
+    title: 'Rodrigo Barraza - Your AI Renders',
+    description: 'View your collection of AI-generated images created with Rodrigo Barraza\'s text-to-image model.',
     keywords: 'generate, text, text to image, text to image generator, text to image ai, ai image, rodrigo barraza',
     image: 'https://assets.rod.dev/rod-dev-generations/f377bd59-49d6-4858-91df-3c0a6456c5e2.jpg',
   });

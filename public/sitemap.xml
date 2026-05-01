@@ -2,13 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://rod.dev/</loc>
-    <lastmod>2023-05-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://rod.dev/rodrigo-barraza</loc>
-    <lastmod>2023-05-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/images/rodrigo-barraza-black-and-white-portrait.jpg</image:loc>
       <image:title>Portrait of Rodrigo Barraza</image:title>
@@ -19,13 +17,11 @@
   </url>
   <url>
     <loc>https://rod.dev/generate</loc>
-    <lastmod>2023-05-19</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
   </url>
   <url>
     <loc>https://rod.dev/collections/tardigrades</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/tardigrades/rodrigo-barraza-tardigrade-ai-art-crystal-tardigrade.jpg</image:loc>
       <image:title>Diamond Tardigrade</image:title>
@@ -64,8 +60,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/mollusca</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/mollusca/rodrigo-barraza-generated-mollusca-diamond-cephalopod-ai-art.jpg</image:loc>
       <image:title>Diamond Cephalopod</image:title>
@@ -90,8 +85,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/crystal-landscapes</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/crystal-landscapes/rodrigo-barraza-crystal-landscapes-crystal-skies-ai-art.jpg</image:loc>
       <image:title>Crystal Skies</image:title>
@@ -130,8 +124,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/ainimations</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <video:video>
       <video:content_loc>https://assets.rod.dev/collections/ainimations/rodrigo-barraza-ainimations-ai-art-animation-descent-to-desert.mp4</video:content_loc>
       <video:thumbnail_loc>https://assets.rod.dev/collections/ainimations/rodrigo-barraza-ainimations-ai-art-animation-descent-to-desert.jpg</video:thumbnail_loc>
@@ -311,8 +304,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/dreamwork</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg</image:loc>
       <image:title>Beach</image:title>
@@ -344,8 +336,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/cops</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/cops/rodrigo-barraza-cops-serve-35mm-kodak-tmax-p3200.jpg</image:loc>
       <image:title>Serve</image:title>
@@ -370,8 +361,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/strolls</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/strolls/rodrigo-barraza-strolls-perseids-medium-format-fuji-provia-100f.jpg</image:loc>
       <image:title>Perseids</image:title>
@@ -417,8 +407,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/angela</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/angela/rodrigo-barraza-angela-no1-medium-format-ilford-delta-400.jpg</image:loc>
       <image:title>Angela No.1</image:title>
@@ -464,8 +453,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/walks</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/walks/rodrigo-barraza-walks-english-bay-shower-medium-format-fuji-acros-100.jpg</image:loc>
       <image:title>Shower</image:title>
@@ -511,8 +499,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/persons</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/persons/rodrigo-barraza-persons-the-landlord-medium-format-fuji-provia-100f.jpg</image:loc>
       <image:title>The Landlord</image:title>
@@ -572,8 +559,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/spotless</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <video:video>
       <video:content_loc>https://assets.rod.dev/collections/spotless/rodrigo-barraza-spotless-short-film-ewa-chruscicka.mp4</video:content_loc>
       <video:thumbnail_loc>https://assets.rod.dev/collections/spotless/rodrigo-barraza-spotless-short-film-ewa-chruscicka.jpg</video:thumbnail_loc>
@@ -588,8 +574,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/tv-date</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <video:video>
       <video:content_loc>https://assets.rod.dev/collections/tv-date/rodrigo-barraza-tv-date-music-video-petroleum-by-product.mp4</video:content_loc>
       <video:thumbnail_loc>https://assets.rod.dev/collections/tv-date/rodrigo-barraza-tv-date-music-video-petroleum-by-product.jpg</video:thumbnail_loc>
@@ -604,8 +589,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/rip-apart</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <video:video>
       <video:content_loc>https://assets.rod.dev/collections/rip-apart/rodrigo-barraza-rip-apart-music-video-petroleum-by-product.mp4</video:content_loc>
       <video:thumbnail_loc>https://assets.rod.dev/collections/rip-apart/rodrigo-barraza-rip-apart-music-video-petroleum-by-product.jpg</video:thumbnail_loc>
@@ -620,8 +604,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/natural</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/natural/rodrigo-barraza-natural-over-the-rainbow.jpg</image:loc>
       <image:title>Over the Rainbow</image:title>
@@ -653,8 +636,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/urban</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/urban/rodrigo-barraza-urban-the-keefer-vancouver.jpg</image:loc>
       <image:title>The Keefer</image:title>
@@ -735,8 +717,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/floppy-mario</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/floppy-mario/rodrigo-barraza-collections-floppy-disk-super-mario.jpg</image:loc>
       <image:title>Floppy Mario</image:title>
@@ -747,8 +728,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/lollipops</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/lollipops/rodrigo-barraza-lollipops-vanilla-medium-format-fuji-velvia-100.jpg</image:loc>
       <image:title>Vanilla</image:title>
@@ -773,8 +753,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/layers</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/layers/rodrigo-barraza-layers-photography-five-red-doors.jpg</image:loc>
       <image:title>Five Red Doors</image:title>
@@ -806,8 +785,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/aura-of-home</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/aura-of-home/rodrigo-barraza-aura-of-home-tom-medium-format-fuji-velvia-100.jpg</image:loc>
       <image:title>Tom</image:title>
@@ -846,8 +824,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/portraiture</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/portraiture/rodrigo-barraza-portraiture-fine-goldkid-buni-kor.jpg</image:loc>
       <image:title>FINE</image:title>
@@ -977,8 +954,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/cities</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/cities/rodrigo-barraza-cities-photography-san-francisco.jpg</image:loc>
       <image:title>San Francisco</image:title>
@@ -1024,8 +1000,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/aerial</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/aerial/rodrigo-barraza-aerial-photography-white-pine-county-nevada.jpg</image:loc>
       <image:title>White Pine County, Nevada</image:title>
@@ -1057,8 +1032,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/artifacts</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/artifacts/rodrigo-barraza-artifacts-photography-we-are-open-neon.jpg</image:loc>
       <image:title>WE ARE OPEN</image:title>
@@ -1146,8 +1120,7 @@
   </url>
   <url>
     <loc>https://rod.dev/collections/slashed</loc>
-    <lastmod>2022-10-05</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-04-30</lastmod>
     <image:image>
       <image:loc>https://assets.rod.dev/collections/slashed/rodrigo-barraza-slashed-photography-mr-wang-medium-format-fuji-pro-160s.jpg</image:loc>
       <image:title>Mr. Wang</image:title>

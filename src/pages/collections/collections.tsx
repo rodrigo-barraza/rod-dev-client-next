@@ -1,10 +1,14 @@
-import Link from 'next/link'
+import { useRouter } from 'next/router';
 
 const collections = () => {
-    return (
-        <div className="HomePage">
-        </div>
-    )
+    const router = useRouter();
+
+    // Redirect to home — /collections has no standalone content
+    if (typeof window !== 'undefined') {
+        router.replace('/');
+    }
+
+    return null;
 }
 
 export default collections

@@ -310,7 +310,8 @@ export default function Gym(props) {
         <SeoHead meta={meta} />
         <div className="container">
             <div className="CardComponent">
-                <h1>Track:</h1>
+                <h1>Gym Tracker</h1>
+                <h2>Track:</h2>
                     <div className="routines">
                     { returnRoutines().map((type, routineIndex) => (
                         <ButtonComponent 
@@ -322,7 +323,7 @@ export default function Gym(props) {
                         ></ButtonComponent>
                     ))}
                     </div>
-                <h1>Log:</h1>
+                <h2>Log:</h2>
                 {/* <p>{averageTotalVolume}</p> */}
                 <div className="GymList">
                     {Object.keys(journal)?.map((date, daysIndex) => (

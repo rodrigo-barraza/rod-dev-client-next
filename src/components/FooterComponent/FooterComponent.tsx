@@ -28,7 +28,7 @@ const FooterComponent: React.FC = () => {
                     </div>
                     <div className="photography">
                         <div>
-                        <h1>Photography</h1>
+                        <h2>Photography</h2>
                         <ul>
                             { ArtCollectionsCollection.filter(artCollection => artCollection.type === 'photography').map((artCollection, artCollectionIndex) => (
                                 <li key={artCollectionIndex}>
@@ -42,7 +42,7 @@ const FooterComponent: React.FC = () => {
                     </div>
                     <div className="film">
                         <div>
-                        <h1>Film</h1>
+                        <h2>Film</h2>
                         <ul>
                             { ArtCollectionsCollection.filter(artCollection => artCollection.type === 'film').map((artCollection, artCollectionIndex) => (
                                 <li key={artCollectionIndex}>
@@ -54,7 +54,7 @@ const FooterComponent: React.FC = () => {
                         </ul>
                         </div>
                         <div className="ai">
-                            <h1>AI Art</h1>
+                            <h2>AI Art</h2>
                             <ul>
                                 { ArtCollectionsCollection.filter(artCollection => artCollection.type === 'ai').map((artCollection, artCollectionIndex) => (
                                     <li key={artCollectionIndex}>
@@ -66,7 +66,7 @@ const FooterComponent: React.FC = () => {
                             </ul>
                         </div>
                         <div className="animation">
-                            <h1>AI Animation</h1>
+                            <h2>AI Animation</h2>
                             <ul>
                                 { ArtCollectionsCollection.filter(artCollection => artCollection.type === 'animation').map((artCollection, artCollectionIndex) => (
                                     <li key={artCollectionIndex}>
@@ -78,7 +78,7 @@ const FooterComponent: React.FC = () => {
                             </ul>
                         </div>
                         <div className="installation">
-                            <h1>Installation</h1>
+                            <h2>Installation</h2>
                             <ul>
                                 { ArtCollectionsCollection.filter(artCollection => artCollection.type === 'installation').map((artCollection, artCollectionIndex) => (
                                     <li key={artCollectionIndex}>
@@ -92,11 +92,11 @@ const FooterComponent: React.FC = () => {
                     </div>
                     <div className="socials">
                         <div>
-                            <h1>Socials</h1>
+                            <h2>Socials</h2>
                             <ul>
                                 { SocialsCollection.map((social, socialIndex) => (
                                     <li className={`social ${social.type}`} key={socialIndex}>
-                                        <Link target="_blank" href={social.url}>
+                                        <Link target="_blank" rel="noopener noreferrer" href={social.url}>
                                             {/* <div className="logo"></div> */}
                                             <img className="logo" src={UtilityLibrary.getIconUrl(social.type)} alt={social.type}></img>
                                             <span>{social.name}</span>

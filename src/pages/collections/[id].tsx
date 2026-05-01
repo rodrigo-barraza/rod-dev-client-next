@@ -128,7 +128,7 @@ export default function Collection(props) {
                                     {!collection.works[0].videoPath && !collection.imagePath && (
                                         <Image
                                         src={UtilityLibrary.renderAssetPath(collection.works[0].imagePath, collection.path)}
-                                        alt="123"
+                                        alt={collection.description || collection.title}
                                         fill={true}>
                                         </Image>
                                     )}
@@ -148,7 +148,7 @@ export default function Collection(props) {
                                 </div>
                                 <div className="description">
                                     <div>
-                                        <h1 className="title">{collection.title}</h1>
+                                        <h2 className="title">{collection.title}</h2>
                                         <span className="year">{collection.year}</span>
                                     </div>
                                     <div>
