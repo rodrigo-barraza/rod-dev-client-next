@@ -161,6 +161,11 @@
             flex-direction: column;
             justify-content: flex-start;
             text-align: justify;
+            h3 {
+                font-weight: 500;
+                color: black;
+                margin-top: 10px;
+            }
             :global(.full-name) {
                 padding: 3px;
                 background-color: #3390ff;
