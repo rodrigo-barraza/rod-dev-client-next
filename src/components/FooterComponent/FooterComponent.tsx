@@ -23,7 +23,7 @@ const FooterComponent: React.FC = () => {
                                 </div>
                                 <p>Vancouver, Canada</p>
                             </div>
-                            <p>© 2023 Rodrigo Barraza</p>
+                            <p>© 2023–{new Date().getFullYear()} Rodrigo Barraza</p>
                         </div>
                     </div>
                     <div className="photography">

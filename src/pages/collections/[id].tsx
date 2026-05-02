@@ -23,6 +23,80 @@ export const getServerSideProps = async (context: any) => {
         image = UtilityLibrary.renderAssetPath(currentCollection.poster, currentCollection.path)
     }
 
+    // Build image objects for ImageGallery schema
+    const imageObjects = currentCollectionWorks
+        .filter((work: any) => work.imagePath)
+        .map((work: any) => ({
+            '@type': 'ImageObject',
+            name: work.title,
+            contentUrl: UtilityLibrary.renderAssetPath(work.imagePath, currentCollection.path),
+            description: work.caption || work.description || `${work.title} by Rodrigo Barraza`,
+            creator: { '@type': 'Person', name: 'Rodrigo Barraza' },
+            copyrightHolder: { '@type': 'Person', name: 'Rodrigo Barraza' },
+            license: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+            ...(work.year ? { dateCreated: String(work.year) } : {}),
+        }));
+
+    // Build video objects for VideoObject schema
+    const videoObjects = currentCollectionWorks
+        .filter((work: any) => work.videoPath)
+        .map((work: any) => ({
+            '@type': 'VideoObject',
+            name: work.title,
+            contentUrl: UtilityLibrary.renderAssetPath(work.videoPath, currentCollection.path),
+            description: work.description || `${work.title} — AI art animation by Rodrigo Barraza`,
+            ...(work.poster ? { thumbnailUrl: UtilityLibrary.renderAssetPath(work.poster, currentCollection.path) } : {}),
+            ...(work.duration ? { duration: `PT${work.duration}S` } : {}),
+            ...(work.uploadDate ? { uploadDate: work.uploadDate } : {}),
+        }));
+
+    // Build the @graph array
+    const graphEntries: any[] = [
+        {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: 'https://rod.dev/',
+                },
+                {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Collections',
+                    item: 'https://rod.dev/',
+                },
+                {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: currentCollection.title,
+                    item: `https://rod.dev/collections/${currentCollection.path}`,
+                },
+            ],
+        },
+    ];
+
+    // Add ImageGallery if there are image works
+    if (imageObjects.length > 0) {
+        graphEntries.push({
+            '@type': 'ImageGallery',
+            name: `${currentCollection.title} — ${currentCollection.type === 'ai' ? 'AI Art' : currentCollection.type === 'photography' ? 'Photography' : 'Art'} by Rodrigo Barraza`,
+            description: currentCollection.description,
+            creator: {
+                '@type': 'Person',
+                name: 'Rodrigo Barraza',
+                url: 'https://rod.dev/rodrigo-barraza',
+            },
+            image: imageObjects,
+        });
+    }
+
+    // Add VideoObject entries at the graph level
+    if (videoObjects.length > 0) {
+        graphEntries.push(...videoObjects);
+    }
+
     return {
         props: {
             meta: UtilityLibrary.buildPageMeta(resolvedUrl, {
@@ -30,6 +104,10 @@ export const getServerSideProps = async (context: any) => {
                 description: `${currentCollection?.documentDescription}`,
                 keywords: `${currentCollection?.documentKeywords}`,
                 image: image,
+                jsonLd: {
+                    '@context': 'https://schema.org',
+                    '@graph': graphEntries,
+                },
             }),
             currentCollectionWorks: currentCollectionWorks,
             currentCollection: currentCollection,

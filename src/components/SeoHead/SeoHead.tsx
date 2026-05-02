@@ -23,6 +23,7 @@ export default function SeoHead({ meta }: SeoHeadProps) {
             <meta name="description" content={meta.description} />
             <meta name="keywords" content={meta.keywords} />
             <meta name="author" content="Rodrigo Barraza" />
+            <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
             {meta.url && (
                 <link rel="canonical" href={meta.url} />
             )}
