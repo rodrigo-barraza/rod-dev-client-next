@@ -49,3 +49,6 @@ next-env.d.ts
 
 # WSL artifacts
 *:Zone.Identifier
+
+# logs
+*.log
