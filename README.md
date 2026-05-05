@@ -139,6 +139,3 @@ npm run format        # Format all files with Prettier
 npm run format:check  # Check formatting without writing
 ```
 
-## ☀️ Part of [Sun](https://github.com/rodrigo-barraza/rod.dev)
-
-rod.dev is one frontend in a collection of composable backend services and frontends by Rodrigo Barraza.

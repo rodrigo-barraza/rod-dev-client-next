@@ -23,7 +23,7 @@ ENV NEXT_PUBLIC_RODRIGO_SERVICE=$NEXT_PUBLIC_RODRIGO_SERVICE
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+RUN npx next build --webpack
 
 # --- Production ---
 FROM base AS runner
