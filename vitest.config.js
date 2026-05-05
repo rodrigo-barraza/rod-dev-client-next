@@ -1,14 +1,14 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { transformWithEsbuild } from 'vite';
+import { transformWithOxc } from 'vite';
 
 const forceJsx = {
   name: 'force-jsx',
   enforce: 'pre',
   async transform(code, id) {
     if (id.endsWith('.js') && !id.includes('node_modules')) {
-      return transformWithEsbuild(code, id, { loader: 'jsx', jsx: 'automatic' });
+      return transformWithOxc(code, id, { lang: 'jsx' });
     }
   },
 };
