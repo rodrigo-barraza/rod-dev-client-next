@@ -34,8 +34,6 @@ yarn-error.log*
 .env
 .env.deploy
 
-# secrets (real values — never commit)
-secrets.js
 
 # editor settings (local)
 .vscode/settings.json
