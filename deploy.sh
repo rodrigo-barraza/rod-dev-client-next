@@ -3,7 +3,8 @@
 # rod.dev — Build & Deploy to Synology NAS
 #
 # Thin wrapper — all logic lives in ../deploy-kit/lib.sh
-# Hook: injects NEXT_PUBLIC_RODRIGO_SERVICE as build arg.
+# Hook: injects VAULT_SERVICE_URL as build arg and VAULT_SERVICE_TOKEN
+#       as a BuildKit secret for Next.js secret resolution at build time.
 #
 # Usage:
 #   npm run deploy              # full deploy
@@ -15,27 +16,22 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 IMAGE_NAME="rod-dev-client"
 DISPLAY_NAME="🚀 Rod Dev Client"
-SKIP_ENV_DEPLOY="true"   # Vault bootstrap is handled by centralized deploy-kit/.env.deploy
+SKIP_ENV_DEPLOY="true"
 
-# ── Inject NEXT_PUBLIC_* as Docker build arg ──────────────────
+# ── Inject Vault credentials for Docker build ─────────────────
 PRE_BUILD() {
   local CENTRAL_ENV="${DEPLOY_KIT_DIR}/.env.deploy"
   if [ -f "$CENTRAL_ENV" ]; then
     set -a; source "$CENTRAL_ENV"; set +a
     info "Loaded deploy-kit/.env.deploy"
   fi
-  if [ -n "${NEXT_PUBLIC_RODRIGO_SERVICE:-}" ]; then
-    BUILD_ARGS="--build-arg NEXT_PUBLIC_RODRIGO_SERVICE=${NEXT_PUBLIC_RODRIGO_SERVICE}"
-    info "API URL: ${NEXT_PUBLIC_RODRIGO_SERVICE}"
+  if [ -n "${VAULT_SERVICE_URL:-}" ]; then
+    BUILD_ARGS="--build-arg VAULT_SERVICE_URL=${VAULT_SERVICE_URL}"
+    info "Vault URL: ${VAULT_SERVICE_URL}"
   fi
-}
-
-# ── Conditionally sync centralized .env.deploy → .env ─────────
-EXTRA_SSH_SYNC() {
-  local CENTRAL_ENV="${DEPLOY_KIT_DIR}/.env.deploy"
-  if [ -f "$CENTRAL_ENV" ]; then
-    cat "$CENTRAL_ENV" | ssh "$NAS_HOST" "cat > '${NAS_COMPOSE_DIR}/.env'"
-    info "Synced deploy-kit/.env.deploy → .env"
+  if [ -n "${VAULT_SERVICE_TOKEN:-}" ]; then
+    BUILD_SECRETS="--secret id=VAULT_SERVICE_TOKEN,env=VAULT_SERVICE_TOKEN"
+    info "Vault token: ****${VAULT_SERVICE_TOKEN: -8}"
   fi
 }
 

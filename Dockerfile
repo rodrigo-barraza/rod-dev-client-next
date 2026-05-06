@@ -10,20 +10,21 @@ FROM node:22-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN apk add --no-cache git && npm ci
 
 # --- Build ---
 FROM base AS builder
 WORKDIR /app
 
-# NEXT_PUBLIC_* vars are inlined at build time by Next.js,
-# so we accept them as build args and expose them to the build.
-ARG NEXT_PUBLIC_RODRIGO_SERVICE=http://localhost:6666
-ENV NEXT_PUBLIC_RODRIGO_SERVICE=$NEXT_PUBLIC_RODRIGO_SERVICE
+# Vault credentials — needed at build time for next.config.ts
+ARG VAULT_SERVICE_URL=http://192.168.86.2:5599
+ENV VAULT_SERVICE_URL=$VAULT_SERVICE_URL
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx next build --webpack
+RUN --mount=type=secret,id=VAULT_SERVICE_TOKEN \
+  export VAULT_SERVICE_TOKEN=$(cat /run/secrets/VAULT_SERVICE_TOKEN 2>/dev/null) && \
+  npx next build --webpack
 
 # --- Production ---
 FROM base AS runner
