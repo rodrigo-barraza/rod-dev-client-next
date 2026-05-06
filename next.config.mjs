@@ -5,9 +5,7 @@
 // and injects them into process.env for the app.
 // ============================================================
 
-import type { NextConfig } from "next";
-// @ts-expect-error — JS-only vault client, no type declarations
-import { createVaultClient } from "@rodrigo-barraza/utilities/node";
+import { createVaultClient } from "@rodrigo-barraza/utilities-library/node";
 
 // ── Bootstrap secrets at build/dev time ────────────────────────
 const vault = createVaultClient({
@@ -20,10 +18,11 @@ const secrets = await vault.fetch();
 // Inject into process.env so the app can read them
 Object.assign(process.env, secrets);
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: "standalone",
   turbopack: {},
-  transpilePackages: ["@rodrigo-barraza/utilities"],
+  transpilePackages: ["@rodrigo-barraza/utilities-library"],
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if

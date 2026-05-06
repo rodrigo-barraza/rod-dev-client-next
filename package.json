@@ -28,7 +28,7 @@
     "vite": "^8.0.10",
     "zustand": "^5.0.5",
     "lucide-react": "^0.577.0",
-    "@rodrigo-barraza/utilities": "git+https://github.com/rodrigo-barraza/utilities-library.git"
+    "@rodrigo-barraza/utilities-library": "git+https://github.com/rodrigo-barraza/utilities-library.git"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
