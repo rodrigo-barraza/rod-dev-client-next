@@ -4,7 +4,6 @@
 #
 # Thin wrapper — all logic lives in ../deploy-kit/lib.sh
 # Hook: injects NEXT_PUBLIC_RODRIGO_SERVICE as build arg.
-# Note: .env.deploy is optional for this service.
 #
 # Usage:
 #   npm run deploy              # full deploy
@@ -16,13 +15,14 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 IMAGE_NAME="rod-dev-client"
 DISPLAY_NAME="🚀 Rod Dev Client"
-SKIP_ENV_DEPLOY="true"   # .env.deploy is optional for rod-dev
+SKIP_ENV_DEPLOY="true"   # Vault bootstrap is handled by centralized deploy-kit/.env.deploy
 
 # ── Inject NEXT_PUBLIC_* as Docker build arg ──────────────────
 PRE_BUILD() {
-  if [ -f "${SCRIPT_DIR}/.env.deploy" ]; then
-    set -a; source "${SCRIPT_DIR}/.env.deploy"; set +a
-    info "Loaded .env.deploy"
+  local CENTRAL_ENV="${DEPLOY_KIT_DIR}/.env.deploy"
+  if [ -f "$CENTRAL_ENV" ]; then
+    set -a; source "$CENTRAL_ENV"; set +a
+    info "Loaded deploy-kit/.env.deploy"
   fi
   if [ -n "${NEXT_PUBLIC_RODRIGO_SERVICE:-}" ]; then
     BUILD_ARGS="--build-arg NEXT_PUBLIC_RODRIGO_SERVICE=${NEXT_PUBLIC_RODRIGO_SERVICE}"
@@ -30,11 +30,12 @@ PRE_BUILD() {
   fi
 }
 
-# ── Conditionally sync .env.deploy if it exists ───────────────
+# ── Conditionally sync centralized .env.deploy → .env ─────────
 EXTRA_SSH_SYNC() {
-  if [ -f "${SCRIPT_DIR}/.env.deploy" ]; then
-    cat "${SCRIPT_DIR}/.env.deploy" | ssh "$NAS_HOST" "cat > '${NAS_COMPOSE_DIR}/.env'"
-    info "Synced .env.deploy → .env"
+  local CENTRAL_ENV="${DEPLOY_KIT_DIR}/.env.deploy"
+  if [ -f "$CENTRAL_ENV" ]; then
+    cat "$CENTRAL_ENV" | ssh "$NAS_HOST" "cat > '${NAS_COMPOSE_DIR}/.env'"
+    info "Synced deploy-kit/.env.deploy → .env"
   fi
 }
 
