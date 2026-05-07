@@ -10,7 +10,9 @@ FROM node:22-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN apk add --no-cache git && npm ci
+RUN apk add --no-cache git && \
+    git config --global url."https://github.com/".insteadOf "ssh://git@github.com/" && \
+    npm ci
 
 # --- Build ---
 FROM base AS builder
