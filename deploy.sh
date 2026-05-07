@@ -16,6 +16,7 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 IMAGE_NAME="rod-dev-client"
 DISPLAY_NAME="🚀 Rod Dev Client"
+BUILD_EXTRA_FLAGS="--network=host"
 SKIP_ENV_DEPLOY="true"
 
 # ── Inject Vault credentials for Docker build ─────────────────
