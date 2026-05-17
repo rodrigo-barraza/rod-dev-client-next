@@ -44,7 +44,6 @@ export default function Txt2ImageComponent({ render, setGuest }: Txt2ImageCompon
     const { isRenderApiAvailable } = useApplicationState();
 
 
-
     const { setMessage } = useAlertContext();
 
     const renderImage = useCallback(() => {
