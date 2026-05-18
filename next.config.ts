@@ -21,15 +21,9 @@ Object.assign(process.env, secrets);
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  allowedDevOrigins: [],
   turbopack: {},
   transpilePackages: ["@rodrigo-barraza/utilities-library", "@rodrigo-barraza/components-library"],
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
-  },
   images: {
     remotePatterns: [
       {

@@ -11,11 +11,11 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "deploy": "bash deploy.sh",
+    "deploy:dry": "bash deploy.sh --dry-run",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "deploy": "bash deploy.sh",
-    "deploy:dry": "bash deploy.sh --dry-run",
     "setup-ssh": "bash setup-ssh.sh"
   },
   "dependencies": {
