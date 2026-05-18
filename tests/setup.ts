@@ -1,9 +1,9 @@
-import '@testing-library/jest-dom/vitest';
-import { vi } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
 
 // Mock next/navigation
-vi.mock('next/navigation', () => ({
-  usePathname: vi.fn(() => '/'),
+vi.mock("next/navigation", () => ({
+  usePathname: vi.fn(() => "/"),
   useRouter: vi.fn(() => ({
     push: vi.fn(),
     replace: vi.fn(),
@@ -13,7 +13,7 @@ vi.mock('next/navigation', () => ({
 }));
 
 // Global window mocks
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
     matches: false,

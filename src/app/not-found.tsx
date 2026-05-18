@@ -3,6 +3,6 @@ function Home() {
     <main>
       <h1>404</h1>
     </main>
-  )
+  );
 }
-export default Home
+export default Home;

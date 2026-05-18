@@ -30,14 +30,14 @@ If SSH isn't configured, the script falls back to exporting a tarball to `K:\rod
 
 ## Configuration
 
-| File | Purpose |
-|------|---------|
-| `deploy.sh` | Build + deploy script |
-| `setup-ssh.sh` | One-time SSH key + Synology permission setup |
-| `.env.deploy` | Build-time env vars for NAS deployment (gitignored) |
-| `.env.deploy.example` | Template for `.env.deploy` |
-| `Dockerfile` | Multi-stage build with standalone Next.js output |
-| `docker-compose.yml` | Container config with health check + log rotation |
+| File                  | Purpose                                             |
+| --------------------- | --------------------------------------------------- |
+| `deploy.sh`           | Build + deploy script                               |
+| `setup-ssh.sh`        | One-time SSH key + Synology permission setup        |
+| `.env.deploy`         | Build-time env vars for NAS deployment (gitignored) |
+| `.env.deploy.example` | Template for `.env.deploy`                          |
+| `Dockerfile`          | Multi-stage build with standalone Next.js output    |
+| `docker-compose.yml`  | Container config with health check + log rotation   |
 
 ### Build-Time Environment Variables
 
@@ -74,6 +74,7 @@ local build → docker push nas:5000/service → docker compose pull → up
 **Why:** When `prism`, `tools-api`, `sessions`, etc. are all containerized, each service pushing full tarballs over SSH becomes slow. A registry only transfers **changed layers** (delta transfer), which is dramatically faster for iterative deploys.
 
 **Steps:**
+
 1. Deploy `registry:2` on Synology via Container Manager
 2. Configure WSL Docker daemon to trust the insecure registry (`/etc/docker/daemon.json`)
 3. Tag images as `<host>:5000/<service>:<tag>`
@@ -95,6 +96,7 @@ git push → GitHub Actions build → push to GHCR/registry → webhook → NAS 
 **Why:** Fully hands-off — no local build, no local Docker. Just push code.
 
 **Requires:**
+
 - GitHub Container Registry (GHCR) or the private registry from above
 - Synology reachable from GitHub (via Cloudflare Tunnel or Tailscale, both already set up)
 - SSH deploy key or webhook endpoint on the NAS

@@ -1,166 +1,167 @@
 .GymPage {
-    .logForm {
-        margin-bottom: 24px;
-        > div {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-        }
-        .blocks {
-            gap: 4px;
-            display: grid;
-            color: black;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-            margin-bottom: 12px;
-            @media (max-width: 640px) {
-                grid-template-columns: 1fr 1fr;
-            }
-            > div {
-                background-color: #7ac668;
-                color: white;
-                padding: 8px;
-                text-transform: capitalize;
-                font-size: 12px;
-                border-radius: 2px;
-            }
-        }
+  .logForm {
+    margin-bottom: 24px;
+    > div {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
     }
-    :global(dialog[open]) {
+    .blocks {
+      gap: 4px;
+      display: grid;
+      color: black;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      margin-bottom: 12px;
+      @media (max-width: 640px) {
+        grid-template-columns: 1fr 1fr;
+      }
+      > div {
+        background-color: #7ac668;
+        color: white;
+        padding: 8px;
+        text-transform: capitalize;
+        font-size: 12px;
+        border-radius: 2px;
+      }
+    }
+  }
+  :global(dialog[open]) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  :global(.container) {
+    @media (max-width: 900px) {
+      padding: 0 4vw;
+    }
+  }
+  :global(.CardComponent) {
+    max-width: none;
+    grid-template: none;
+  }
+  :global(.routines) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    > div {
+      flex: 1 1 auto;
+    }
+  }
+  :global(.experience-bar) {
+    height: 10px;
+    background: rgb(234, 234, 234);
+    margin: 4px 0;
+    overflow: hidden;
+    :global(.experience-bar-fill) {
+      height: 100%;
+      background: rgb(122 91 255);
+    }
+  }
+  :global(.GymList) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    font-size: 11px;
+    // border: 2px solid black;
+    :global(.title) {
+      font-size: 18px;
+    }
+    ul {
+      gap: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      @media (max-width: 1100px) {
+        grid-template-columns: 1fr;
+      }
+      li {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-    }
-    :global(.container) {
-        @media (max-width: 900px) {
-            padding: 0 4vw;
+        background-image: url(https://cdn.discordapp.com/attachments/634583290984136716/1178478811029962902/yellow-crumpled-lined-paper-background-2022-12-16-00-47-47-utc-scaled.png);
+        background-size: 100%;
+        border: 2px solid black;
+        margin-bottom: 4px;
+        border-radius: 4px;
+        color: black;
+        :global(.header) {
+          flex-wrap: wrap;
+          padding: 20px;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          background-color: var(--COLOR_BLUE);
+          color: white;
+          &:hover {
+            background-color: var(--COLOR_BLUE_SHADOW);
+          }
+          > div {
+            flex: 1 1 100%;
+            display: flex;
+            justify-content: space-between;
+            > div {
+              display: flex;
+              justify-content: row;
+            }
+          }
+          &:global(.ghost) {
+            background: rgba(100, 100, 100, 0.5);
+          }
         }
+        :global(.body) {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+          flex-wrap: wrap;
+          box-shadow: inset 0px 10px 10px -16px black;
+          > div > div {
+            text-align: center;
+          }
+          > div {
+            padding: 6px 2px;
+            box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            // &:nth-of-type(1) {
+            //     color: rgba(0,0,0,0.35);
+            // }
+            &:nth-of-type(2n + 2) {
+              background: rgba(0, 0, 0, 0.05);
+            }
+          }
+        }
+        &:global(.today) {
+        }
+      }
+    }
+    :global(.ExerciseComponent) {
+      &:global(.ghost) {
+        opacity: 0.75;
+        :global(.header) {
+          background: red;
+        }
+      }
+    }
+  }
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min-device-pixel-ratio: 2) {
+    :global(dialog) {
+      height: 100%;
+      width: 100%;
+      padding: 20px;
+      margin: 20px;
+      box-sizing: border-box;
+    }
+    :global(.GymList) li :global(.body) > div {
+      padding: 2px 3px;
+    }
+    :global(.GymList) li :global(.header) {
+      padding: 8px;
     }
     :global(.CardComponent) {
-        max-width: none;
-        grid-template: none;
+      padding: 4px;
     }
-    :global(.routines) {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        > div {
-            flex: 1 1 auto;
-        }
+    :global(.container) {
+      padding: 0;
     }
-    :global(.experience-bar) {
-        height: 10px;
-        background: rgb(234, 234, 234);
-        margin: 4px 0; 
-        overflow: hidden;
-        :global(.experience-bar-fill) {
-            height: 100%;
-            background: rgb(122 91 255);
-        }
-    }
-    :global(.GymList) {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin: 0 auto;
-        width: 100%;
-        font-size: 11px;
-        // border: 2px solid black;
-        :global(.title) {
-            font-size: 18px;
-        }
-        ul {
-            gap: 8px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            @media (max-width: 1100px) {
-                grid-template-columns: 1fr;
-            }
-            li {
-                display: flex;
-                flex-direction: column;
-                background-image: url(https://cdn.discordapp.com/attachments/634583290984136716/1178478811029962902/yellow-crumpled-lined-paper-background-2022-12-16-00-47-47-utc-scaled.png);
-                background-size: 100%;
-                border: 2px solid black;
-                margin-bottom: 4px;
-                border-radius: 4px;
-                color: black;
-                :global(.header) {
-                    flex-wrap: wrap;
-                    padding: 20px;
-                    cursor: pointer;
-                    display: flex;
-                    justify-content: space-between;
-                    background-color: var(--COLOR_BLUE);
-                    color: white;
-                    &:hover{
-                        background-color: var(--COLOR_BLUE_SHADOW);
-                    }
-                    > div {
-                        flex: 1 1 100%;
-                        display: flex;
-                        justify-content: space-between;
-                        > div {
-                            display: flex;
-                            justify-content: row;
-                        }
-                    }
-                    &:global(.ghost) {
-                        background: rgba(100,100,100,0.5);
-                    }
-                }
-                :global(.body) {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-                    flex-wrap: wrap;
-                    box-shadow: inset 0px 10px 10px -16px black;
-                    > div > div {
-                        text-align: center;
-                    }
-                    > div {
-                        padding: 6px 2px;
-                        box-shadow: inset -1px -1px 0px rgba(0,0,0,0.25);
-                        display: flex;
-                        flex-direction: column;
-                        // &:nth-of-type(1) {
-                        //     color: rgba(0,0,0,0.35);
-                        // }
-                        &:nth-of-type(2n+2) {
-                            background: rgba(0,0,0,0.05);
-                        }
-                    }
-                }
-                &:global(.today) {
-                }
-            }
-        }
-        :global(.ExerciseComponent) {
-            &:global(.ghost) {
-                opacity: 0.75;
-                :global(.header) {
-                    background: red;
-                }
-            }
-        }
-    }
-    @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
-        :global(dialog) {
-            height: 100%;
-            width: 100%;
-            padding: 20px;
-            margin: 20px;
-            box-sizing: border-box;
-        }
-        :global(.GymList) li :global(.body) > div {
-            padding: 2px 3px;
-        }
-        :global(.GymList) li :global(.header) {
-            padding: 8px;
-        }
-        :global(.CardComponent) {
-            padding: 4px;
-        }
-        :global(.container) {
-            padding: 0;
-        }
-    }
+  }
 }

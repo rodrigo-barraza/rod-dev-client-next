@@ -1,327 +1,347 @@
 .ButtonComponent {
-    cursor: pointer;
-    border-radius: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.1s;
+  background: white;
+  border: 3px solid rgb(55, 55, 55);
+  color: rgb(55, 55, 55);
+  button,
+  a {
+    // gap: 8px;
+    font-family: Arial, Helvetica, sans-serif;
     transition: all 0.1s;
-    background: white;
-    border: 3px solid rgb(55,55,55);
-    color: rgb(55,55,55);
-    button, a {
-        // gap: 8px;
-        font-family: Arial, Helvetica, sans-serif;
-        transition: all 0.1s;
-        font-weight: 700;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-        background: transparent;
-        border: 0;
-        color: inherit;
-        padding: 20px;
-        font-size: var(--FONT_SIZE_BIG);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .icon {
-            font-family: var(--FONT_FAMILY_MATERIAL_SYMBOLS);
-            // margin-right: 8px;
-            font-size: 24px;
-        }
-        &.active {
-            text-decoration: underline;
-        }
+    font-weight: 700;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    padding: 20px;
+    font-size: var(--FONT_SIZE_BIG);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .icon {
+      font-family: var(--FONT_FAMILY_MATERIAL_SYMBOLS);
+      // margin-right: 8px;
+      font-size: 24px;
     }
+    &.active {
+      text-decoration: underline;
+    }
+  }
+  a {
+    display: flex;
+    box-sizing: border-box;
+    text-decoration: none;
+    .logo {
+      flex: 0 0 30px;
+      height: 30px;
+      background-size: 100%;
+      filter: saturate(0);
+      &.instagram {
+        background-image: var(--URL_ICON_INSTAGRAM);
+      }
+      &.facebook {
+        background-image: var(--URL_ICON_FACEBOOK);
+      }
+      &.twitter {
+        background-image: var(--URL_ICON_TWITTER);
+      }
+      &.github {
+        background-image: var(--URL_ICON_GITHUB);
+      }
+      &.deviantart {
+        background-image: var(--URL_ICON_DEVIANTART);
+      }
+      &.behance {
+        background-image: var(--URL_ICON_BEHANCE);
+      }
+      &.flickr {
+        background-image: var(--URL_ICON_FLICKR);
+      }
+      &.foundationapp {
+        background-image: var(--URL_ICON_FOUNDATION_APP);
+      }
+      &.opensea {
+        background-image: var(--URL_ICON_OPENSEA);
+      }
+      &.superrare {
+        background-image: var(--URL_ICON_SUPER_RARE);
+      }
+      &.discord {
+        background-image: var(--URL_ICON_DISCORD);
+      }
+      &.keybase {
+        background-image: var(--URL_ICON_KEYBASE);
+      }
+      &.linkedin {
+        background-image: var(--URL_ICON_LINKEDIN);
+      }
+    }
+    .label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  &:hover {
+    transform: translateY(-2px);
+    background: var(--COLOR_BLUE);
+    box-shadow: 4px 4px 0px rgb(0, 0, 0, 0.9);
+    border: 3px solid rgb(15, 15, 15);
+    color: white;
+    .logo {
+      filter: saturate(1);
+    }
+  }
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 2px 2px 0px rgb(0, 0, 0, 1);
+    background: var(--COLOR_BLUE);
+    color: white;
+  }
+  &.mini {
+    button,
     a {
-        display: flex;
-        box-sizing: border-box;
-        text-decoration: none;
-        .logo {
-            flex: 0 0 30px;
-            height: 30px;
-            background-size: 100%;
-            filter: saturate(0);
-            &.instagram {
-                background-image: var(--URL_ICON_INSTAGRAM)
-            }
-            &.facebook {
-                background-image: var(--URL_ICON_FACEBOOK)
-            }
-            &.twitter {
-                background-image: var(--URL_ICON_TWITTER)
-            }
-            &.github {
-                background-image: var(--URL_ICON_GITHUB)
-            }
-            &.deviantart {
-                background-image: var(--URL_ICON_DEVIANTART)
-            }
-            &.behance {
-                background-image: var(--URL_ICON_BEHANCE)
-            }
-            &.flickr {
-                background-image: var(--URL_ICON_FLICKR)
-            }
-            &.foundationapp {
-                background-image: var(--URL_ICON_FOUNDATION_APP)
-            }
-            &.opensea {
-                background-image: var(--URL_ICON_OPENSEA)
-            }
-            &.superrare {
-                background-image: var(--URL_ICON_SUPER_RARE)
-            }
-            &.discord {
-                background-image: var(--URL_ICON_DISCORD)
-            }
-            &.keybase {
-                background-image: var(--URL_ICON_KEYBASE)
-            }
-            &.linkedin {
-                background-image: var(--URL_ICON_LINKEDIN)
-            }
-        }
-        .label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      padding-right: clamp(4px, 1.4vw, 16px);
+      padding-left: clamp(4px, 1.4vw, 16px);
+      padding-top: clamp(2px, 0.7vw, 8px);
+      padding-bottom: clamp(2px, 0.7vw, 8px);
+      // padding: 1vw 2vw;
+      font-size: var(--FONT_SIZE_MEDIUM);
+    }
+  }
+  &.new {
+    button,
+    a {
+      padding-right: clamp(4px, 1.4vw, 16px);
+      padding-left: clamp(4px, 1.4vw, 16px);
+      padding-top: clamp(2px, 0.7vw, 8px);
+      padding-bottom: clamp(2px, 0.7vw, 8px);
+      // padding: 1vw 2vw;
+      font-size: var(--FONT_SIZE_MEDIUM);
+    }
+  }
+  &.blue {
+    background: var(--COLOR_BLUE);
+    color: white;
+    &[disabled] {
+      border: 3px solid white;
+      background: rgba(235, 235, 235);
+      pointer-events: none;
+      box-shadow:
+        inset 4px 4px 0px rgba(225, 225, 225),
+        inset -4px -4px 0px rgba(245, 245, 245);
+      button,
+      a {
+        color: rgba(210, 210, 210);
+        cursor: not-allowed;
+      }
     }
     &:hover {
-        transform: translateY(-2px);
-        background: var(--COLOR_BLUE);
-        box-shadow: 4px 4px 0px rgb(0,0,0,0.9);
-        border: 3px solid rgb(15,15,15);
-        color: white;
-        .logo {
-            filter: saturate(1)
-        }
+      background: var(--COLOR_BLUE_SHADOW);
+      color: white;
     }
     &:active {
-        transform: translateY(-1px);
-        box-shadow: 2px 2px 0px rgb(0,0,0,1);
-        background: var(--COLOR_BLUE);
-        color: white;
+      background: var(--COLOR_BLUE_SHADOW);
+      color: white;
     }
-    &.mini {
-        button, a {
-            padding-right: clamp(4px, 1.4vw, 16px);
-            padding-left: clamp(4px, 1.4vw, 16px);
-            padding-top: clamp(2px, 0.7vw, 8px);
-            padding-bottom: clamp(2px, 0.7vw, 8px);
-            // padding: 1vw 2vw;
-            font-size: var(--FONT_SIZE_MEDIUM);
-        }
+  }
+  &.positive {
+    background: var(--COLOR_BLUE);
+    color: white;
+    &[disabled] {
+      border: 3px solid white;
+      background: rgba(235, 235, 235);
+      pointer-events: none;
+      box-shadow:
+        inset 4px 4px 0px rgba(225, 225, 225),
+        inset -4px -4px 0px rgba(245, 245, 245);
+      button,
+      a {
+        color: rgba(210, 210, 210);
+        cursor: not-allowed;
+      }
     }
-    &.new {
-        button, a {
-            padding-right: clamp(4px, 1.4vw, 16px);
-            padding-left: clamp(4px, 1.4vw, 16px);
-            padding-top: clamp(2px, 0.7vw, 8px);
-            padding-bottom: clamp(2px, 0.7vw, 8px);
-            // padding: 1vw 2vw;
-            font-size: var(--FONT_SIZE_MEDIUM);
-        }
+    &:hover {
+      background: var(--COLOR_BLUE_SHADOW);
+      color: white;
     }
-    &.blue {
-        background: var(--COLOR_BLUE);
-        color: white;
-        &[disabled] {
-            border: 3px solid white;
-            background: rgba(235,235,235);
-            pointer-events: none;
-            box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
-            button, a {
-                color: rgba(210,210,210);
-                cursor: not-allowed;
-            }
-        }
-        &:hover {
-            background: var(--COLOR_BLUE_SHADOW);
-            color: white;
-        }
-        &:active {
-            background: var(--COLOR_BLUE_SHADOW);
-            color: white;
-        }
+    &:active {
+      background: var(--COLOR_BLUE_SHADOW);
+      color: white;
     }
-    &.positive {
-        background: var(--COLOR_BLUE);
-        color: white;
-        &[disabled] {
-            border: 3px solid white;
-            background: rgba(235,235,235);
-            pointer-events: none;
-            box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
-            button, a {
-                color: rgba(210,210,210);
-                cursor: not-allowed;
-            }
-        }
-        &:hover {
-            background: var(--COLOR_BLUE_SHADOW);
-            color: white;
-        }
-        &:active {
-            background: var(--COLOR_BLUE_SHADOW);
-            color: white;
-        }
+  }
+  &.negative {
+    background: var(--COLOR_RED);
+    color: white;
+    &[disabled] {
+      border: 3px solid white;
+      background: rgba(235, 235, 235);
+      pointer-events: none;
+      box-shadow:
+        inset 4px 4px 0px rgba(225, 225, 225),
+        inset -4px -4px 0px rgba(245, 245, 245);
+      button,
+      a {
+        color: rgba(210, 210, 210);
+        cursor: not-allowed;
+      }
     }
-    &.negative {
-        background: var(--COLOR_RED);
-        color: white;
-        &[disabled] {
-            border: 3px solid white;
-            background: rgba(235,235,235);
-            pointer-events: none;
-            box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
-            button, a {
-                color: rgba(210,210,210);
-                cursor: not-allowed;
-            }
-        }
-        &:hover {
-            background: var(--COLOR_BLUE_SHADOW);
-            color: white;
-        }
-        &:active {
-            background: var(--COLOR_BLUE_SHADOW);
-            color: white;
-        }
+    &:hover {
+      background: var(--COLOR_BLUE_SHADOW);
+      color: white;
     }
-    &.vertical {
-        button, a {
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 12px;
-        }
-        &:hover {
-            button, a {
-                text-decoration: none;
-                .label {
-                    text-decoration: underline;
-                }
-            }
-        }
+    &:active {
+      background: var(--COLOR_BLUE_SHADOW);
+      color: white;
     }
-    &:not(.vertical) {
-        button, a {
-            gap: 8px;
-        }
+  }
+  &.vertical {
+    button,
+    a {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
     }
-    &.action {
-        border: 0;
-        height: 40px;
-        border-radius: 40px;
-        background: black;
-        button, a {
-            color: white;
-            padding: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            .icon {
-                margin: 0;
-            }
+    &:hover {
+      button,
+      a {
+        text-decoration: none;
+        .label {
+          text-decoration: underline;
         }
-        &.forward {
-            background: var(--COLOR_BLUE);
-        }
-        &.download {
-            background: var(--COLOR_RED);
-        }
+      }
+    }
+  }
+  &:not(.vertical) {
+    button,
+    a {
+      gap: 8px;
+    }
+  }
+  &.action {
+    border: 0;
+    height: 40px;
+    border-radius: 40px;
+    background: black;
+    button,
+    a {
+      color: white;
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .icon {
+        margin: 0;
+      }
+    }
+    &.forward {
+      background: var(--COLOR_BLUE);
+    }
+    &.download {
+      background: var(--COLOR_RED);
+    }
+  }
+  &[disabled] {
+    border: none;
+    background: rgba(235, 235, 235);
+    // cursor: not-allowed;
+    box-shadow:
+      inset 4px 4px 0px rgba(225, 225, 225),
+      inset -4px -4px 0px rgba(245, 245, 245);
+    button,
+    a {
+      pointer-events: none;
+      color: rgba(210, 210, 210);
+    }
+  }
+  &.transparent-night {
+    background: transparent;
+    color: rgb(170, 170, 170);
+    border: none;
+    transition: all 0.3s;
+    box-shadow: none;
+    button,
+    a {
+      padding: 0;
+      color: inherit;
+      font-family: "Ubuntu";
+      font-weight: 500;
+      font-size: var(--FONT_SIZE_MINI);
+      text-underline-offset: 5px;
+    }
+    &:hover {
+      background: transparent;
+      transform: translateY(0);
+      color: rgb(255, 255, 255);
     }
     &[disabled] {
-        border: none;
-        background: rgba(235,235,235);
-        // cursor: not-allowed;
-        box-shadow: inset 4px 4px 0px rgba(225,225,225), inset -4px -4px 0px rgba(245,245,245);
-        button, a {
-            pointer-events: none;
-            color: rgba(210,210,210);
-        }
+      background: transparent;
+      box-shadow: none;
+      color: rgb(100, 100, 100);
+      pointer-events: none;
     }
-    &.transparent-night {
-        background: transparent;
-        color: rgb(170, 170, 170);
-        border: none;
-        transition: all 0.3s;
-        box-shadow: none;
-        button, a {
-            padding: 0;
-            color: inherit;
-            font-family: 'Ubuntu';
-            font-weight: 500;
-            font-size: var(--FONT_SIZE_MINI);
-            text-underline-offset: 5px;
-        }
-        &:hover {
-            background: transparent;
-            transform: translateY(0);
-            color: rgb(255, 255, 255);
-        }
-        &[disabled] {
-            background: transparent;
-            box-shadow: none;
-            color: rgb(100, 100, 100);
-            pointer-events: none;
-        }
-        :global(a.active) {
-            color: rgb(255, 255, 255);
-            .label {
-                text-decoration: underline;
-            }
-        }
+    :global(a.active) {
+      color: rgb(255, 255, 255);
+      .label {
+        text-decoration: underline;
+      }
     }
-    &.logo {
-        border: 0;
-        // &.instagram {
-        //     &:hover {
-        //         background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
-        //         color: white;
-        //         // border: 3px solid transparent;
-        //         .label {
-        //             text-shadow: 2px 2px 6px black;
-        //         }
-        //     }
-        // }
-        // &.github {
-        //     &:hover {
-        //         background: rgb(22,22,22);
-        //         color: white;
-        //         .logo {
-        //             filter: invert(1)
-        //         }
-        //     }
-        // }
-        // &.facebook {
-        //     &:hover {
-        //         background: #039be5;
-        //         color: white;
-        //     }
-        // }
-        // &.behance {
-        //     &:hover {
-        //         background: #2196f3;
-        //         color: white;
-        //     }
-        // }
-        // &.deviantart {
-        //     &:hover {
-        //         background: #06070d;
-        //         color: white;
-        //     }
-        // }
-        // &.flickr {
-        //     &:hover {
-        //         background: rgba(21,21,23,.95);
-        //         color: white;
-        //     }
-        // }
-        // &.linkedin {
-        //     &:hover {
-        //         background: #0077d3;
-        //         color: white;
-        //     }
-        // }
-    }
+  }
+  &.logo {
+    border: 0;
+    // &.instagram {
+    //     &:hover {
+    //         background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+    //         color: white;
+    //         // border: 3px solid transparent;
+    //         .label {
+    //             text-shadow: 2px 2px 6px black;
+    //         }
+    //     }
+    // }
+    // &.github {
+    //     &:hover {
+    //         background: rgb(22,22,22);
+    //         color: white;
+    //         .logo {
+    //             filter: invert(1)
+    //         }
+    //     }
+    // }
+    // &.facebook {
+    //     &:hover {
+    //         background: #039be5;
+    //         color: white;
+    //     }
+    // }
+    // &.behance {
+    //     &:hover {
+    //         background: #2196f3;
+    //         color: white;
+    //     }
+    // }
+    // &.deviantart {
+    //     &:hover {
+    //         background: #06070d;
+    //         color: white;
+    //     }
+    // }
+    // &.flickr {
+    //     &:hover {
+    //         background: rgba(21,21,23,.95);
+    //         color: white;
+    //     }
+    // }
+    // &.linkedin {
+    //     &:hover {
+    //         background: #0077d3;
+    //         color: white;
+    //     }
+    // }
+  }
 }

@@ -1,17 +1,17 @@
-import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import useFilteredPagination from '@/hooks/useFilteredPagination';
-import type { Render } from '@/types/types';
+import { renderHook, act } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import useFilteredPagination from "@/hooks/useFilteredPagination";
+import type { Render } from "@/types/types";
 
 const mockItems = [
-  { prompt: 'A sunset over mountains', favorite: true },
-  { prompt: 'A cat sitting on a chair', favorite: false },
-  { prompt: 'Abstract colorful painting', favorite: true },
-  { prompt: 'City skyline at night', favorite: false },
-  { prompt: 'Ocean waves crashing', favorite: true },
+  { prompt: "A sunset over mountains", favorite: true },
+  { prompt: "A cat sitting on a chair", favorite: false },
+  { prompt: "Abstract colorful painting", favorite: true },
+  { prompt: "City skyline at night", favorite: false },
+  { prompt: "Ocean waves crashing", favorite: true },
 ] as unknown as Render[];
 
-describe('useFilteredPagination', () => {
+describe("useFilteredPagination", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -21,21 +21,21 @@ describe('useFilteredPagination', () => {
     vi.useRealTimers();
   });
 
-  it('should return all items when no filters are applied', () => {
+  it("should return all items when no filters are applied", () => {
     const { result } = renderHook(() => useFilteredPagination(mockItems));
 
     expect(result.current.filteredItems).toHaveLength(5);
     expect(result.current.currentPage).toBe(1);
-    expect(result.current.search).toBe('');
-    expect(result.current.filter).toBe('');
-    expect(result.current.sort).toBe('');
+    expect(result.current.search).toBe("");
+    expect(result.current.filter).toBe("");
+    expect(result.current.sort).toBe("");
   });
 
-  it('should filter items by search after debounce', async () => {
+  it("should filter items by search after debounce", async () => {
     const { result } = renderHook(() => useFilteredPagination(mockItems));
 
     act(() => {
-      result.current.setSearch('cat');
+      result.current.setSearch("cat");
     });
 
     // Before debounce, still all items
@@ -47,14 +47,14 @@ describe('useFilteredPagination', () => {
     });
 
     expect(result.current.filteredItems).toHaveLength(1);
-    expect(result.current.filteredItems![0].prompt).toContain('cat');
+    expect(result.current.filteredItems![0].prompt).toContain("cat");
   });
 
-  it('should filter favorites when filter is set', () => {
+  it("should filter favorites when filter is set", () => {
     const { result } = renderHook(() => useFilteredPagination(mockItems));
 
     act(() => {
-      result.current.setFilter('favorites');
+      result.current.setFilter("favorites");
     });
 
     expect(result.current.filteredItems).toHaveLength(3);
@@ -63,11 +63,11 @@ describe('useFilteredPagination', () => {
     });
   });
 
-  it('should filter unfavorites when filter is set', () => {
+  it("should filter unfavorites when filter is set", () => {
     const { result } = renderHook(() => useFilteredPagination(mockItems));
 
     act(() => {
-      result.current.setFilter('unfavorites');
+      result.current.setFilter("unfavorites");
     });
 
     expect(result.current.filteredItems).toHaveLength(2);
@@ -76,14 +76,14 @@ describe('useFilteredPagination', () => {
     });
   });
 
-  it('should paginate items correctly', () => {
+  it("should paginate items correctly", () => {
     const manyItems = Array.from({ length: 25 }, (_, i) => ({
       prompt: `Item ${i}`,
       favorite: false,
     })) as unknown as Render[];
 
     const { result } = renderHook(() =>
-      useFilteredPagination(manyItems, { postsPerPage: 10 })
+      useFilteredPagination(manyItems, { postsPerPage: 10 }),
     );
 
     expect(result.current.paginatedItems).toHaveLength(10);
@@ -102,14 +102,14 @@ describe('useFilteredPagination', () => {
     expect(result.current.paginatedItems).toHaveLength(5);
   });
 
-  it('should reset to page 1 when filter changes', () => {
+  it("should reset to page 1 when filter changes", () => {
     const manyItems = Array.from({ length: 25 }, (_, i) => ({
       prompt: `Item ${i}`,
       favorite: i % 2 === 0,
     })) as unknown as Render[];
 
     const { result } = renderHook(() =>
-      useFilteredPagination(manyItems, { postsPerPage: 10 })
+      useFilteredPagination(manyItems, { postsPerPage: 10 }),
     );
 
     act(() => {
@@ -118,12 +118,12 @@ describe('useFilteredPagination', () => {
     expect(result.current.currentPage).toBe(3);
 
     act(() => {
-      result.current.setFilter('favorites');
+      result.current.setFilter("favorites");
     });
     expect(result.current.currentPage).toBe(1);
   });
 
-  it('should return undefined for empty items array', () => {
+  it("should return undefined for empty items array", () => {
     const { result } = renderHook(() => useFilteredPagination([]));
     expect(result.current.filteredItems).toBeUndefined();
   });

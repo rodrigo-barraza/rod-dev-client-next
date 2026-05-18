@@ -33,19 +33,19 @@
       }
 
       &:hover {
-          opacity: 1;
-          transform: translateY(-2px);
-          background: var(--COLOR_BLUE);
-          box-shadow: 2px 2px 0px rgb(0,0,0,0.9);
-          border: 2px solid rgb(15,15,15);
-          color: white;
+        opacity: 1;
+        transform: translateY(-2px);
+        background: var(--COLOR_BLUE);
+        box-shadow: 2px 2px 0px rgb(0, 0, 0, 0.9);
+        border: 2px solid rgb(15, 15, 15);
+        color: white;
       }
       &:active {
-          opacity: 1;
-          transform: translateY(-1px);
-          box-shadow: 2px 2px 0px rgb(0,0,0,1);
-          background: var(--COLOR_BLUE);
-          color: white;
+        opacity: 1;
+        transform: translateY(-1px);
+        box-shadow: 2px 2px 0px rgb(0, 0, 0, 1);
+        background: var(--COLOR_BLUE);
+        color: white;
       }
     }
   }

@@ -1,28 +1,31 @@
 .FilterComponent {
+  :global(.container) {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 32px;
+    :global(.CardComponent) {
+      max-width: none;
+      display: flex;
+      align-items: flex-end;
+      div {
+        flex: 1 1 100%;
+      }
+    }
+  }
+  @media (max-width: 960px) {
     :global(.container) {
-        padding: 0;
-        display: flex;
-        align-items: center;
-        margin-top: 32px;
-        :global(.CardComponent) {
-            max-width: none;
-            display: flex;
-            align-items: flex-end;
-            div {
-                flex: 1 1 100%;
-            }
+      :global(.CardComponent) {
+        flex-wrap: wrap;
+        div {
+          &:nth-of-type(2),
+          &:nth-of-type(3),
+          &:nth-of-type(4),
+          &:nth-of-type(5) {
+            flex: 1 1 40%;
+          }
         }
+      }
     }
-    @media (max-width: 960px) {
-        :global(.container) {
-            :global(.CardComponent) {
-                flex-wrap: wrap;
-                div {
-                    &:nth-of-type(2), &:nth-of-type(3), &:nth-of-type(4), &:nth-of-type(5) {
-                        flex: 1 1 40%;
-                    }
-                }
-            }
-        }
-    }
+  }
 }

@@ -20,7 +20,10 @@ const nextConfig: NextConfig = {
   output: "standalone",
   allowedDevOrigins: [],
   turbopack: {},
-  transpilePackages: ["@rodrigo-barraza/components-library", "@rodrigo-barraza/utilities-library"],
+  transpilePackages: [
+    "@rodrigo-barraza/components-library",
+    "@rodrigo-barraza/utilities-library",
+  ],
   images: {
     remotePatterns: [
       {
@@ -43,14 +46,16 @@ const nextConfig: NextConfig = {
     SESSIONS_SERVICE_URL: secrets.SESSIONS_SERVICE_URL,
     SESSIONS_SERVICE_PUBLIC_URL: secrets.SESSIONS_SERVICE_PUBLIC_URL,
     NEXT_PUBLIC_SESSIONS_SERVICE_URL: secrets.SESSIONS_SERVICE_URL,
-    NEXT_PUBLIC_SESSIONS_SERVICE_PUBLIC_URL: secrets.SESSIONS_SERVICE_PUBLIC_URL,
+    NEXT_PUBLIC_SESSIONS_SERVICE_PUBLIC_URL:
+      secrets.SESSIONS_SERVICE_PUBLIC_URL,
 
     // ── MinIO / Assets ────────────────────────────────────────
     ROD_DEV_MINIO_BUCKET_NAME: secrets.ROD_DEV_MINIO_BUCKET_NAME,
     ROD_DEV_ASSETS_MINIO_BUCKET_NAME: secrets.ROD_DEV_ASSETS_MINIO_BUCKET_NAME,
     NEXT_PUBLIC_ASSETS_PUBLIC_URL: secrets.ASSETS_PUBLIC_URL,
     NEXT_PUBLIC_ROD_DEV_MINIO_BUCKET_NAME: secrets.ROD_DEV_MINIO_BUCKET_NAME,
-    NEXT_PUBLIC_ROD_DEV_ASSETS_MINIO_BUCKET_NAME: secrets.ROD_DEV_ASSETS_MINIO_BUCKET_NAME,
+    NEXT_PUBLIC_ROD_DEV_ASSETS_MINIO_BUCKET_NAME:
+      secrets.ROD_DEV_ASSETS_MINIO_BUCKET_NAME,
 
     // ── Analytics ─────────────────────────────────────────────
     NEXT_PUBLIC_GA_MEASUREMENT_ID: secrets.GA_MEASUREMENT_ID,

@@ -9,13 +9,17 @@ export const IS_PRODUCTION =
 
 export const IS_LOCALHOST = !IS_PRODUCTION;
 
-export const PROJECT_NAME = IS_PRODUCTION ? "rod-dev-client" : "rod-dev-client-dev";
+export const PROJECT_NAME = IS_PRODUCTION
+  ? "rod-dev-client"
+  : "rod-dev-client-dev";
 
 const RAW_SERVICE_URL =
-  process.env.NEXT_PUBLIC_SESSIONS_SERVICE_URL || process.env.SESSIONS_SERVICE_URL;
+  process.env.NEXT_PUBLIC_SESSIONS_SERVICE_URL ||
+  process.env.SESSIONS_SERVICE_URL;
 
 const PUBLIC_SERVICE_URL =
-  process.env.NEXT_PUBLIC_SESSIONS_SERVICE_PUBLIC_URL || process.env.SESSIONS_SERVICE_PUBLIC_URL;
+  process.env.NEXT_PUBLIC_SESSIONS_SERVICE_PUBLIC_URL ||
+  process.env.SESSIONS_SERVICE_PUBLIC_URL;
 
 function resolveServiceUrl() {
   if (!IS_BROWSER) return RAW_SERVICE_URL;

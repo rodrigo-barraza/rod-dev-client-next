@@ -12,7 +12,10 @@ import { SESSIONS_SERVICE_URL } from "@/config";
  * so the sessions-service can perform accurate IP geolocation.
  */
 
-async function proxyRequest(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
+async function proxyRequest(
+  request: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> },
+) {
   try {
     const p = await params;
     const path = p.path;
@@ -75,22 +78,37 @@ async function proxyRequest(request: NextRequest, { params }: { params: Promise<
   }
 }
 
-export async function GET(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> },
+) {
   return proxyRequest(request, context);
 }
 
-export async function POST(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+export async function POST(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> },
+) {
   return proxyRequest(request, context);
 }
 
-export async function PUT(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> },
+) {
   return proxyRequest(request, context);
 }
 
-export async function PATCH(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> },
+) {
   return proxyRequest(request, context);
 }
 
-export async function DELETE(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> },
+) {
   return proxyRequest(request, context);
 }

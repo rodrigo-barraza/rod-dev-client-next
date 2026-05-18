@@ -1,33 +1,51 @@
 "use client";
 
-import { usePathname } from 'next/navigation'
-import Link, { LinkProps } from 'next/link'
-import React, { PropsWithChildren, useState, useEffect } from 'react'
+import { usePathname } from "next/navigation";
+import Link, { LinkProps } from "next/link";
+import React, { PropsWithChildren, useState, useEffect } from "react";
 
 type ActiveLinkProps = LinkProps & {
-  className?: string
-  activeClassName: string
-}
+  className?: string;
+  activeClassName: string;
+};
 
-const ActiveLinkComponent = ({children, activeClassName, className, ...props}: PropsWithChildren<ActiveLinkProps>) => {
-  const pathname = usePathname()
-  const [computedClassName, setComputedClassName] = useState(className)
+const ActiveLinkComponent = ({
+  children,
+  activeClassName,
+  className,
+  ...props
+}: PropsWithChildren<ActiveLinkProps>) => {
+  const pathname = usePathname();
+  const [computedClassName, setComputedClassName] = useState(className);
 
   useEffect(() => {
-    const linkPathname = new URL((props.as || props.href) as string, location.href).pathname
-    const activePathname = new URL(pathname || '/', location.href).pathname
-    const newClassName = linkPathname === activePathname ? `${className} ${activeClassName}`.trim() : className
+    const linkPathname = new URL(
+      (props.as || props.href) as string,
+      location.href,
+    ).pathname;
+    const activePathname = new URL(pathname || "/", location.href).pathname;
+    const newClassName =
+      linkPathname === activePathname
+        ? `${className} ${activeClassName}`.trim()
+        : className;
 
     if (newClassName !== computedClassName) {
-      setComputedClassName(newClassName)
+      setComputedClassName(newClassName);
     }
-  }, [pathname, props.as, props.href, activeClassName, className, computedClassName])
+  }, [
+    pathname,
+    props.as,
+    props.href,
+    activeClassName,
+    className,
+    computedClassName,
+  ]);
 
   return (
     <Link className={computedClassName} {...props} passHref={true}>
       {children}
     </Link>
-  )
-}
+  );
+};
 
-export default ActiveLinkComponent
+export default ActiveLinkComponent;

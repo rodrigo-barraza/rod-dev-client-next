@@ -7,6 +7,7 @@ Portfolio site for [rod.dev](https://rod.dev) — AI art gallery, project showca
 ## Features
 
 ### Portfolio
+
 - **Home Gallery** — Masonry grid with hover descriptions and lightbox
 - **Collections** — Curated project collections with detail views
 - **Projects / About** — CV-style page with skills, education, and work history
@@ -14,6 +15,7 @@ Portfolio site for [rod.dev](https://rod.dev) — AI art gallery, project showca
 - **Renders Gallery** — Filterable AI art gallery with like/favorite system
 
 ### Gym Tracker
+
 - **Exercise Journal** — Daily workout logging with sets, reps, and weight
 - **Volume Tracking** — Automatic total/average calculations
 - **Experience System** — Visual XP bar progression per exercise
@@ -42,4 +44,3 @@ npm run deploy         # Deploy to production
 npm run deploy:dry     # Validate deployment without deploying
 npm run setup-ssh      # Set up SSH keys for deployment
 ```
-
