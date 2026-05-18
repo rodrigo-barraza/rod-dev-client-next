@@ -1,4 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
+import { SESSIONS_SERVICE_URL } from "@/config";
 
 /**
  * Catch-all API proxy route for sessions-service.
@@ -11,27 +12,18 @@ import type { NextApiRequest, NextApiResponse } from "next";
  * so the sessions-service can perform accurate IP geolocation.
  */
 
-import { SESSIONS_SERVICE_URL } from "@/config";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+async function proxyRequest(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   try {
-    const { path } = req.query;
+    const p = await params;
+    const path = p.path;
     const segments = Array.isArray(path) ? path.join("/") : path || "";
-    const queryString = new URLSearchParams(
-      req.query as Record<string, string>,
-    );
-    // Remove the path param used by Next.js routing
-    queryString.delete("path");
-    const qs = queryString.toString();
-    const url = `${SESSIONS_SERVICE_URL}/${segments}${qs ? `?${qs}` : ""}`;
+    const queryString = request.nextUrl.search;
+    const url = `${SESSIONS_SERVICE_URL}/${segments}${queryString}`;
 
     // Forward the client's real IP
     const clientIp =
-      (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
-      req.socket?.remoteAddress ||
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
       "";
 
     const headers: Record<string, string> = {
@@ -44,39 +36,61 @@ export default async function handler(
     }
 
     // Forward user-agent so sessions-service can parse browser/OS/device
-    const userAgent = req.headers["user-agent"] as string;
+    const userAgent = request.headers.get("user-agent");
     if (userAgent) {
       headers["user-agent"] = userAgent;
     }
 
     // Forward session ID header if present
-    const sessionId = req.headers["x-session-id"] as string;
+    const sessionId = request.headers.get("x-session-id");
     if (sessionId) {
       headers["x-session-id"] = sessionId;
     }
 
     // Forward accept-language for locale detection
-    const acceptLanguage = req.headers["accept-language"] as string;
+    const acceptLanguage = request.headers.get("accept-language");
     if (acceptLanguage) {
       headers["accept-language"] = acceptLanguage;
     }
 
     const fetchOptions: RequestInit = {
-      method: req.method || "GET",
+      method: request.method,
       headers,
     };
 
-    if (req.method !== "GET" && req.method !== "HEAD" && req.body) {
-      fetchOptions.body = JSON.stringify(req.body);
+    if (request.method !== "GET" && request.method !== "HEAD") {
+      const bodyText = await request.text();
+      if (bodyText) {
+        fetchOptions.body = bodyText;
+      }
     }
 
     const response = await fetch(url, fetchOptions);
     const data = await response.json();
 
-    res.status(response.status).json(data);
+    return NextResponse.json(data, { status: response.status });
   } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Proxy error";
-    res.status(502).json({ error: true, message });
+    const message = error instanceof Error ? error.message : "Proxy error";
+    return NextResponse.json({ error: true, message }, { status: 502 });
   }
+}
+
+export async function GET(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  return proxyRequest(request, context);
+}
+
+export async function POST(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  return proxyRequest(request, context);
+}
+
+export async function PUT(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  return proxyRequest(request, context);
+}
+
+export async function PATCH(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  return proxyRequest(request, context);
+}
+
+export async function DELETE(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  return proxyRequest(request, context);
 }
