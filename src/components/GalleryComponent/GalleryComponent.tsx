@@ -1,7 +1,9 @@
+"use client";
+
 import React from 'react'
 import style from './GalleryComponent.module.scss'
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import BadgeComponent from '../BadgeComponent/BadgeComponent';
 import RenderApiLibrary from '@/libraries/RenderApiLibrary';

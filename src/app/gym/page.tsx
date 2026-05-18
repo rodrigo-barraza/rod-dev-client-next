@@ -1,7 +1,9 @@
+"use client";
+
 import React from 'react'
 import { useState, useEffect } from 'react'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
-import { useRouter } from 'next/router'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import GymApiLibrary from '@/libraries/GymApiLibrary'
 import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
@@ -11,25 +13,15 @@ import ExerciseCollection from '@/collections/ExerciseCollection4'
 import DialogComponent from '@/components/DialogComponent'
 
 import ExerciseComponent from '@/components/ExerciseComponent/ExerciseComponent'
-import SeoHeadComponent from '@/components/SeoHeadComponent/SeoHeadComponent'
 import type { Meta, Exercise, JournalEntry, JournalMap, GymSet } from '@/types/types'
 
-interface GymPageProps {
-    meta: Meta;
-}
-
-export const getServerSideProps: GetServerSideProps<GymPageProps> = async (context: GetServerSidePropsContext) => {
-  const metaProps = UtilityLibrary.buildServerSideMetaProps(context, {
-      title: 'Gym Tracker',
-      description: 'Gym exercise tracking and journal.',
-      keywords: 'gym, exercise, tracking, journal',
-  });
-  return { props: { ...metaProps.props } };
-}
 
 
-export default function Gym({ meta }: GymPageProps) {
+
+function GymContent() {
     const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
     const [gymExercises] = useState<Exercise[]>(ExerciseCollection)
     const [trackList, setTrackList] = useState<Exercise[]>([])
     const [weight, setWeight] = useState('')
@@ -231,39 +223,40 @@ export default function Gym({ meta }: GymPageProps) {
         
         const queryString = new URLSearchParams(newQuery).toString()
         window.history.replaceState(
-            { url: `${router.pathname}?${queryString}`, as: `${router.asPath}?${queryString}`, options: { shallow: true } },
+            { url: `${pathname}?${queryString}`, as: `${pathname}?${queryString}`, options: { shallow: true } },
             '',
-            `${router.pathname}?${queryString}`
+            `${pathname}?${queryString}`
         )
         if (!selectedEquipment && !selectedPosition && !selectedStance && !selectedStyle && !selectedForm && !selectedExercise) {
-            window.history.replaceState({}, '', router.pathname)
+            window.history.replaceState({}, '', pathname)
         }
-    }, [selectedExercise, selectedPosition, selectedEquipment, selectedStyle, selectedStance, selectedForm])
+    }, [selectedExercise, selectedPosition, selectedEquipment, selectedStyle, selectedStance, selectedForm, pathname])
 
     useEffect(() => {
         getJournal()
     }, [])
 
     useEffect(() => {
-        if (router.query.exercise) {
-            const foundExercise = gymExercises.find((exercise) => exercise.name === router.query.exercise)
+        const exerciseParam = searchParams?.get('exercise')
+        if (exerciseParam) {
+            const foundExercise = gymExercises.find((exercise) => exercise.name === exerciseParam)
             if (foundExercise) {
                 setIsModalOpen(foundExercise.type)
                 setSelectedExercise(foundExercise)
-                if (router.query.stance) {
-                    setSelectedStance(router.query.stance as string)
+                if (searchParams?.get('stance')) {
+                    setSelectedStance(searchParams.get('stance') as string)
                 }
-                if (router.query.style) {
-                    setSelectedStyle(router.query.style as string)
+                if (searchParams?.get('style')) {
+                    setSelectedStyle(searchParams.get('style') as string)
                 }
-                if (router.query.position) {
-                    setSelectedPosition(router.query.position as string)
+                if (searchParams?.get('position')) {
+                    setSelectedPosition(searchParams.get('position') as string)
                 }
-                if (router.query.equipment) {
-                    setSelectedEquipment(router.query.equipment as string)
+                if (searchParams?.get('equipment')) {
+                    setSelectedEquipment(searchParams.get('equipment') as string)
                 }
-                if (router.query.form) {
-                    setSelectedForm(router.query.form as string)
+                if (searchParams?.get('form')) {
+                    setSelectedForm(searchParams.get('form') as string)
                 }
             }
         }
@@ -271,7 +264,7 @@ export default function Gym({ meta }: GymPageProps) {
 
     return (
     <main className={style.GymPage}>
-        <SeoHeadComponent meta={meta} />
+        
         <div className="container">
             <div className="CardComponent">
                 <h1>Gym Tracker</h1>
@@ -564,5 +557,14 @@ export default function Gym({ meta }: GymPageProps) {
             </DialogComponent>
         </div>
     </main>
+    )
+}
+
+
+export default function Gym() {
+    return (
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <GymContent />
+        </React.Suspense>
     )
 }

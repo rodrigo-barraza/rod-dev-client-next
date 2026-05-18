@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react'
 import style from './ButtonComponent.module.scss'
 import ActiveLinkComponent from '@/components/ActiveLinkComponent'

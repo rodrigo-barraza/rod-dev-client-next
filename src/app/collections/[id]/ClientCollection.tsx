@@ -1,134 +1,20 @@
+"use client";
+
 import lodash from 'lodash'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import styles from './[id].module.scss'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import ArtCollectionsCollection from '@/collections/ArtCollectionsCollection'
-import SeoHeadComponent from '@/components/SeoHeadComponent/SeoHeadComponent'
-import type { Meta, ArtCollection, ArtWork } from '@/types/types'
+import type { ArtCollection, ArtWork } from '@/types/types'
 
-interface CollectionPageProps {
-    meta: Meta;
+interface ClientCollectionProps {
     currentCollectionWorks: ArtWork[];
     currentCollection: ArtCollection;
 }
 
-export const getServerSideProps: GetServerSideProps<CollectionPageProps> = async (context: GetServerSidePropsContext) => {
-    const { query, resolvedUrl } = context
-    
-    const currentCollectionPath = query.id as string;
-    const currentCollection = ArtCollectionsCollection.find(collection => collection.path === currentCollectionPath)
-
-    if (!currentCollection) {
-        return { notFound: true };
-    }
-
-    const currentCollectionWorks = currentCollection.works;
-
-    let image: string | null = null;
-    if (currentCollection.thumbnail) {
-        image = UtilityLibrary.renderAssetPath(currentCollection.thumbnail, currentCollection.path)
-    } else if (currentCollection.works[0]?.imagePath) {
-        image = UtilityLibrary.renderAssetPath(currentCollection.works[0].imagePath, currentCollection.path)
-    } else if (currentCollection.poster) {
-        image = UtilityLibrary.renderAssetPath(currentCollection.poster, currentCollection.path)
-    }
-
-    // Build image objects for ImageGallery schema
-    const imageObjects = currentCollectionWorks
-        .filter((work) => work.imagePath)
-        .map((work) => ({
-            '@type': 'ImageObject',
-            name: work.title,
-            contentUrl: UtilityLibrary.renderAssetPath(work.imagePath!, currentCollection.path),
-            description: work.caption || work.description || `${work.title} by Rodrigo Barraza`,
-            creator: { '@type': 'Person', name: 'Rodrigo Barraza' },
-            copyrightHolder: { '@type': 'Person', name: 'Rodrigo Barraza' },
-            license: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
-            ...(work.year ? { dateCreated: String(work.year) } : {}),
-        }));
-
-    // Build video objects for VideoObject schema
-    const videoObjects = currentCollectionWorks
-        .filter((work) => work.videoPath)
-        .map((work) => ({
-            '@type': 'VideoObject',
-            name: work.title,
-            contentUrl: UtilityLibrary.renderAssetPath(work.videoPath!, currentCollection.path),
-            description: work.description || `${work.title} — AI art animation by Rodrigo Barraza`,
-            ...(work.poster ? { thumbnailUrl: UtilityLibrary.renderAssetPath(work.poster, currentCollection.path) } : {}),
-            ...(work.duration ? { duration: `PT${work.duration}S` } : {}),
-            ...(work.uploadDate ? { uploadDate: work.uploadDate } : {}),
-        }));
-
-    // Build the @graph array
-    const graphEntries: Record<string, unknown>[] = [
-        {
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-                {
-                    '@type': 'ListItem',
-                    position: 1,
-                    name: 'Home',
-                    item: 'https://rod.dev/',
-                },
-                {
-                    '@type': 'ListItem',
-                    position: 2,
-                    name: 'Collections',
-                    item: 'https://rod.dev/',
-                },
-                {
-                    '@type': 'ListItem',
-                    position: 3,
-                    name: currentCollection.title,
-                    item: `https://rod.dev/collections/${currentCollection.path}`,
-                },
-            ],
-        },
-    ];
-
-    // Add ImageGallery if there are image works
-    if (imageObjects.length > 0) {
-        graphEntries.push({
-            '@type': 'ImageGallery',
-            name: `${currentCollection.title} — ${currentCollection.type === 'ai' ? 'AI Art' : currentCollection.type === 'photography' ? 'Photography' : 'Art'} by Rodrigo Barraza`,
-            description: currentCollection.description,
-            creator: {
-                '@type': 'Person',
-                name: 'Rodrigo Barraza',
-                url: 'https://rod.dev/rodrigo-barraza',
-            },
-            image: imageObjects,
-        });
-    }
-
-    // Add VideoObject entries at the graph level
-    if (videoObjects.length > 0) {
-        graphEntries.push(...videoObjects);
-    }
-
-    return {
-        props: {
-            meta: UtilityLibrary.buildPageMeta(resolvedUrl, {
-                title: `${currentCollection.documentTitle}`,
-                description: `${currentCollection.documentDescription}`,
-                keywords: `${currentCollection.documentKeywords}`,
-                image: image ?? undefined,
-                jsonLd: {
-                    '@context': 'https://schema.org',
-                    '@graph': graphEntries,
-                },
-            }),
-            currentCollectionWorks: currentCollectionWorks,
-            currentCollection: currentCollection,
-        }
-    };
-}
-
-export default function Collection({ meta, currentCollectionWorks, currentCollection }: CollectionPageProps) {
+export default function ClientCollection({ currentCollectionWorks, currentCollection }: ClientCollectionProps) {
     const [moreCollections, setMoreCollections] = useState<ArtCollection[]>([])
 
     useEffect(() => {
@@ -138,7 +24,6 @@ export default function Collection({ meta, currentCollectionWorks, currentCollec
 
     return (
         <main className={styles.CollectionView}>
-            <SeoHeadComponent meta={meta} />
             <div className="collection">
                 <div className="collection-details">
                     <div className="container">
@@ -173,8 +58,7 @@ export default function Collection({ meta, currentCollectionWorks, currentCollec
 
                             { work.videoPath && (
                                 <video id="oneVideo" autoPlay muted controls={currentCollection.videoControls} loop poster=""
-                                key={work.title}
-                                v-if="work.videoPath">
+                                key={work.title}>
                                     <source src={UtilityLibrary.renderAssetPath(work.videoPath, currentCollection.path)} type="video/mp4"></source>
                                     Your browser does not support the video tag.
                                 </video>
@@ -251,5 +135,5 @@ export default function Collection({ meta, currentCollectionWorks, currentCollec
                 </div>
             </div>
         </main>
-  );
+    );
 }

@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",
-    "@rodrigo-barraza/components-library": "github:rodrigo-barraza/components-library",
+    "@rodrigo-barraza/components-library": "git+https://github.com/rodrigo-barraza/components-library.git",
     "@rodrigo-barraza/utilities-library": "git+https://github.com/rodrigo-barraza/utilities-library.git",
     "@vercel/analytics": "^2.0.1",
     "lodash": "^4.18.1",

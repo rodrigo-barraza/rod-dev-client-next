@@ -1,32 +1,37 @@
-import { AppProps } from 'next/app'
-import Head from 'next/head'
-import { Analytics } from '@vercel/analytics/react';
-import { useEffect, useState } from 'react'
+"use client";
+
+import { useEffect, useState } from 'react';
+import { ThemeProvider } from "@rodrigo-barraza/components-library";
+import { AlertProvider, useAlertContext } from '@/contexts/AlertContext';
 import LayoutComponent from '@/components/LayoutComponent';
 import EventLibrary from '@/libraries/EventLibrary';
-import '@/styles/styles.scss'
-import '@/styles/animations.scss'
-import { AlertProvider, useAlertContext } from '@/contexts/AlertContext'
 import RenderApiLibrary from '@/libraries/RenderApiLibrary';
-import { ThemeProvider } from "@rodrigo-barraza/components-library";
 import { useApplicationState } from "@/stores/ZustandStore";
 
-
-function App({ Component, pageProps }: AppProps) {
+function AlertMessageHelper() {
     const { message } = useAlertContext();
+    return <>{message}</>;
+}
+
+export default function ClientProviders({ children }: { children: React.ReactNode }) {
     const [getRenderStatus, setRenderStatus] = useState(false);
     const { setIsRenderApiAvailable } = useApplicationState();
 
     async function getStatus() {
-        const getStatus = await RenderApiLibrary.getStatus();
-        if (getStatus.data) {
-            setRenderStatus(true);
-            setIsRenderApiAvailable(true);
-        } else {
+        try {
+            const getStatus = await RenderApiLibrary.getStatus();
+            if (getStatus.data) {
+                setRenderStatus(true);
+                setIsRenderApiAvailable(true);
+            } else {
+                setRenderStatus(false);
+                setIsRenderApiAvailable(false);
+            }
+        } catch (error) {
             setRenderStatus(false);
             setIsRenderApiAvailable(false);
         }
-      }
+    }
 
     useEffect(() => {
         // Initialize session tracking
@@ -50,7 +55,6 @@ function App({ Component, pageProps }: AppProps) {
 
         // Track navigation and link clicks
         const handleDocumentClick = (event: MouseEvent) => {
-            event = event || window.event;
             const target = event.target as HTMLAnchorElement;
             if (target && target.nodeName === 'A') {
                 if(target.href.includes('//development.rod.dev') ||
@@ -67,25 +71,23 @@ function App({ Component, pageProps }: AppProps) {
 
         // Session heartbeat — every 5 seconds
         const heartbeatInterval = setInterval(() => {
-            EventLibrary.postSession(5000, screen.width, screen.height);
+            EventLibrary.postSession(5000, window.screen.width, window.screen.height);
         }, 5000);
 
         return () => {
             clearInterval(heartbeatInterval);
             document.removeEventListener('click', handleDocumentClick, false);
         };
-    }, [])
+    }, []);
 
     return (
         <ThemeProvider>
             <LayoutComponent>
                 <AlertProvider>
-                    {message}
-                    <Component {...pageProps} />
+                    <AlertMessageHelper />
+                    {children}
                 </AlertProvider>
-                {/* <Analytics /> */}
             </LayoutComponent>
         </ThemeProvider>
-    )
+    );
 }
-export default App

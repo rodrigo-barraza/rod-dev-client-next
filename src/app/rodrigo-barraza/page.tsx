@@ -4,123 +4,18 @@ import SocialsCollection from '@/collections/SocialsCollection'
 import AboutCollection from '@/collections/AboutCollection'
 import styles from './index.module.scss'
 import ButtonComponent from '@/components/ButtonComponent/ButtonComponent'
-import SeoHeadComponent from '@/components/SeoHeadComponent/SeoHeadComponent'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
-import type { Meta } from '@/types/types'
+import type { Metadata } from 'next'
 
-export const getServerSideProps = async (context: { resolvedUrl: string }) =>
-    UtilityLibrary.buildServerSideMetaProps(context, {
-        title: 'The Software Engineer, Photographer, Artist: Rodrigo Barraza',
-        description: 'About Rodrigo Barraza, a Vancouver-based software engineer, photographer, generative AI artist and filmmaker. BFA in Photography from Emily Carr University. Over 20 years of programming experience.',
-        keywords: 'rodrigo barraza, vancouver software engineer, photographer, artist, ai artist, generative art, clip guided diffusion, full stack developer, emily carr university, film photography, medium format photography, pristine diffusion, einstein exchange',
-        image: 'https://assets.rod.dev/rod-dev-assets/images/rodrigo-barraza-black-and-white-portrait.jpg',
-        jsonLd: {
-            '@context': 'https://schema.org',
-            '@graph': [
-                {
-                    '@type': 'Person',
-                    '@id': 'https://rod.dev/rodrigo-barraza#person',
-                    name: 'Rodrigo Barraza',
-                    givenName: 'Rodrigo',
-                    familyName: 'Barraza',
-                    url: 'https://rod.dev/rodrigo-barraza',
-                    image: 'https://assets.rod.dev/rod-dev-assets/images/rodrigo-barraza-black-and-white-portrait.jpg',
-                    description: 'Vancouver-based software engineer, photographer, and generative AI artist with over 20 years of programming experience. BFA in Photography from Emily Carr University of Art + Design.',
-                    jobTitle: ['Software Engineer', 'Photographer', 'Artist'],
-                    knowsAbout: [
-                        'Software Engineering',
-                        'Full-Stack Web Development',
-                        'Photography',
-                        'Film Photography',
-                        'Medium Format Photography',
-                        'Generative AI Art',
-                        'CLIP-Guided Diffusion',
-                        'Stable Diffusion',
-                        'Front-End Development',
-                        'React',
-                        'Next.js',
-                        'Node.js',
-                        'TypeScript',
-                        'JavaScript',
-                        'Python',
-                        'Animation',
-                        'Cinematography',
-                        'Graphic Design',
-                        'Illustration',
-                    ],
-                    nationality: {
-                        '@type': 'Country',
-                        name: 'Canada',
-                    },
-                    alumniOf: {
-                        '@type': 'CollegeOrUniversity',
-                        name: 'Emily Carr University of Art + Design',
-                        sameAs: 'https://www.ecuad.ca/',
-                    },
-                    hasCredential: {
-                        '@type': 'EducationalOccupationalCredential',
-                        credentialCategory: 'degree',
-                        educationalLevel: 'Bachelor of Fine Arts',
-                        about: 'Photography',
-                    },
-                    address: {
-                        '@type': 'PostalAddress',
-                        addressLocality: 'Vancouver',
-                        addressRegion: 'BC',
-                        addressCountry: 'CA',
-                    },
-                    birthPlace: {
-                        '@type': 'Place',
-                        name: 'Vancouver, BC, Canada',
-                    },
-                    sameAs: [
-                        'https://github.com/rodrigo-barraza',
-                        'https://www.instagram.com/rawdreygo',
-                        'https://www.linkedin.com/in/rodrigobarraza',
-                        'https://www.deviantart.com/bioviral',
-                        'https://www.facebook.com/barraza.rodrigo',
-                        'https://flickr.com/photos/rodrigobarraza',
-                        'https://www.behance.net/rodrigobarraza',
-                        'https://keybase.io/rodrigobarraza',
-                    ],
-                },
-                {
-                    '@type': 'ProfilePage',
-                    '@id': 'https://rod.dev/rodrigo-barraza#profilepage',
-                    url: 'https://rod.dev/rodrigo-barraza',
-                    name: 'About Rodrigo Barraza',
-                    mainEntity: { '@id': 'https://rod.dev/rodrigo-barraza#person' },
-                    breadcrumb: {
-                        '@type': 'BreadcrumbList',
-                        itemListElement: [
-                            {
-                                '@type': 'ListItem',
-                                position: 1,
-                                name: 'Home',
-                                item: 'https://rod.dev/',
-                            },
-                            {
-                                '@type': 'ListItem',
-                                position: 2,
-                                name: 'About Rodrigo Barraza',
-                                item: 'https://rod.dev/rodrigo-barraza',
-                            },
-                        ],
-                    },
-                },
-            ],
-        },
-    });
+export const metadata: Metadata = {
+    title: 'The Software Engineer, Photographer, Artist: Rodrigo Barraza',
+    description: 'About Rodrigo Barraza, a Vancouver-based software engineer, photographer, generative AI artist and filmmaker. BFA in Photography from Emily Carr University. Over 20 years of programming experience.',
+    keywords: 'rodrigo barraza, vancouver software engineer, photographer, artist, ai artist, generative art, clip guided diffusion, full stack developer, emily carr university, film photography, medium format photography, pristine diffusion, einstein exchange',
+};
 
-interface AboutPageProps {
-    meta: Meta;
-}
-    
-
-export default function AboutView({ meta }: AboutPageProps) {
+export default function AboutView() {
     return (
         <main className={ styles.AboutView }>
-            <SeoHeadComponent meta={meta} />
             <div className="container">
                 <div className="layout">
                     <div className="sidebar">

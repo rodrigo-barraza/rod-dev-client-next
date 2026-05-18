@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { usePathname, useParams } from 'next/navigation'
 import ActiveLinkComponent from '@/components/ActiveLinkComponent'
 import styles from './HeaderComponent.module.scss'
 import SocialsCollection from '@/collections/SocialsCollection'
@@ -13,14 +15,15 @@ const HeaderComponent: React.FC = () => {
     const [mobileMenu, setMobileMenu] = useState(false)
     const [stripeClass, setStripeClass] = useState({})
     const [routeName, setRouteName] = useState('')
-    const router = useRouter()
-    const queryId = router.query.id
+    const pathname = usePathname() || ''
+    const params = useParams()
+    const queryId = params?.id
     let path = ''
 
     if (queryId !== undefined && typeof queryId === "string") {
-        path = router.asPath.replaceAll('/', '').replace(queryId, '')
+        path = pathname.replaceAll('/', '').replace(queryId, '')
     } else {
-        path = router.asPath.replaceAll('/', '')
+        path = pathname.replaceAll('/', '')
     }
 
     useEffect(() => {

@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import React from 'react'
-import { useRouter } from 'next/router';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import StyleCollection from '@/collections/StyleCollection'
 import SamplerCollection from '@/collections/SamplerCollection'
 import AspectRatioCollection from '@/collections/AspectRatioCollection'
@@ -54,8 +53,7 @@ export default function Txt2ImageComponent({ render, setGuest }: Txt2ImageCompon
             const styleLabel = UtilityLibrary.findStyleLabel(parsedResult.data.style)
             const currentStyle = UtilityLibrary.findStyle(parsedResult.data.style)
 
-            router.query.id = parsedResult.data.id
-            router.push(router)
+            router.push(`${currentPage}?id=${parsedResult.data.id}`)
 
             setTheRender(parsedResult.data as unknown as Render)
 

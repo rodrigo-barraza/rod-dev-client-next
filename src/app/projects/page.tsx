@@ -1,58 +1,20 @@
 import styles from './index.module.scss'
 import ProjectsCollection from '@/collections/ProjectsCollection'
-import SeoHeadComponent from '@/components/SeoHeadComponent/SeoHeadComponent'
 import UtilityLibrary from '@/libraries/UtilityLibrary'
 import type { Meta } from '@/types/types'
 
-export const getServerSideProps = async (context: { resolvedUrl: string }) =>
-    UtilityLibrary.buildServerSideMetaProps(context, {
-        title: 'Rodrigo Barraza - Software Engineering Projects',
-        description: 'Software engineering projects, open-source repositories, and AI art tools by Rodrigo Barraza. Including Pristine Diffusion, image captioning, and full-stack web applications.',
-        keywords: 'rodrigo barraza, projects, repository, image captioning, blip2, github, google colab, disco diffusion, pristine diffusion, programming, software engineer, portfolio, open source, ai art tools, full stack developer',
-        image: 'https://assets.rod.dev/rod-dev-assets/collections/dreamwork/rodrigo-barraza-dreamwork-beach-medium-format-fuji-velvia-100.jpg',
-        jsonLd: {
-            '@context': 'https://schema.org',
-            '@graph': [
-                {
-                    '@type': 'BreadcrumbList',
-                    itemListElement: [
-                        {
-                            '@type': 'ListItem',
-                            position: 1,
-                            name: 'Home',
-                            item: 'https://rod.dev/',
-                        },
-                        {
-                            '@type': 'ListItem',
-                            position: 2,
-                            name: 'Projects',
-                            item: 'https://rod.dev/projects',
-                        },
-                    ],
-                },
-                {
-                    '@type': 'CollectionPage',
-                    name: 'Software Engineering Projects by Rodrigo Barraza',
-                    description: 'A portfolio of software engineering projects, open-source tools, and AI art experiments.',
-                    url: 'https://rod.dev/projects',
-                    creator: {
-                        '@type': 'Person',
-                        name: 'Rodrigo Barraza',
-                        url: 'https://rod.dev/rodrigo-barraza',
-                    },
-                },
-            ],
-        },
-    });
+import type { Metadata } from 'next';
 
-interface ProjectsPageProps {
-    meta: Meta;
-}
+export const metadata: Metadata = {
+    title: 'Rodrigo Barraza - Software Engineering Projects',
+    description: 'Software engineering projects, open-source repositories, and AI art tools by Rodrigo Barraza. Including Pristine Diffusion, image captioning, and full-stack web applications.',
+    keywords: 'rodrigo barraza, projects, repository, image captioning, blip2, github, google colab, disco diffusion, pristine diffusion, programming, software engineer, portfolio, open source, ai art tools, full stack developer',
+    // We can omit JSON-LD script for now, or you could add it to layout/page
+};
 
-export default function Projects({ meta }: ProjectsPageProps) {
+export default function Projects() {
     return (
         <main className={styles.AboutView}>
-            <SeoHeadComponent meta={meta} />
             <div className="container">
             <div className="layout">
                 <div className="main">

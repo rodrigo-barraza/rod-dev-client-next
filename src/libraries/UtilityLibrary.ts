@@ -1,7 +1,6 @@
 import SamplerCollection from '@/collections/SamplerCollection';
 import StyleCollection from '@/collections/StyleCollection';
 import type { GymSet, JournalMap } from '@/types/types';
-import type { NextRouter } from 'next/router';
 import type { IncomingMessage } from 'http';
 
 // Use native Temporal if available, otherwise polyfill (Safari)
@@ -307,16 +306,11 @@ const UtilityLibrary = {
 
     // ─── Navigation Utilities ───────────────────────────────────
 
-    navigateToGeneration(router: NextRouter, id?: string) {
+    navigateToGeneration(router: any, id?: string) {
         if (id) {
-            router.push({
-                pathname: '/generate',
-                query: { id },
-            });
+            router.push(`/generate?id=${id}`);
         } else {
-            router.push({
-                pathname: '/generate',
-            });
+            router.push(`/generate`);
         }
     },
 
