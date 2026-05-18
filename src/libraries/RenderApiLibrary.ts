@@ -26,9 +26,9 @@ const RenderApiLibrary = {
         negativePrompt: string,
         aspectRatio?: string,
     ): Promise<{ data: { id: string; image: string | null; prompt: string; style: string; sampler: string; config: number; count: number; createdAt: string; aspectRatio: string; provider?: string; model?: string; estimatedCost?: number } }> {
-        const prismUrl = ApiConstants.PRISM_SERVICE;
+        const prismUrl = ApiConstants.PRISM_SERVICE_PUBLIC_URL;
         if (!prismUrl) {
-            throw new Error('PRISM_SERVICE is not configured');
+            throw new Error('PRISM_SERVICE_PUBLIC_URL is not configured');
         }
 
         // Build an enriched prompt that incorporates the style modifier
@@ -145,7 +145,7 @@ const RenderApiLibrary = {
      * Check if Prism is available by hitting its /health endpoint.
      */
     async getStatus() {
-        const prismUrl = ApiConstants.PRISM_SERVICE;
+        const prismUrl = ApiConstants.PRISM_SERVICE_PUBLIC_URL;
         if (!prismUrl) {
             return { data: null };
         }

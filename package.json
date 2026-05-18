@@ -4,9 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",
-    "@rodrigo-barraza/components-library": "git+https://github.com/rodrigo-barraza/components-library.git",
-    "@rodrigo-barraza/utilities-library": "git+https://github.com/rodrigo-barraza/utilities-library.git",
+    "@rodrigo-barraza/components-library": "github:rodrigo-barraza/components-library",
+    "@rodrigo-barraza/utilities-library": "github:rodrigo-barraza/utilities-library",
     "@vercel/analytics": "^2.0.1",
     "lodash": "^4.18.1",
     "lucide-react": "^1.14.0",

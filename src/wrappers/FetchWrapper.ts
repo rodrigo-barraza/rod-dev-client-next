@@ -5,7 +5,7 @@ const FetchWrapper = {
      * Build a full service URL from a service constant and path segment.
      */
     _buildUrl(service: string, path: string): string {
-        return `${ApiConstants.RODRIGO_SERVICE}${service}/${path}`;
+        return `${ApiConstants.ROD_DEV_SERVICE_URL}${service}/${path}`;
     },
 
     /**
