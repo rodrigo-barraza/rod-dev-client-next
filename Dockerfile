@@ -25,7 +25,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN --mount=type=secret,id=VAULT_SERVICE_TOKEN \
   export VAULT_SERVICE_TOKEN=$(cat /run/secrets/VAULT_SERVICE_TOKEN 2>/dev/null) && \
-  npx next build --webpack
+  npm run build
 
 # --- Production ---
 FROM base AS runner
