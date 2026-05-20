@@ -349,7 +349,7 @@ const UtilityLibrary = {
 
   // ─── Navigation Utilities ───────────────────────────────────
 
-  navigateToGeneration(router: any, id?: string) {
+  navigateToGeneration(router: { push: (url: string) => void }, id?: string) {
     if (id) {
       router.push(`/generate?id=${id}`);
     } else {

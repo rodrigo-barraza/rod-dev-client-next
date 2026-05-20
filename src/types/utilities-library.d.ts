@@ -1,12 +1,13 @@
 declare module "@rodrigo-barraza/utilities-library/rate" {
-  export function debounce<T extends (...args: any[]) => any>(
-    fn: T,
+  export function debounce<T extends Function>(
+    func: T,
     wait: number,
-    options?: { leading?: boolean },
-  ): T & { cancel: () => void; flush: () => void };
+    immediate?: boolean,
+  ): T & { cancel: () => void };
 
-  export function throttle<T extends (...args: any[]) => any>(
-    fn: T,
+  export function throttle<T extends Function>(
+    func: T,
     wait: number,
+    options?: { leading?: boolean; trailing?: boolean },
   ): T & { cancel: () => void };
 }
