@@ -1,6 +1,6 @@
-import ApiConstants from "@/constants/ApiConstants";
+import { PROJECT_NAME } from "@/config";
 
-const PROJECT_ID = "rod-dev-client";
+const SESSIONS_API = "/api/sessions";
 
 const EventApiLibrary = {
   /**
@@ -17,7 +17,7 @@ const EventApiLibrary = {
     utm: Record<string, string> | null,
   ): Promise<void> {
     try {
-      await fetch(`${ApiConstants.SESSIONS_API}/sessions`, {
+      await fetch(`${SESSIONS_API}/sessions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,7 +26,7 @@ const EventApiLibrary = {
         body: JSON.stringify({
           sessionId,
           visitorId,
-          projectId: PROJECT_ID,
+          projectId: PROJECT_NAME,
           duration,
           width,
           height,
@@ -51,7 +51,7 @@ const EventApiLibrary = {
     referrer: string | null,
   ): Promise<void> {
     try {
-      await fetch(`${ApiConstants.SESSIONS_API}/pageviews`, {
+      await fetch(`${SESSIONS_API}/pageviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const EventApiLibrary = {
         body: JSON.stringify({
           sessionId,
           visitorId,
-          projectId: PROJECT_ID,
+          projectId: PROJECT_NAME,
           url,
           title,
           referrer,
@@ -84,7 +84,7 @@ const EventApiLibrary = {
     value?: string,
   ): Promise<void> {
     try {
-      await fetch(`${ApiConstants.SESSIONS_API}/events`, {
+      await fetch(`${SESSIONS_API}/events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +93,7 @@ const EventApiLibrary = {
         body: JSON.stringify({
           sessionId,
           visitorId,
-          projectId: PROJECT_ID,
+          projectId: PROJECT_NAME,
           category,
           action,
           label: label || null,
